@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/15/hello-world/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题 算法岗基础知识 反向传播原理简介:反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的">
-<meta property="og:updated_time" content="2018-10-11T12:35:11.193Z">
+<meta property="og:updated_time" content="2018-10-11T12:43:31.661Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题 算法岗基础知识 反向传播原理简介:反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的">
@@ -181,7 +181,7 @@
 </li>
 <li><p><strong>梯度消失问题和损失函数有关吗?</strong><br>无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. </p>
 </li>
-<li><p><strong>使用TensorFlow训练神经网络模型的基本流程:</strong><br>训练神经网络可分为以下三个步骤</p>
+<li><p><strong>使用TensorFlow训练神经网络模型的基本流程:</strong><br><a href="https://blog.csdn.net/paopaovae/article/details/81143367" target="_blank" rel="noopener">训练神经网络可分为以下三个步骤</a></p>
 <pre><code>1 定义神经网络的结构和前向传播的输出结果
 2 定义损失函数以及选择后向传播的算法
 3 生成会话 并且在训练数据上反复执行反向传播优化算法。
