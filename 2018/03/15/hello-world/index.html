@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/15/hello-world/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题 算法岗基础知识反向传播原理简介: 反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的">
-<meta property="og:updated_time" content="2018-11-04T09:30:40.226Z">
+<meta property="og:updated_time" content="2018-11-04T11:49:29.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题 算法岗基础知识反向传播原理简介: 反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的">
@@ -178,7 +178,9 @@
 <p><font color="#dddd00">Sigmoid和ReLU激活函数的优劣:</font><br> 使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入x总是为正的话, 对于式f=wx+b, 关于w的梯度总是非负即正(损失函数对w的导数总是和损失函数对f的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元”Dead”现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.</p>
 <p><font color="#dddd00">梯度消失问题和损失函数有关吗?</font><br> 基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. </p>
 <p><font color="#dddd00">使用TensorFlow训练神经网络模型的基本流程:</font><br> <a href="https://blog.csdn.net/paopaovae/article/details/81143367" target="_blank" rel="noopener">训练神经网络可分为以下三个步骤</a><br>        1 定义神经网络的结构和前向传播的输出结果<br>        2 定义损失函数以及选择后向传播的算法<br>        3 生成会话 并且在训练数据上反复执行反向传播优化算法。<br>无论神经网络结构如何变化，这三个步骤基本不变。</p>
-<p><font color="#dddd00">XGboost和GBDT的区别:</font><br> <a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
+<p><font color="#dddd00">XGboost和GBDT的区别:</font>&gt; <a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
+<p><font color="#dddd00">XGboost和RF的区别:</font>&gt; <a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
+<p><font color="#dddd00">ROC、AUC等概念的理解:</font>&gt; <a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a></p>
 <h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器，生成无偏概率0/1生成器</a></li>
