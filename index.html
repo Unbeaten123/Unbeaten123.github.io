@@ -183,6 +183,7 @@
 <p><font color="#dddd00">梯度优化的几种方法:</font><br>按照大类来分包括: 一阶优化和二阶优化, 二阶优化由于用到了二阶导数计算代价较大往往不会广泛使用(代表算法有牛顿法)<br>只看一阶优化算法主要就是梯度下降包括SGD、BGD、mini-batch GD(MBGD有时也称为SGD)、Momentum、AdaGrad、Adam等等.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
 <p><font color="#dddd00">数据偏斜的处理:</font><br>在有数据有偏的情况下, 评价标准也需要更换比如ROC, 如果需要特别关注样本较少的类别, 那么precision-recall曲线则是一个很好的选择;<br>将数据聚类对大类别数据进行欠采样, 对小类别数据进行相似生成或过采样, 调整分类器的阈值 少类别样本/(少类别样本+多类别样本),<br>欠采样或是过采样都会导致数据分布被改变因此使用集成学习的方法来调整分类阈值是一个很好的选择</p>
 <p><font color="#dddd00">GBDT+LR的原理:</font><br>利用GBDT来做embedding特征, 预先选定GBDT的树和叶子的数量就可以设置好用于LR分类的特征维度(num_trees * num_leaves), 通过one-hot<br>编码即可作为LR的输入特征来使用</p>
+<p><font color="#dddd00">GBDT+LR中，如果GBDT有有1万颗树，每个树有100个叶子节点，那么输入到LR的特征会是一个高维稀疏的向量，那么应该如何处理，使用PCA降维的话会造成损失，如果不想有损失的话应该怎么办:</font><br>??????????????????????????????? </p>
 <h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器，生成无偏概率0/1生成器</a></li>
