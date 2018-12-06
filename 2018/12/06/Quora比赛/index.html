@@ -8,16 +8,16 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Quora Insincere Questions Classification | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结">
+  <meta name="description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结 p_{a}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Quora Insincere Questions Classification">
 <meta property="og:url" content="http://yoursite.com/2018/12/06/Quora比赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结">
-<meta property="og:updated_time" content="2018-12-06T06:20:13.531Z">
+<meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结 p_{a}">
+<meta property="og:updated_time" content="2018-12-06T06:37:52.543Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
-<meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结">
+<meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结 p_{a}">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -169,12 +169,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Kaggle的NLP比赛Quora Insincere Questions Classification总结</p>
+        <p>Kaggle的NLP比赛Quora Insincere Questions Classification总结 <script type="math/tex">p_{a}</script></p>
 <a id="more"></a>
 <h1 id="比赛简介"><a href="#比赛简介" class="headerlink" title="比赛简介"></a>比赛简介</h1><pre><code>这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)
 训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛, 即所有的提交结果必须
 通过kaggle提供的kernel环境执行生成(如果使用Telsa K80显卡则限定kernel运行时间2h, 不使用显卡则为6h, 内存16G)
-</code></pre><h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><h2 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h2><pre><code>预处理中包含了数据清洗、文本向量化等操作 $$p_{a}$$
+</code></pre><h1 id="整体流程-p-a"><a href="#整体流程-p-a" class="headerlink" title="整体流程 p_{a}"></a>整体流程 <script type="math/tex">p_{a}</script></h1><h2 id="预处理-p-a"><a href="#预处理-p-a" class="headerlink" title="预处理 p_{a}"></a>预处理 <script type="math/tex">p_{a}</script></h2><pre><code>预处理中包含了数据清洗、文本向量化等操作 $$p_{a}$$
 </code></pre><h3 id="数据清洗"><a href="#数据清洗" class="headerlink" title="数据清洗"></a>数据清洗</h3><h3 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h3><h3 id="填充序列保持长度一致"><a href="#填充序列保持长度一致" class="headerlink" title="填充序列保持长度一致"></a>填充序列保持长度一致</h3><h2 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h2><h2 id="参数优化"><a href="#参数优化" class="headerlink" title="参数优化"></a>参数优化</h2>
       
 
