@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Quora Insincere Questions Classification | Zhizhou Yu&#39;s Blog</title>
+  <title>机器学习算法面经总结 | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结">
+  <meta name="description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Quora Insincere Questions Classification">
-<meta property="og:url" content="http://yoursite.com/2018/12/06/ Quora Insincere Questions Classification/index.html">
+<meta property="og:title" content="机器学习算法面经总结">
+<meta property="og:url" content="http://yoursite.com/2018/03/15/知识总结/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结">
-<meta property="og:updated_time" content="2018-12-06T04:47:30.625Z">
+<meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
+<meta property="og:updated_time" content="2018-12-06T05:43:52.634Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Quora Insincere Questions Classification">
-<meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结">
+<meta name="twitter:title" content="机器学习算法面经总结">
+<meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -153,29 +153,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post- Quora Insincere Questions Classification" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-知识总结" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Quora Insincere Questions Classification
+      机器学习算法面经总结
     </h1>
   
 
         
-        <a href="/2018/12/06/ Quora Insincere Questions Classification/" class="archive-article-date">
-  	<time datetime="2018-12-06T04:30:50.205Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-06</time>
+        <a href="/2018/03/15/知识总结/" class="archive-article-date">
+  	<time datetime="2018-03-15T11:46:34.048Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Kaggle的NLP比赛Quora Insincere Questions Classification总结</p>
+        <p>记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题</p>
 <a id="more"></a>
-<h2 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h2><h2 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h2><h2 id="参数优化"><a href="#参数优化" class="headerlink" title="参数优化"></a>参数优化</h2>
+<h2 id="算法岗"><a href="#算法岗" class="headerlink" title="算法岗"></a>算法岗</h2><h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><p><font color="#dddd00">反向传播原理简介:</font><br> 反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.</p>
+<p><font color="#dddd00">Sigmoid和ReLU激活函数的优劣:</font><br> 使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入x总是为正的话, 对于式f=wx+b, 关于w的梯度总是非负即正(损失函数对w的导数总是和损失函数对f的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元”Dead”现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.</p>
+<p><font color="#dddd00">梯度消失问题和损失函数有关吗?</font><br> 基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. </p>
+<p><font color="#dddd00">使用TensorFlow训练神经网络模型的基本流程:</font><br> <a href="https://blog.csdn.net/paopaovae/article/details/81143367" target="_blank" rel="noopener">训练神经网络可分为以下三个步骤</a><br>        1 定义神经网络的结构和前向传播的输出结果<br>        2 定义损失函数以及选择后向传播的算法<br>        3 生成会话 并且在训练数据上反复执行反向传播优化算法。<br>无论神经网络结构如何变化，这三个步骤基本不变。</p>
+<p><font color="#dddd00">XGboost和GBDT的区别:</font><br>Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.<br><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
+<p><font color="#dddd00">XGboost和RF的区别:</font> <a href="https://www.cnblogs.com/notwice/p/8546436.html" target="_blank" rel="noopener">reference here</a></p>
+<p><font color="#dddd00">ROC、AUC等概念的理解:</font> <a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a><br>一句话说明AUC的本质和计算规则：给定一个正例，一个负例，预测为正的概率值比预测为负的概率值还要大的可能性。</p>
+<p><font color="#dddd00">K-means、KNN、层次聚类和密度聚类(DBSCAN):</font><br>这个链接直接对比了Kmeans和KNN<br><a href="https://www.cnblogs.com/190260995xixi/p/5945652.html" target="_blank" rel="noopener">K-means &amp; KNN</a><br>层次聚类的复杂度很高, 但是一次聚类完成就可以得到一个聚类树结果, 选择不同的聚类个数下的聚类结果直接根据树来得到即可且层次聚类是贪心的思想得到的是局部最优需要随机化, kmans的主要优势是效率<br><a href="https://www.cnblogs.com/nku-wangfeng/p/7642745.html" target="_blank" rel="noopener">K-means &amp; 层次聚类</a><br>DBSCAN是基于密度的聚类, 对于密度稀疏的数据表现较差, 但是可以运用到凸和非凸数据集上(甜甜圈数据集), 其计算复杂度较高但是结果往往要比kmeans好, DBSCAN对异常点也不敏感, 聚类结果可复现, 但同时需要调参达到最佳性能<br><a href="https://www.cnblogs.com/pinard/p/6208966.html" target="_blank" rel="noopener">DBSCAN原理</a><br><a href="https://www.cnblogs.com/hdu-2010/p/4621258.html" target="_blank" rel="noopener">K-means &amp; DBSCAN</a></p>
+<p><font color="#dddd00">梯度优化的几种方法:</font><br>按照大类来分包括: 一阶优化和二阶优化, 二阶优化由于用到了二阶导数计算代价较大往往不会广泛使用(代表算法有牛顿法), 只看一阶优化算法主要就是梯度下降包括SGD、BGD、mini-batch GD(MBGD有时也称为SGD)、Momentum、AdaGrad、Adam等等.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
+<p><font color="#dddd00">数据偏斜的处理:</font><br>在有数据有偏的情况下, 评价标准也需要更换比如ROC, 如果需要特别关注样本较少的类别, 那么precision-recall曲线则是一个很好的选择; 将数据聚类对大类别数据进行欠采样, 对小类别数据进行相似生成或过采样, 调整分类器的阈值: 少类别样本/(少类别样本+多类别样本), 欠采样或是过采样都会导致数据分布被改变因此使用集成学习的方法来调整分类阈值是一个很好的选择</p>
+<p><font color="#dddd00">GBDT+LR的原理:</font><br>利用GBDT来做embedding特征, 预先选定GBDT的树和叶子的数量就可以设置好用于LR分类的特征维度(num_trees * num_leaves), 通过one-hot编码即可作为LR的输入特征来使用</p>
+<p><font color="#dddd00">GBDT+LR中，如果GBDT有有1万颗树，每个树有100个叶子节点，那么输入到LR的特征会是一个高维稀疏的向量，那么应该如何处理，使用PCA降维的话会造成损失，如果不想有损失的话应该怎么办:</font><br>??????????????????????????????? </p>
+<p><font color="#dddd00">GBDT在回归和多分类当中有什么不同，在预测的时候的流程是怎样的:</font><br>在回归和多分类任务中的主要区别在于损失函数不同造成的算法初始化不同以及叶节点取值和表示含义的不同, 回归任务常用均方损失函数、绝对值损失函数和Huber损失函数(前面两者的折中), 而多分类则采用多类逻辑损失函数(二分类是对数损失函数), 对于回归类问题, 定义好损失函数之后, GBDT算法的预测值表示与真实值的偏差, 而多分类中的预测值则表示预测值为真实值的概率. 此外对于多分类, GBDT采用一对多策略, 训练过程中的主要区别是多分类中多了一层内部for循环(k个类别都各自拟合完一棵树之后再拟合下一棵树, 一共拟合M轮, 最终有M*K颗树), 最后使用softmax来计算最终的类别概率<a href="https://blog.csdn.net/qq_22238533/article/details/79199605" target="_blank" rel="noopener">详细的介绍</a></p>
+<p><font color="#dddd00">逻辑回归如何防止过拟合:</font><br>减少特征的数量; 正则化, 加入模型复杂度的惩罚项</p>
+<p><font color="#dddd00">L1、L2正则化的区别是什么:</font><br>L1正则化是参数的绝对值之和(Lasso回归), L2正则化是参数的平方和后再开根值(岭回归). 它们都可以防止过拟合, 区别在于L1正则化倾向于稀疏(部分特征的权值会为0)而L2正则化则是使每个权值都很小接近于0但不会为0, L1的稀疏特性使得L1正则可以用于特征选择. L1范数符合拉普拉斯分布在一些地方是不可导的, 用有约束的优化来解释就是: 在图像中的特点就是有很多棱角(棱角处包含很多0, 高维情况下尤为明显), 这些棱角有更大概率和误差项等值线相交从而出现很多0, 而L2范数符合高斯分布完全可导不会那么多棱角.</p>
+<p><font color="#dddd00">L1正则不可导该如何解决:</font><br><a href="https://blog.csdn.net/luoleicn/article/details/52676378" target="_blank" rel="noopener">Proximal Algorithms或者ADMM来解决</a></p>
+<p><font color="#dddd00">坐标轴下降法的原理是什么:</font><br>坐标下降法属于一种非梯度优化的方法，它在每步迭代中沿一个坐标的方向进行线性搜索（线性搜索是不需要求导数的），通过循环使用不同的坐标来达到目标函数的局部极小值, 简单来说就是固定一个变量把其他变量当做常量看待</p>
+<p><font color="#dddd00">LSTM和GRU的区别:</font><br><a href="https://zhuanlan.zhihu.com/p/30465140" target="_blank" rel="noopener">LSTM</a><br><a href="https://zhuanlan.zhihu.com/p/28297161" target="_blank" rel="noopener">LSTM&amp;GRU</a><br><a href="https://zhuanlan.zhihu.com/p/40119926" target="_blank" rel="noopener">双向LSTM</a></p>
+<ol>
+<li>GRU和LSTM的性能在很多任务上不分伯仲。</li>
+<li>GRU参数更少因此更容易收敛，但是数据集很大的情况下，LSTM表达性能更好。</li>
+<li>从结构上来说，GRU只有两个门（update和reset），LSTM有三个门（forget，input，output），GRU直接将hidden state传给下一个单元，而LSTM则用memory cell把hidden state包装起来。</li>
+</ol>
+<h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
+<li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
+<li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器，生成无偏概率0/1生成器</a></li>
+<li><a href="https://blog.csdn.net/zhangxiao93/article/details/55101605" target="_blank" rel="noopener">旋转数组求最小值</a></li>
+</ol>
+<h3 id="益智题"><a href="#益智题" class="headerlink" title="益智题"></a>益智题</h3><ol>
+<li><a href="https://www.nowcoder.com/questionTerminal/cded93aeac5249f7a9754400dd249c1d" target="_blank" rel="noopener">站在地球上的某一点，向南走一公里，然后向东走一公里，最后向北走一公里，回到了原点。地球上有多少个满足这样条件的点?(无数个)</a></li>
+</ol>
+
       
 
       
@@ -254,7 +285,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/12/06/ Quora Insincere Questions Classification/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/03/15/知识总结/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -268,11 +299,15 @@
   
 <nav id="article-nav">
   
-  
-    <a href="/2018/03/15/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">机器学习算法面经总结</div>
-      <i class="icon-circle-right"></i>
+    <a href="/2018/12/06/Quora比赛/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Quora Insincere Questions Classification
+        
+      </div>
     </a>
+  
   
 </nav>
 
