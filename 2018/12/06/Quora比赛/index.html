@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/12/06/Quora比赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
-<meta property="og:updated_time" content="2018-12-07T03:15:01.859Z">
+<meta property="og:updated_time" content="2018-12-07T09:37:24.426Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -185,7 +185,7 @@
 <li>把”qoura, qouta”等错误拼写的单词替换为正确的拼写单词</li>
 <li>把所有非字母的字符全部移除并填充缺失值</li>
 </ol>
-<h3 id="序列-向量化"><a href="#序列-向量化" class="headerlink" title="序列/向量化"></a>序列/向量化</h3><p>向量化的目的是为了把输入的文本序列转换成一个序列化、向量化的表示以便于时序模型如LSTM和GRU读取训练. 我们使用keras的Tokenizer来进行文本序列化处理, Tokenizer</p>
+<h3 id="序列-向量化"><a href="#序列-向量化" class="headerlink" title="序列/向量化"></a>序列/向量化</h3><p>向量化的目的是为了把输入的文本序列转换成一个序列化、向量化的表示以便于时序模型如LSTM和GRU读取训练. 我们使用keras的Tokenizer来进行文本序列化处理, 简单来说Tokenizer需要我们给定一个参数num_words表示需要从预料中保存出现频率最高的num_words个单词用于生成向量. 实际上Tokenizer就是在所提供的预料数据上使用fit_on_texts 方法生成一个字典, 使得每个单词有着对应的word_index, 再使用texts_to_sequences方法将每条预料转换成对应的向量表示.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">somestr = [&apos;ha ha gua angry&apos;,&apos;howa ha gua excited naive&apos;]</span><br><span class="line">tok = tt.Tokenizer()</span><br><span class="line">tok.fit_on_texts(somestr)</span><br><span class="line">tok.word_index</span><br><span class="line">Out[90]: &#123;&apos;angry&apos;: 3, &apos;excited&apos;: 5, &apos;gua&apos;: 2, &apos;ha&apos;: 1, &apos;howa&apos;: 4, &apos;naive&apos;: 6&#125;</span><br><span class="line">tok.texts_to_sequences(somestr)</span><br><span class="line">Out[91]: [[1, 1, 2, 3], [4, 1, 2, 5, 6]]</span><br></pre></td></tr></table></figure></p>
 <h3 id="填充序列保持长度一致"><a href="#填充序列保持长度一致" class="headerlink" title="填充序列保持长度一致"></a>填充序列保持长度一致</h3><h2 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h2><h2 id="参数优化"><a href="#参数优化" class="headerlink" title="参数优化"></a>参数优化</h2>
       
 
@@ -556,21 +556,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
