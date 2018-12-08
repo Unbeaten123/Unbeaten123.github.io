@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/15/知识总结/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta property="og:updated_time" content="2018-12-07T03:14:59.976Z">
+<meta property="og:updated_time" content="2018-12-08T06:53:22.740Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -196,6 +196,7 @@
 <li>GRU参数更少因此更容易收敛，但是数据集很大的情况下，LSTM表达性能更好。</li>
 <li>从结构上来说，GRU只有两个门（update和reset），LSTM有三个门（forget，input，output），GRU直接将hidden state传给下一个单元，而LSTM则用memory cell把hidden state包装起来。</li>
 </ol>
+<p><font color="#dddd00">boosting和bagging在不同情况下的选用:</font><br>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练. 根据自己的经验, 只要模型不容易过拟合boosting的表现一般都不差于bagging</p>
 <h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器，生成无偏概率0/1生成器</a></li>
