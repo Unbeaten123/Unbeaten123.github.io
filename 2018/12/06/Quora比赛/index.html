@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
 <meta property="og:image" content="http://yoursite.com/img/1.png">
-<meta property="og:updated_time" content="2018-12-10T06:46:25.832Z">
+<meta property="og:updated_time" content="2018-12-17T04:35:12.426Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -192,10 +192,10 @@
 <p><font face="黑体" size="5.5" color="#FF0000"><strong>模型选择</strong></font><br><br>模型选择花费了我们很多时间尝试, 由于限制了kernel的使用时间, 所以模型方面不能太复杂, 我们主要在特征工程 + 传统机器学习模型和深度模型之间做实验选择</p>
 <h3 id="传统机器学习模型"><a href="#传统机器学习模型" class="headerlink" title="传统机器学习模型"></a>传统机器学习模型</h3><h3 id="深度模型"><a href="#深度模型" class="headerlink" title="深度模型"></a>深度模型</h3><p>深度模型在实际使用中表现最好, 很遗憾由于不能使用外部数据导致一些state-of-art的模型比如<a href="">ULMFiT</a>和<a href="">BERT</a>都无法使用, 我们在线下测试了这些模型的表现十分出色, 但是线上无法使用也无法得知最终的表现会如何, 在线上我们尝试过很多模型包括:</p>
 <ol>
-<li>单模型: CNN, LSTM, GRU, <a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">SRU</a>, <a href="https://arxiv.org/abs/1611.01576" target="_blank" rel="noopener">QRNN</a>以及<a href="https://arxiv.org/abs/1803.04831" target="_blank" rel="noopener">IndRNN</a></li>
-<li>多模型结合: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, 最终选定的模型是LSTM+GRU+Attention<br>最终确定确定的模型框架如下图:<br><img src="/img/1.png" alt="avatar"><br><strong>为什么是LSTM+GRU?</strong><br> 因为我们测试过不同的组合, 发现LSTM+GRU的表现最佳.<br><strong>关于SRU, QRNN和IndRNN:</strong><br> SRU设计动机是解决 <strong>RNN的训练速度太慢</strong>、<strong>模型的应用性和实验的可重复性</strong>、<strong>网络结构的可解释性</strong>三个问题, 按照<a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">论文</a>里的实验显示, SRU最高可以比keras优化的CuDNNLSTM快10倍! 但是实际使用过程中我们发现在该任务上SRU的keras实现速度是比不上CuDNNLSTM的, 不知道是keras实现的代码不够完善还是我们的网络结构不利于SRU的发挥所致, SRU的详细介绍<a href="https://www.zhihu.com/question/65244705/answer/229364472" target="_blank" rel="noopener">在这</a><br> QRNN设计动机是<strong>RNN在计算时，有时间的依赖性，并行度受限；而CNN受制于有限的receptive field, 因此, 信息传递太慢</strong>, QRNN希望能综合RNN和CNN的优点，尽量避免各自的缺陷, 但是在我们使用的过程中发现精度较低且速度没有明显加快, QRNN的详细介绍<a href="https://blog.csdn.net/jackytintin/article/details/77945354" target="_blank" rel="noopener">在这</a><br> IndRNN<strong>既可以利用CNN的多层网络，又可以利用RNN的循环连接</strong>. 特别适合于解决时序相关问题，比如视频分析，动作识别，NLP之类. 同样和SRU以及QRNN一样精度低于CuDNNLSTM/GRU, 需要堆叠多层才能达到相同精度但速度因此降低导致无法使用, 关于IndRNN的详细介绍<a href="https://www.zhihu.com/question/266379600/answer/358655349" target="_blank" rel="noopener">在这</a>  </li>
+<li><strong>单模型</strong>: CNN, LSTM, GRU, <a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">SRU</a>, <a href="https://arxiv.org/abs/1611.01576" target="_blank" rel="noopener">QRNN</a>以及<a href="https://arxiv.org/abs/1803.04831" target="_blank" rel="noopener">IndRNN</a></li>
+<li><strong>多模型结合</strong>: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, BiLSTM+BiGRU+Attention+Pooling, BiLSTM+BiGRU+Capsule+CRF<br>最终确定确定的模型框架如下图:<br><img src="/img/1.png" alt="avatar"><br><font face="黑体" size="4" color="#0000FF"><strong>为什么是LSTM+GRU?</strong></font><br><br> 因为我们测试过不同的组合, 发现LSTM+GRU的表现最佳.<br><font face="黑体" size="4" color="#0000FF"><strong>关于SRU、QRNN和IndRNN:</strong></font><br><br> SRU设计动机是解决 <strong>RNN的训练速度太慢</strong>、<strong>模型的应用性和实验的可重复性</strong>、<strong>网络结构的可解释性</strong>三个问题, 按照<a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">论文</a>里的实验显示, SRU最高可以比keras优化的CuDNNLSTM快10倍! 但是实际使用过程中我们发现在该任务上SRU的keras实现速度是比不上CuDNNLSTM的, 不知道是keras实现的代码不够完善还是我们的网络结构不利于SRU的发挥所致, SRU的详细介绍<a href="https://www.zhihu.com/question/65244705/answer/229364472" target="_blank" rel="noopener">在这</a><br> QRNN设计动机是<strong>RNN在计算时，有时间的依赖性，并行度受限；而CNN受制于有限的receptive field, 因此, 信息传递太慢</strong>, QRNN希望能综合RNN和CNN的优点，尽量避免各自的缺陷, 但是在我们使用的过程中发现精度较低且速度没有明显加快, QRNN的详细介绍<a href="https://blog.csdn.net/jackytintin/article/details/77945354" target="_blank" rel="noopener">在这</a><br> IndRNN<strong>既可以利用CNN的多层网络，又可以利用RNN的循环连接</strong>. 特别适合于解决时序相关问题，比如视频分析，动作识别，NLP之类. 同样和SRU以及QRNN一样精度低于CuDNNLSTM/GRU, 需要堆叠多层才能达到相同精度但速度因此降低导致无法使用, 关于IndRNN的详细介绍<a href="https://www.zhihu.com/question/266379600/answer/358655349" target="_blank" rel="noopener">在这</a><br><font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font><br><br> Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 前者效果稍差但速度更快, 后者效果更好但速度更慢.</li>
 </ol>
-<p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是训练过程中使用一定trick的回调函数, 如<a href="">CLR</a>、<a href="">SWA</a>、<a href="">SGDR</a>和<a href="">Snapshot</a></p>
+<p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是训练过程中使用一定trick的回调函数, 如<a href="">CLR</a>、<a href="">SWA</a>、<a href="">SGDR</a>和<a href="">Snapshot</a>以及目标函数的改进, 何恺名的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>  </p>
 
       
 
@@ -575,5 +575,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
