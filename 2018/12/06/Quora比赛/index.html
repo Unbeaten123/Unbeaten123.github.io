@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
 <meta property="og:image" content="http://yoursite.com/img/clr.png">
-<meta property="og:updated_time" content="2018-12-23T13:23:20.282Z">
+<meta property="og:updated_time" content="2018-12-23T13:24:47.913Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -208,7 +208,7 @@
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font><br>    Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 前者效果稍差但速度更快, 后者效果更好但速度更慢.  <br></p>
 <p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是训练过程中使用一定trick的回调函数, 如<a href="https://arxiv.org/pdf/1506.01186" target="_blank" rel="noopener">CLR</a>、<a href="https://arxiv.org/pdf/1803.05407" target="_blank" rel="noopener">随机加权平均SWA</a>、<a href="https://arxiv.org/abs/1608.03983" target="_blank" rel="noopener">模拟余弦退火SGDR</a>和<a href="https://arxiv.org/abs/1704.00109" target="_blank" rel="noopener">快照集成Snapshot</a>以及目标函数的改进, 何恺名针对不平衡类别设计的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>, 还有Google Brain团队在ICLR 2018上发表的<a href="https://arxiv.org/pdf/1711.00489" target="_blank" rel="noopener">论文</a>, 不对学习率进行衰减调整而对batch_szie做文章的技巧.</p>
 <ol>
-<li>CLR(Cyclical Learning Rate): 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角状和指数)以及一个指数模式下的衰减参数gamma.<br><img src="/img/clr.png" alt="avatar"></li>
+<li>CLR(Cyclical Learning Rate): 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角变化和指数变化)以及一个指数模式下的衰减参数gamma.<br><img src="/img/clr.png" alt="avatar"></li>
 </ol>
 
       
@@ -589,5 +589,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
