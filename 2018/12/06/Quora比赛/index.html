@@ -14,10 +14,12 @@
 <meta property="og:url" content="http://yoursite.com/2018/12/06/Quora比赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
-<meta property="og:updated_time" content="2018-12-23T12:20:05.101Z">
+<meta property="og:image" content="http://yoursite.com/img/clr.png">
+<meta property="og:updated_time" content="2018-12-23T13:23:20.282Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
+<meta name="twitter:image" content="http://yoursite.com/img/clr.png">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -194,7 +196,8 @@
 <h3 id="序列-向量化"><a href="#序列-向量化" class="headerlink" title="序列/向量化"></a>序列/向量化</h3><p>向量化的目的是为了把输入的文本序列转换成一个序列化、向量化的表示以便于时序模型如LSTM和GRU读取训练. 我们使用keras的Tokenizer来进行文本序列化处理, 简单来说Tokenizer需要我们给定一个参数num_words表示需要从预料中保存出现频率最高的num_words个单词用于生成向量. 实际上Tokenizer就是在所提供的预料数据上使用fit_on_texts 方法生成一个字典, 使得每个单词有着对应的word_index, 再使用texts_to_sequences方法将每条预料转换成对应的向量表示, 这个向量表示实际上就是这条预料中的单词出现在字典中的index, 在后续的深度模型中我们会使用字典生成预训练词向量矩阵, 随后根据这个index向量来获取各个单词对应的词向量. 在比赛中我们尝试不同的num_words最终设置了num_words = 95000<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">somestr = [<span class="string">'ha ha gua angry'</span>,<span class="string">'howa ha gua excited naive'</span>]</span><br><span class="line">tok = tt.Tokenizer()</span><br><span class="line">tok.fit_on_texts(somestr)</span><br><span class="line">tok.word_index</span><br><span class="line">Out[<span class="number">90</span>]: &#123;<span class="string">'angry'</span>: <span class="number">3</span>, <span class="string">'excited'</span>: <span class="number">5</span>, <span class="string">'gua'</span>: <span class="number">2</span>, <span class="string">'ha'</span>: <span class="number">1</span>, <span class="string">'howa'</span>: <span class="number">4</span>, <span class="string">'naive'</span>: <span class="number">6</span>&#125;</span><br><span class="line">tok.texts_to_sequences(somestr)</span><br><span class="line">Out[<span class="number">91</span>]: [[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>]]</span><br></pre></td></tr></table></figure></p>
 <h3 id="填充序列保持长度一致"><a href="#填充序列保持长度一致" class="headerlink" title="填充序列保持长度一致"></a>填充序列保持长度一致</h3><p>经过Tokenizer对每条样本的向量化处理后还有一个问题就是各条处理后的训练样本长度是不一致的, 这样无法直接被keras的RNN模型所使用, 所以我们采用了keras的pad_sequence方法对所有的训练数据做填充/截断处理, 我们统计了所有训练数据的平均长度约为70, 所以我们将所有的样本按照长度70来填充/截断.</p>
 <p><font face="黑体" size="5.5" color="#FF0000"><strong>模型选择</strong></font><br><br>模型选择花费了我们很多时间尝试, 由于限制了kernel的使用时间, 所以模型方面不能太复杂, 我们主要在特征工程 + 传统机器学习模型和深度模型之间做实验选择</p>
-<h3 id="传统机器学习模型"><a href="#传统机器学习模型" class="headerlink" title="传统机器学习模型"></a>传统机器学习模型</h3><h3 id="深度模型"><a href="#深度模型" class="headerlink" title="深度模型"></a>深度模型</h3><p>深度模型在实际使用中表现最好, 很遗憾由于不能使用外部数据导致一些state-of-art的模型比如<a href="">ULMFiT</a>和<a href="">BERT</a>都无法使用, 我们在线下测试了这些模型的表现十分出色, 但是线上无法使用也无法得知最终的表现会如何, 在线上我们尝试过很多模型包括:</p>
+<h3 id="传统机器学习模型"><a href="#传统机器学习模型" class="headerlink" title="传统机器学习模型"></a>传统机器学习模型</h3><p>由于这个比赛和提取语义有很大关系, 传统的机器学习模型不是很适用, 我们尝试过特征工程加上LightGBM</p>
+<h3 id="深度模型"><a href="#深度模型" class="headerlink" title="深度模型"></a>深度模型</h3><p>深度模型在实际使用中表现最好, 很遗憾由于不能使用外部数据导致一些state-of-art的模型比如<a href="">ULMFiT</a>和<a href="">BERT</a>都无法使用, 我们在线下测试了这些模型的表现十分出色, 但是线上无法使用也无法得知最终的表现会如何, 在线上我们尝试过很多模型包括:</p>
 <ol>
 <li><strong>单模型</strong>: CNN, LSTM, GRU, <a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">SRU</a>, <a href="https://arxiv.org/abs/1611.01576" target="_blank" rel="noopener">QRNN</a>以及<a href="https://arxiv.org/abs/1803.04831" target="_blank" rel="noopener">IndRNN</a></li>
 <li><strong>多模型结合</strong>: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, BiLSTM+BiGRU+Attention+Pooling, BiLSTM+BiGRU+Capsule+CRF </li>
@@ -203,7 +206,10 @@
 <p><font face="黑体" size="4" color="#0000FF"><strong>为什么是LSTM+GRU?</strong></font><br>    因为我们测试过不同的组合, 发现LSTM+GRU的表现最佳.  <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于SRU、QRNN和IndRNN:</strong></font><br>    SRU设计动机是解决 <strong>RNN的训练速度太慢</strong>、<strong>模型的应用性和实验的可重复性</strong>、<strong>网络结构的可解释性</strong>三个问题, 按照<a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">论文</a>里的实验显示, SRU最高可以比keras优化的CuDNNLSTM快10倍! 但是实际使用过程中我们发现在该任务上SRU的keras实现速度是比不上CuDNNLSTM的, 不知道是keras实现的代码不够完善还是我们的网络结构不利于SRU的发挥所致, SRU的详细介绍<a href="https://www.zhihu.com/question/65244705/answer/229364472" target="_blank" rel="noopener">在这</a><br>    QRNN设计动机是<strong>RNN在计算时，有时间的依赖性，并行度受限；而CNN受制于有限的receptive field, 因此, 信息传递太慢</strong>, QRNN希望能综合RNN和CNN的优点，尽量避免各自的缺陷, 但是在我们使用的过程中发现精度较低且速度没有明显加快, QRNN的详细介绍<a href="https://blog.csdn.net/jackytintin/article/details/77945354" target="_blank" rel="noopener">在这</a><br>    IndRNN<strong>既可以利用CNN的多层网络，又可以利用RNN的循环连接</strong>. 特别适合于解决时序相关问题，比如视频分析，动作识别，NLP之类. 同样和SRU以及QRNN一样精度低于CuDNNLSTM/GRU, 需要堆叠多层才能达到相同精度但速度因此降低导致无法使用, 关于IndRNN的详细介绍<a href="https://www.zhihu.com/question/266379600/answer/358655349" target="_blank" rel="noopener">在这</a>  <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font><br>    Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 前者效果稍差但速度更快, 后者效果更好但速度更慢.  <br></p>
-<p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是训练过程中使用一定trick的回调函数, 如<a href="">CLR</a>、<a href="">SWA</a>、<a href="">SGDR</a>和<a href="">Snapshot</a>以及目标函数的改进, 何恺名的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>  </p>
+<p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是训练过程中使用一定trick的回调函数, 如<a href="https://arxiv.org/pdf/1506.01186" target="_blank" rel="noopener">CLR</a>、<a href="https://arxiv.org/pdf/1803.05407" target="_blank" rel="noopener">随机加权平均SWA</a>、<a href="https://arxiv.org/abs/1608.03983" target="_blank" rel="noopener">模拟余弦退火SGDR</a>和<a href="https://arxiv.org/abs/1704.00109" target="_blank" rel="noopener">快照集成Snapshot</a>以及目标函数的改进, 何恺名针对不平衡类别设计的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>, 还有Google Brain团队在ICLR 2018上发表的<a href="https://arxiv.org/pdf/1711.00489" target="_blank" rel="noopener">论文</a>, 不对学习率进行衰减调整而对batch_szie做文章的技巧.</p>
+<ol>
+<li>CLR(Cyclical Learning Rate): 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角状和指数)以及一个指数模式下的衰减参数gamma.<br><img src="/img/clr.png" alt="avatar"></li>
+</ol>
 
       
 
@@ -583,21 +589,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
