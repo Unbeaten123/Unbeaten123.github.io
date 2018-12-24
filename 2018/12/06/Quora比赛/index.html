@@ -16,7 +16,7 @@
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
 <meta property="og:image" content="http://yoursite.com/img/model.png">
 <meta property="og:image" content="http://yoursite.com/img/clr.png">
-<meta property="og:updated_time" content="2018-12-24T07:31:28.472Z">
+<meta property="og:updated_time" content="2018-12-24T07:34:14.005Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -200,7 +200,7 @@
 ### 传统机器学习模型
 由于这个比赛和提取语义有很大关系, 传统的机器学习模型不是很适用, 我们尝试过特征工程加上LightGBM, 但是LB得分很不如人意所以我们基本放弃了传统机器学习的思路.
 ### 深度模型
-深度模型在实际使用中表现最好, 很遗憾由于不能使用外部数据导致一些state-of-art的模型比如ACL 2018上发表的[ULMFiT](http://www.aclweb.org/anthology/P18-1031)和Google AI Language与2018年10月提出的[BERT](https://arxiv.org/pdf/1810.04805.pdf?fbclid=IwAR3FQiWQzP7stmPWZ4kzrGmiUaN81UpiNeq4GWthrxmwgX0B9f1CvuXJC2E)都无法使用, 我们在线下测试了这些模型的表现十分出色, 但是线上无法使用也无法得知最终的表现会如何, 在线上我们尝试过很多模型包括:
+深度模型在实际使用中表现最好, 很遗憾由于不能使用外部数据导致一些state-of-art的模型比如ACL 2018上发表的[ULMFiT](http://www.aclweb.org/anthology/P18-1031)和Google AI Language与2018年10月提出的[BERT](https://arxiv.org/pdf/1810.04805.pdf?fbclid=IwAR3FQiWQzP7stmPWZ4kzrGmiUaN81UpiNeq4GWthrxmwgX0B9f1CvuXJC2E)都无法使用, 我们在线下测试了这些模型的表现十分出色, 但是线上无法使用也无法得知最终的表现会如何, 在线上我们尝试过很多模型包括:  
 1. **单模型**: CNN, LSTM, GRU, [SRU](https://arxiv.org/abs/1709.02755), [QRNN](https://arxiv.org/abs/1611.01576)以及[IndRNN](https://arxiv.org/abs/1803.04831)
 2. **多模型结合**: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, BiLSTM+BiGRU+Attention+Pooling, BiLSTM+BiGRU+Capsule+CRF 
 3. **多任务模型**: 不仅仅以区分出insincere问题为目标, 我们可以在训练的过程中加入其他的目标同时学习, 例如先对每条数据进行简单的语义分析得出一个情感分数, 把这个分数作为标签与原来的insincere标签一起作为新的标签, 通过联合的训练两个目标带来的好处包括: 1. 加入了更多的特征信息, 降低过拟合的风险; 2. 模型在学习的过程中可能会获取一些额外的信息以供原目标任务参考  
