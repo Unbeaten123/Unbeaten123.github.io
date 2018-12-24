@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
 <meta property="og:image" content="http://yoursite.com/img/clr.png">
-<meta property="og:updated_time" content="2018-12-23T13:31:50.511Z">
+<meta property="og:updated_time" content="2018-12-24T05:52:19.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -210,8 +210,11 @@
 <ol>
 <li>CLR(Cyclical Learning Rate): 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角变化和指数变化)以及一个指数模式下的衰减参数gamma.   <div align="center">
 <img src="/img/clr.png" width="400" height="200"> 
-</div></li>
+</div>
+
+</li>
 </ol>
+<h1 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h1><h2 id="深度模型的可重复性"><a href="#深度模型的可重复性" class="headerlink" title="深度模型的可重复性"></a>深度模型的可重复性</h2><p>由于使用到了CuDNNLSTM和CuDNNGRU, 其网络权重初始化具有很大的随机性, 使得同样的代码跑出来的结果在LB上的得分足足有<script type="math/tex">\pm</script>0.005的差距! 经过各种测试, 定义下面的代码并在开始训练前调用函数即可保证网络结果的可复现性, 要注意除了网络权重随机化造成的影响, 还有是否使用随机种子对训练数据进行shuffle以及处理embedding时缺失单词是否随机生成一个向量等细微之处都会影响最终的结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">seed_torch</span><span class="params">(seed=<span class="number">1029</span>)</span>:</span></span><br><span class="line">    random.seed(seed)</span><br><span class="line">    os.environ[<span class="string">'PYTHONHASHSEED'</span>] = str(seed)</span><br><span class="line">    np.random.seed(seed)</span><br><span class="line">    torch.manual_seed(seed)</span><br><span class="line">    torch.cuda.manual_seed(seed)</span><br><span class="line">    torch.backends.cudnn.deterministic = <span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
 
       
 
