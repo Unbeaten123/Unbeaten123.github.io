@@ -16,7 +16,7 @@
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
 <meta property="og:image" content="http://yoursite.com/img/model.png">
 <meta property="og:image" content="http://yoursite.com/img/clr.png">
-<meta property="og:updated_time" content="2018-12-24T08:44:49.362Z">
+<meta property="og:updated_time" content="2018-12-24T08:50:50.321Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -202,7 +202,7 @@
 <li><strong>单模型</strong>: CNN, LSTM, GRU, <a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">SRU</a>, <a href="https://arxiv.org/abs/1611.01576" target="_blank" rel="noopener">QRNN</a>以及<a href="https://arxiv.org/abs/1803.04831" target="_blank" rel="noopener">IndRNN</a></li>
 <li><strong>多模型结合</strong>: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, BiLSTM+BiGRU+Attention+Pooling, BiLSTM+BiGRU+Capsule+CRF </li>
 <li><strong>多任务模型</strong>: 不仅仅以区分出insincere问题为目标, 我们可以在训练的过程中加入其他的目标同时学习, 例如先对每条数据进行简单的语义分析得出一个情感分数, 把这个分数作为标签与原来的insincere标签一起作为新的标签, 通过联合的训练两个目标带来的好处包括: 1. 加入了更多的特征信息, 降低过拟合的风险; 2. 模型在学习的过程中可能会获取一些额外的信息以供原目标任务参考<br>最终确定确定的模型框架如下图:  <div align="center">
-<img src="/img/model.png" width="650" height="800"> 
+<img src="/img/model.png" width="700" height="800"> 
 </div>
 
 </li>
@@ -599,5 +599,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
