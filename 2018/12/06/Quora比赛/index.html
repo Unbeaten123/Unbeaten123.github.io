@@ -16,7 +16,7 @@
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
 <meta property="og:image" content="http://yoursite.com/img/model.png">
 <meta property="og:image" content="http://yoursite.com/img/clr.png">
-<meta property="og:updated_time" content="2018-12-24T07:20:30.162Z">
+<meta property="og:updated_time" content="2018-12-24T07:28:37.359Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -202,12 +202,12 @@
 <li><strong>单模型</strong>: CNN, LSTM, GRU, <a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">SRU</a>, <a href="https://arxiv.org/abs/1611.01576" target="_blank" rel="noopener">QRNN</a>以及<a href="https://arxiv.org/abs/1803.04831" target="_blank" rel="noopener">IndRNN</a></li>
 <li><strong>多模型结合</strong>: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, BiLSTM+BiGRU+Attention+Pooling, BiLSTM+BiGRU+Capsule+CRF </li>
 <li><strong>多任务模型</strong>: 不仅仅以区分出insincere问题为目标, 我们可以在训练的过程中加入其他的目标同时学习, 例如先对每条数据进行简单的语义分析得出一个情感分数, 把这个分数作为标签与原来的insincere标签一起作为新的标签, 通过联合的训练两个目标带来的好处包括: 1. 加入了更多的特征信息, 降低过拟合的风险; 2. 模型在学习的过程中可能会获取一些额外的信息以供原目标任务参考<br>最终确定确定的模型框架如下图:  <div align="center">
-<img src="/img/model.png" width="600" height="800"> 
+<img src="/img/model.png" width="500" height="800"> 
 </div>
 
 </li>
 </ol>
-<p><font face="黑体" size="4" color="#0000FF"><strong>为什么是LSTM+GRU?</strong></font><br>    因为我们测试过不同的组合, 发现LSTM+GRU的表现最佳.  <br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>为什么是LSTM+GRU?</strong></font><br>    因为我们测试过不同的组合, 发现LSTM+GRU的表现最佳. GRU+LSTM效果也明显差于前者<br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于SRU、QRNN和IndRNN:</strong></font><br>    SRU设计动机是解决 <strong>RNN的训练速度太慢</strong>、<strong>模型的应用性和实验的可重复性</strong>、<strong>网络结构的可解释性</strong>三个问题, 按照<a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">论文</a>里的实验显示, SRU最高可以比keras优化的CuDNNLSTM快10倍! 但是实际使用过程中我们发现在该任务上SRU的keras实现速度是比不上CuDNNLSTM的, 不知道是keras实现的代码不够完善还是我们的网络结构不利于SRU的发挥所致, SRU的详细介绍<a href="https://www.zhihu.com/question/65244705/answer/229364472" target="_blank" rel="noopener">在这</a><br>    QRNN设计动机是<strong>RNN在计算时，有时间的依赖性，并行度受限；而CNN受制于有限的receptive field, 因此, 信息传递太慢</strong>, QRNN希望能综合RNN和CNN的优点，尽量避免各自的缺陷, 但是在我们使用的过程中发现精度较低且速度没有明显加快, QRNN的详细介绍<a href="https://blog.csdn.net/jackytintin/article/details/77945354" target="_blank" rel="noopener">在这</a><br>    IndRNN<strong>既可以利用CNN的多层网络，又可以利用RNN的循环连接</strong>. 特别适合于解决时序相关问题，比如视频分析，动作识别，NLP之类. 同样和SRU以及QRNN一样精度低于CuDNNLSTM/GRU, 需要堆叠多层才能达到相同精度但速度因此降低导致无法使用, 关于IndRNN的详细介绍<a href="https://www.zhihu.com/question/266379600/answer/358655349" target="_blank" rel="noopener">在这</a>  <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font><br>    Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 前者效果稍差但速度更快, 后者效果更好但速度更慢.  <br></p>
 <p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是训练过程中使用一定trick的回调函数, 如<a href="https://arxiv.org/pdf/1506.01186" target="_blank" rel="noopener">CLR</a>、<a href="https://arxiv.org/pdf/1803.05407" target="_blank" rel="noopener">随机加权平均SWA</a>、<a href="https://arxiv.org/abs/1608.03983" target="_blank" rel="noopener">模拟余弦退火SGDR</a>和<a href="https://arxiv.org/abs/1704.00109" target="_blank" rel="noopener">快照集成Snapshot</a>以及目标函数的改进, 何恺名针对不平衡类别设计的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>, 还有Google Brain团队在ICLR 2018上发表的<a href="https://arxiv.org/pdf/1711.00489" target="_blank" rel="noopener">论文</a>, 不对学习率进行衰减调整而对batch_szie做文章的技巧.</p>
