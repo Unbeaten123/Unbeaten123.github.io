@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/15/知识总结/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta property="og:updated_time" content="2018-12-23T12:05:39.877Z">
+<meta property="og:updated_time" content="2018-12-25T07:04:40.397Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -200,6 +200,8 @@
 <li>GRU参数更少因此更容易收敛，但是数据集很大的情况下，LSTM表达性能更好。</li>
 <li>从结构上来说，GRU只有两个门（update和reset），LSTM有三个门（forget，input，output），GRU直接将hidden state传给下一个单元，而LSTM则用memory cell把hidden state包装起来。</li>
 </ol>
+<p><font color="#dddd00">LSTM防止梯度弥散和爆炸的原因:</font><br>传统的RNN是用覆盖的的方式计算状态: <script type="math/tex">S_t = f(S_{t-1}, x_t)</script>, 这有点类似于复合函数，那么根据链式求导的法则，复合函数求导：设 <script type="math/tex">f</script> 和 <script type="math/tex">g</script> 为 <script type="math/tex">x</script> 的可导函数，则 <script type="math/tex">(f\circg)'(x) = f'(g(x))g'(x)</script>，他们是一种乘积的方式，那么如果导数都是小数或者都是大于1的数的话，就会使得总的梯度发生vanishing或explosion的情况，当然梯度爆炸(gradient explosion)不是个严重的问题，一般靠裁剪后的优化算法即可解决，比如gradient clipping（如果梯度的范数大于某个给定值，将梯度同比收缩），但是梯度消失做不到，这个时候就要用lstm了。在lstm中，我们发现，状态 <script type="math/tex">S</script> 是通过累加的方式来计算的，<script type="math/tex">S_t = \sum_{i=1}^t\DeltaS_i</script>. 那这样的话，就不是一直复合函数的形式了，它的的导数也不是乘积的形式，这样就不会发生梯度消失的情况了. </p>
+<p>作者：Evan<br>链接：<a href="https://zhuanlan.zhihu.com/p/34203833" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/34203833</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 <p><font color="#dddd00">boosting和bagging在不同情况下的选用:</font><br>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练. 根据自己的经验, 只要模型不容易过拟合boosting的表现一般都不差于bagging</p>
 <p><font color="#dddd00">Seq2seq模型:</font><br>经典的seq2seq模型就是翻译模型, 例如google翻译团队的transformer + attention. seq2seq模型最大的特点是突破了传统RNN模型输入输出等长的限制. 而seq2seq模型实际上属于encoder-decoder结构, encoder将输入序列压缩成指定维度的隐向量, decoder根据这个隐向量生成输出序列, 生成输出序列可以仅把隐向量当做decoder的输入, 也可以把隐向量加入到生成序列的每个时刻的计算中.  </p>
 <h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
@@ -584,5 +586,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
