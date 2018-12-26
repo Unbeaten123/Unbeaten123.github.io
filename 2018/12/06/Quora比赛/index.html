@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
 <meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
-<meta property="og:updated_time" content="2018-12-26T11:09:33.532Z">
+<meta property="og:updated_time" content="2018-12-26T11:13:32.278Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -239,7 +239,7 @@
 
 <p>SWA设计的思路源于观察, 每次学习率周期学习到的结果倾向于堆叠在低loss平面边缘(图左的3个FGE结果: <script type="math/tex">W_1, W_2, W_3</script>), 对这样的结果取平均可能得到一个更好泛化解(图左部的 <script type="math/tex">W_{SWA}</script>). SWA只保存两个模型, 一个模型保存对训练过程中不同的模型权值平均值(<script type="math/tex">W_{SWA}</script>), 它将用于最终的预测; 另一个模型(<script type="math/tex">W</script>)用于探索权值空间. 其更新公式:  </p>
 <script type="math/tex; mode=display">W_{SWA} \leftarrow \frac{W_{SWA} \cdot n_{models} + W}{n_{models} + 1}</script><p>Trick 5. <strong>Focal Loss</strong>: Focal loss是何恺明团队提出的一个处理类别不平衡的损失函数, 可以改善图像物体检测的效果. 虽然是针对CV提出的一个不平衡损失函数, 但是在NLP中也存在大量类别不平衡任务, 比如这个比赛中正负样本的比例就达到1: 15. 下面简单介绍Focal loss设计的motivation: 1) 极度的样本不平衡, 正负比例可能大于1000; 2) 梯度被easy example支配(虽然easy example的loss很低, 但是数量过多导致最终loss依然很大从而收敛不到一个好的结果). 处理方法也很简单就是对easy example按loss值衰减其权重, 如下图所示well-classified部分就是easy examples, CE为传统交叉熵损失, FL为Focal loss损失, 其损失函数公式为:</p>
-<script type="math/tex; mode=display">FL(p_t) = -\alpha_t(1 - p_t)^\gamma log(p_t)</script><p><script type="math/tex">\alpha_t</script> 和 <script type="math/tex">\gamma</script> 是两个超参数, </p>
+<script type="math/tex; mode=display">FL(p_t) = -\alpha_t(1 - p_t)^\gamma log(p_t)</script><p>其中 <script type="math/tex">\alpha_t</script> 是均衡系数, <script type="math/tex">\gamma</script> 是对easy example的衰减超参数, 当 <script type="math/tex">p_t</script> 趋于1时对应的loss很低此时通过 <script type="math/tex">(1 - p_t)^\gamma</script> 项来衰减其在损失函数中的权重.   </p>
 <div align="center">
 <img src="/img/FocalLoss.png" width="600" height="400"> 
 </div>  
@@ -625,21 +625,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
