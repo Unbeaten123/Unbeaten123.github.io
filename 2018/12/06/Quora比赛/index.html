@@ -19,7 +19,8 @@
 <meta property="og:image" content="http://yoursite.com/img/Snapshot.png">
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
-<meta property="og:updated_time" content="2018-12-26T08:37:28.723Z">
+<meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
+<meta property="og:updated_time" content="2018-12-26T09:30:24.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -217,19 +218,19 @@
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font><br>    Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 发现针对不同的网络结构两种操作各有胜负, 但整体来说取平均的得分更高且更节省内存空间.  <br></p>
 <p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是学习率的衰减改变、目标函数的改变等, 如<a href="https://arxiv.org/pdf/1506.01186" target="_blank" rel="noopener">CLR</a>、<a href="https://arxiv.org/abs/1704.00109" target="_blank" rel="noopener">快照集成Snapshot</a>、<a href="https://arxiv.org/abs/1608.03983" target="_blank" rel="noopener">余弦退火集合热重启SGDR</a>和<a href="https://arxiv.org/pdf/1803.05407" target="_blank" rel="noopener">随机加权平均SWA</a>以及目标函数的改进, 何恺明针对不平衡类别设计的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>, 还有Google Brain团队在ICLR 2018上发表的<a href="https://arxiv.org/pdf/1711.00489" target="_blank" rel="noopener">论文</a>, 不对学习率进行衰减调整而对batch_szie做文章的技巧.  </p>
 <ol>
-<li><p>CLR(Cyclical Learning Rate, 周期学习率): 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角变化和指数变化)以及一个指数模式下的衰减参数gamma.   </p>
+<li><p><strong>CLR(Cyclical Learning Rate, 周期学习率)</strong>: 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角变化和指数变化)以及一个指数模式下的衰减参数gamma.   </p>
 <div align="center">
 <img src="/img/clr.png" width="400" height="200"> 
 </div>
 </li>
-<li><p>Snapshot(快照集成): 发表在ICLR 2017上的论文, 是一种网络集成方法只需要训练一个模型, 使用基于余弦退火策略的循环学习率策略. 其motivation在于: 训练过程中的不同局部最优解可能包含更多的信息.<br>我们知道SGD会在权重空间内产生较大的跃变, 当学习率因为余弦退火策略而下降时, SGD会收敛到某个局部解, 此时Snapshot集成就会对这个局部解模型拍下”快照”, 将局部解加入解集合中. 随后学习率再次被重置为一个较高值(warm restart), SGD再次收敛时很可能产生一个大的跃变进入新的局部解. 当然为了找到具有差异性的模型, 需要设置较大的epochs.(20~40)</p>
+<li><p><strong>Snapshot(快照集成)</strong>: 发表在ICLR 2017上的论文, 是一种网络集成方法只需要训练一个模型, 使用基于余弦退火策略的循环学习率策略. 其motivation在于: 训练过程中的不同局部最优解可能包含更多的信息.<br>我们知道SGD会在权重空间内产生较大的跃变, 当学习率因为余弦退火策略而下降时, SGD会收敛到某个局部解, 此时Snapshot集成就会对这个局部解模型拍下”快照”, 将局部解加入解集合中. 随后学习率再次被重置为一个较高值(warm restart), SGD再次收敛时很可能产生一个大的跃变进入新的局部解. 当然为了找到具有差异性的模型, 需要设置较大的epochs.(20~40)</p>
 <div align="center">
 <img src="/img/Snapshot.png" width="700" height="350"> 
 </div>  
 </li>
-<li><p>SGDR(Stochastic gradient descent with warm restarts, 余弦退火结合热重启): 同样发表在ICLR 2017上, 按照我的理解SGDR和Snapshot的区别在于Snapshot利用和SGDR一样的过程调整学习率即余弦退火结合循环学习率策略, 只不过Snapshot在每次收敛到局部解时保存了局部解的模型用与ensemble.  </p>
+<li><p><strong>SGDR(Stochastic gradient descent with warm restarts, 余弦退火结合热重启)</strong>: 同样发表在ICLR 2017上, 按照我的理解SGDR和Snapshot的区别在于Snapshot利用和SGDR一样的过程调整学习率即余弦退火结合循环学习率策略, 只不过Snapshot在每次收敛到局部解时保存了局部解的模型用与ensemble.  </p>
 </li>
-<li><p>SWA(Stochastic Weight Averaging, 随机加权平均): 是2018年提出的一篇论文, 它和主要对比对象<a href="https://arxiv.org/pdf/1802.10026" target="_blank" rel="noopener">快速几何集成FGE</a>(Fast Geometric Ensembling, 快速集合集成)都投了NIPS 2018, 但是FGE的论文中了, 这篇却没有(实验结果比不过不可怕, 开会缺谁谁尴尬 =_=#).<br>我们没有使用FGE, 这里就简单介绍一下FGE: FGE和Snapshot集成十分相似但主要有两个不同点: 1) FGE使用线性分段周期学习率策略而不是余弦退火; 2) FGE的循环周期短得多(相较于Snapshot的20~40降低到2~4个epochs). 直观上来看这样获取的模型差异性可能比较小, 但是作者发现在足够多的不同模型之间, 存在低loss的连接通路(如下图所示, 实线部分即为局部最优解之间的低loss通路), 沿着这些通路以较小的步长前进保存模型快照可以获取差异足够大的模型, 相比Snapshot的集成结果FGE的表现更好且速度更快.  </p>
+<li><p><strong>SWA(Stochastic Weight Averaging, 随机加权平均)</strong>: 是2018年提出的一篇论文, 它和主要对比对象<a href="https://arxiv.org/pdf/1802.10026" target="_blank" rel="noopener">快速几何集成FGE</a>(Fast Geometric Ensembling, 快速集合集成)都投了NIPS 2018, 但是FGE的论文中了, 这篇却没有(实验结果比不过不可怕, 开会缺谁谁尴尬 =_=#).<br>我们没有使用FGE, 这里就简单介绍一下FGE: FGE和Snapshot集成十分相似但主要有两个不同点: 1) FGE使用线性分段周期学习率策略而不是余弦退火; 2) FGE的循环周期短得多(相较于Snapshot的20~40降低到2~4个epochs). 直观上来看这样获取的模型差异性可能比较小, 但是作者发现在足够多的不同模型之间, 存在低loss的连接通路(如下图所示, 实线部分即为局部最优解之间的低loss通路), 沿着这些通路以较小的步长前进保存模型快照可以获取差异足够大的模型, 相比Snapshot的集成结果FGE的表现更好且速度更快.  </p>
 <div align="center">
 <img src="/img/FGE.png" width="600" height="180"> 
 </div>  
@@ -243,10 +244,14 @@
 
 <p>SWA设计的思路源于观察, 每次学习率周期学习到的结果倾向于堆叠在低loss平面边缘(图左的3个FGE结果: <script type="math/tex">W_1, W_2, W_3</script>), 对这样的结果取平均可能得到一个更好泛化解(图左部的 <script type="math/tex">W_{SWA}</script>). SWA只保存两个模型, 一个模型保存对训练过程中不同的模型权值平均值(<script type="math/tex">W_{SWA}</script>), 它将用于最终的预测; 另一个模型(<script type="math/tex">W</script>)用于探索权值空间. 其更新公式:  </p>
 <script type="math/tex; mode=display">W_{SWA} \leftarrow \frac{W_{SWA} \cdot n_{models} + W}{n_{models} + 1}</script><ol>
-<li><p>Focal Loss: </p>
-</li>
-<li><p>Don’t decay the learning rate, increase your batch size!: 这是ICLR 2018的论文, 作者也没起个好记的名字, 我就只好把论文名字放这了, 看起来还是很有气势的. </p>
-</li>
+<li><strong>Focal Loss</strong>: Focal loss是何恺明团队提出的一个处理类别不平衡的损失函数, 可以改善图像物体检测的效果. 虽然是针对CV提出的一个不平衡损失函数, 但是在NLP中也存在大量类别不平衡任务, 比如这个比赛中正负样本的比例就达到1: 15. 下面简单介绍Focal loss设计的motivation: 1) 极度的样本不平衡, 正负比例可能大于1000; 2) 梯度被easy example支配(虽然easy example的loss很低, 但是数量过多导致最终loss依然很大从而收敛不到一个好的结果). 处理方法也很简单就是对easy example按loss值衰减其权重, 如下图所示well-classified部分就是easy examples, CE为传统交叉熵损失, FL为Focal loss损失, 其损失函数公式为:<script type="math/tex; mode=display">FL(p_t) = -\alpha_t(1 - p_t)^\gamma log(p_t)</script></li>
+</ol>
+<div align="center">
+<img src="/img/FocalLoss.png" width="600" height="400"> 
+</div>  
+
+<ol>
+<li><strong>Don’t decay the learning rate, increase your batch size!</strong>: 这是ICLR 2018的论文, 作者也没起个好记的名字, 我就只好把论文名字放这了, 看起来还是很有气势的. </li>
 </ol>
 <h1 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h1><h3 id="深度模型的可重复性"><a href="#深度模型的可重复性" class="headerlink" title="深度模型的可重复性"></a>深度模型的可重复性</h3><p>由于使用到了CuDNNLSTM和CuDNNGRU, 其网络权重初始化具有很大的随机性, 使得同样的代码跑出来的结果在LB上的得分足足有 <script type="math/tex">\pm</script>0.005 的差距! 经过各种测试, 定义下面的代码并在开始训练前调用函数即可保证网络结果的可复现性, 要注意除了网络权重随机化造成的影响, 还有是否使用随机种子对训练数据进行shuffle以及处理embedding时缺失单词是否随机生成一个向量等细微之处都会影响最终的结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">seed_torch</span><span class="params">(seed=<span class="number">1029</span>)</span>:</span></span><br><span class="line">    random.seed(seed)</span><br><span class="line">    os.environ[<span class="string">'PYTHONHASHSEED'</span>] = str(seed)</span><br><span class="line">    np.random.seed(seed)</span><br><span class="line">    torch.manual_seed(seed)</span><br><span class="line">    torch.cuda.manual_seed(seed)</span><br><span class="line">    torch.backends.cudnn.deterministic = <span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
 
