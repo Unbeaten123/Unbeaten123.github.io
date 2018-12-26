@@ -18,7 +18,8 @@
 <meta property="og:image" content="http://yoursite.com/img/clr.png">
 <meta property="og:image" content="http://yoursite.com/img/Snapshot.png">
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
-<meta property="og:updated_time" content="2018-12-26T07:43:02.604Z">
+<meta property="og:image" content="http://yoursite.com/img/SWA.png">
+<meta property="og:updated_time" content="2018-12-26T08:29:35.798Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -228,13 +229,18 @@
 </li>
 <li><p>SGDR(Stochastic gradient descent with warm restarts, 余弦退火结合热重启): 同样发表在ICLR 2017上, 按照我的理解SGDR和Snapshot的区别在于Snapshot利用和SGDR一样的过程调整学习率即余弦退火结合循环学习率策略, 只不过Snapshot在每次收敛到局部解时保存了局部解的模型用与ensemble.  </p>
 </li>
-<li><p>SWA(Stochastic Weight Averaging, 随机加权平均): 是2018年提出的一篇论文, 它和主要对比对象<a href="https://arxiv.org/pdf/1802.10026" target="_blank" rel="noopener">快速几何集成FGE</a>(Fast Geometric Ensembling, 快速集合集成)都投了NIPS 2018, 但是FGE的论文中了, 这篇却没有(实验结果比不过不可怕, 开会缺谁谁尴尬 =_=#).<br>我们没有使用FGE, 这里就简单介绍一下FGE: FGE和Snapshot集成十分相似但主要有两个不同点: 1) FGE使用线性分段周期学习率策略而不是余弦退火; 2) FGE的循环周期短得多(相较于Snapshot的20~40降低到2~4个epochs). 直观上来看这样获取的模型差异性可能比较小, 但是作者发现在足够多的不同模型之间, 存在低loss的连接通路(如下图所示, 实线部分即为局部最优解之间的低loss通路), 沿着这些通路以较小的步长前进保存模型快照可以获取差异足够大的模型, 相比Snapshot的集成结果FGE的表现更好且速度更快.</p>
+<li><p>SWA(Stochastic Weight Averaging, 随机加权平均): 是2018年提出的一篇论文, 它和主要对比对象<a href="https://arxiv.org/pdf/1802.10026" target="_blank" rel="noopener">快速几何集成FGE</a>(Fast Geometric Ensembling, 快速集合集成)都投了NIPS 2018, 但是FGE的论文中了, 这篇却没有(实验结果比不过不可怕, 开会缺谁谁尴尬 =_=#).<br>我们没有使用FGE, 这里就简单介绍一下FGE: FGE和Snapshot集成十分相似但主要有两个不同点: 1) FGE使用线性分段周期学习率策略而不是余弦退火; 2) FGE的循环周期短得多(相较于Snapshot的20~40降低到2~4个epochs). 直观上来看这样获取的模型差异性可能比较小, 但是作者发现在足够多的不同模型之间, 存在低loss的连接通路(如下图所示, 实线部分即为局部最优解之间的低loss通路), 沿着这些通路以较小的步长前进保存模型快照可以获取差异足够大的模型, 相比Snapshot的集成结果FGE的表现更好且速度更快.  </p>
 <div align="center">
-<img src="/img/FGE.png" width="500" height="200"> 
+<img src="/img/FGE.png" width="600" height="180"> 
+</div>  
+回到SWA, SWA只需要FGE的一小部分算力, 严格来说SWA不算集成模型, 在训练结束后SWA只有一个模型, 性能优于Snapshot接近FGE. SWA的实验结果如下图, 图中左部是三个FGE的快照模型结果和SWA在权重空间内平均的结果, 图中部是SWA与SGD的泛化误差差别, 注意SWA的训练误差是高于SGD的(图右部). SWA设计的思路源于观察, 每次学习率周期学习到的结果倾向于堆叠在低loss平面边缘(图左的3个FGE结果: $$W_1, W_2, W_3$$), 对这样的结果取平均可能得到一个更好泛化解(图左部的 $$W_{SWA}$$). SWA只保存两个模型, 一个模型保存对训练过程中不同的模型权值平均值($$W_{SWA}$$), 它将用于最终的预测; 另一个模型($$W$$)用于探索权值空间. 其更新公式:  
+$W_{SWA} \leftarrow \frac{W_{SWA} \dot n_{models} + W}{n_{models} + 1}$ 
+<div align="center">
+<img src="/img/SWA.png" width="600" height="180"> 
 </div>  </li>
 <li><p>Focal Loss: </p>
 </li>
-<li><p>Don’t decay the learning rate, increase your batch size!: </p>
+<li><p>Don’t decay the learning rate, increase your batch size!: 这是ICLR 2018的论文, 作者也没起个好记的名字, 我就只好把论文名字放这了, 看起来还是很有气势的. </p>
 </li>
 </ol>
 <h1 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h1><h3 id="深度模型的可重复性"><a href="#深度模型的可重复性" class="headerlink" title="深度模型的可重复性"></a>深度模型的可重复性</h3><p>由于使用到了CuDNNLSTM和CuDNNGRU, 其网络权重初始化具有很大的随机性, 使得同样的代码跑出来的结果在LB上的得分足足有 <script type="math/tex">\pm</script>0.005 的差距! 经过各种测试, 定义下面的代码并在开始训练前调用函数即可保证网络结果的可复现性, 要注意除了网络权重随机化造成的影响, 还有是否使用随机种子对训练数据进行shuffle以及处理embedding时缺失单词是否随机生成一个向量等细微之处都会影响最终的结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">seed_torch</span><span class="params">(seed=<span class="number">1029</span>)</span>:</span></span><br><span class="line">    random.seed(seed)</span><br><span class="line">    os.environ[<span class="string">'PYTHONHASHSEED'</span>] = str(seed)</span><br><span class="line">    np.random.seed(seed)</span><br><span class="line">    torch.manual_seed(seed)</span><br><span class="line">    torch.cuda.manual_seed(seed)</span><br><span class="line">    torch.backends.cudnn.deterministic = <span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
@@ -617,21 +623,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
