@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://yoursite.com/img/Snapshot.png">
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
-<meta property="og:updated_time" content="2018-12-26T08:29:35.798Z">
+<meta property="og:updated_time" content="2018-12-26T08:29:56.850Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -237,7 +237,8 @@
 $W_{SWA} \leftarrow \frac{W_{SWA} \dot n_{models} + W}{n_{models} + 1}$ 
 <div align="center">
 <img src="/img/SWA.png" width="600" height="180"> 
-</div>  </li>
+</div>  
+</li>
 <li><p>Focal Loss: </p>
 </li>
 <li><p>Don’t decay the learning rate, increase your batch size!: 这是ICLR 2018的论文, 作者也没起个好记的名字, 我就只好把论文名字放这了, 看起来还是很有气势的. </p>
@@ -623,5 +624,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
