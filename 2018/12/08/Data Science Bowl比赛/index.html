@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/resnet.png">
 <meta property="og:image" content="http://yoursite.com/img/fpn1.jpg">
 <meta property="og:image" content="http://yoursite.com/img/fpn2.jpg">
-<meta property="og:updated_time" content="2018-12-27T11:02:25.799Z">
+<meta property="og:updated_time" content="2018-12-27T11:11:13.886Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
@@ -196,7 +196,7 @@
 <p>目标检测中，TP是IOU&gt;0.5的检测框数量，FP是IOU&lt;0.5的检测框和对同一个GT多余的检测框数量。FN是没有被检测出来的GT的数量。</p>
 <h3 id="1、IOU是什么？用代码写一个IOU函数"><a href="#1、IOU是什么？用代码写一个IOU函数" class="headerlink" title="1、IOU是什么？用代码写一个IOU函数"></a>1、IOU是什么？用代码写一个IOU函数</h3><p>IOU的意思是是交并比。</p>
 <div align="center">
-<img src="/img/IOU.png" width="400px" align="center/">
+<img src="/img/IOU.png" width="400px">
 </div>
 它的公式可以表示为：
 $$
@@ -233,7 +233,7 @@ $$
 
 一张图片放入CNN网络中经过多层转化后，会生成多张特征图：
 <div align="center">
-<img src="/img/spp.png" width="600px" align="center/">
+<img src="/img/spp.png" width="600px">
 </div>
 而在原图中任意一个窗口在这些特征图中都有对应的窗口，SPP就是在这些对应的窗口中做池化操作使每张特征图都生成21维的特征向量。
 
@@ -267,12 +267,12 @@ faster rcnn=fast rcnn+rpn层；
 
   RPN层的作用是选出一些候选区域供fast rcnn网络的训练和预测，起加速作用。**rpn的核心是anchor机制，即对于一个卷积后的锚点可以对应回原图的不同宽高比例，不同大小的区域。在faster rcnn中anchor数量设置为k=9。**
   <div align="center">
-  <img src="/img/anchor.png" width="500px" align="center/">
+  <img src="/img/anchor.png" width="500px">
   </div>
   原图像经过一个卷积网络会得到H\*W\*256的feature map，在论文里的H*W是原图像的\dfrac{1}{16}，特征图可以理解为原图的一种缩放。**那么，对于每个anchor，有一个256维度的特征向量来描述。这个特征向量对应原图像中k个anchor**；接下来每个anchor的256维向量都要经过两个分支进行训练：一个分支是候选区域分类，256->2\*k，一共k组输出，每组分别表示目标和前景的概率；一个分支是bbox regression，256->4\*k，一共k组输出，每一组4维向量分别表示候选区域的位置和大小：(t_x,t_y,t_w,t_h)。
 
   其中，每个anchor是否为真实区域取决于IOU的大小，与任意一个真实区域的IOU>0.7则为标定为正样本，与所有真实区域的IOU<0.3则标定为负样本。 rpn层和fast="" rcnn是共享特征图的，只不过rpn层是利用anchor机制事先选择得到候选框。这部分候选框映射到的特征图的区域经过roi="" pooling得到相同大小的特征向量，传递给后面两个分支：fc层分类和回归。="" ###="" 6、mask="" rcnn="" mask="" rcnn是基于faster="" rcnn工作的基础上提出的同时可以进行目标检测和目标分割的模型，可以认为mask="" rcnn+roialign+mask分支。="" -="" ####="" roialign="" rcnn不仅需要检测候选框的类别，还需要给出目标类别的mask映射。mask映射应该遵循平移等价性，就是说框移动，输出的mask也会相应移动="" (平移不变性是指框移动，输出也不会变化，比如分类器)。="" 所以，传统的fast="" rcnn在这一点上有着较大的缺陷，因为它在卷积过程和roi层经过了两次量化损失。比如说，原图像256\*256，而特征图是16\*16，缩小为原来的\dfrac{1}{16}。那么原图中坐标17映射到特征图上就是1.0625，小数部分会被舍去。而在roi层，如果框的大小是15\*15，要进行7\*7的pooling，又是一次损失。="" <div="" align="center">
-  <img src="/img/roialign.png" width="700px" align="center/">
+  <img src="/img/roialign.png" width="700px">
   
   这种损失会导致生成的mask和目标无法对齐。所以，RoIAlign为了得到浮点数坐标的像素值，利用了双线性插值算法。 像上图种每个bin里面的四个点的像素值，都是由这种方法得到的，之后再进行正常的max pooling操作。
 
@@ -280,7 +280,7 @@ faster rcnn=fast rcnn+rpn层；
 
   mask rcnn和faster rcnn除了RoIAlign的区别外，另一个区别就是加了一个mask的分支，如下图：
   <div align="center">
-  <img src="/img/maskrcnn.png" width="700px" align="center/">
+  <img src="/img/maskrcnn.png" width="700px">
   </div>
   以ResNet为例：候选区域经过RoIAlign层得到7\*7*2048的feature map，mask分支是通过FCN网络来实现的，最终得到了14\*14\*80的输出，这里的80就是类别数，也就是有80个mask，但只有一个是对应于目标类别的。所以需要等另一个分支预测得到区域类别后选择对应的mask输出。
 
@@ -292,7 +292,7 @@ one-stage目标检测的主流方法，速度比rcnn系列模型要快很多，�
 
   该框架假设一张448\*448的图片被划分成S\*S的网格 (论文中S=7)，经过如下的网络结构后输出了S\*S\*N的向量，每个N维向量对应于一个格子的预测信息。其中N=B*5+C，B是认为设置的要预测的bbox数量，C是目标类别数 (论文中分别是2和20)；所以N=30。
   <div align="center">
-  <img src="/img/yolov1.png" width="800px" align="center/">
+  <img src="/img/yolov1.png" width="800px">
   </div>
   这里记录几个关键点：
 
@@ -307,11 +307,11 @@ one-stage目标检测的主流方法，速度比rcnn系列模型要快很多，�
 
   - 
   <div align="center">
-  <img src="/img/yololossfunc.png" width="800px" align="center/">
+  <img src="/img/yololossfunc.png" width="800px">
   </div>
   - 因为每个格子都会给出两个bbox的预测，所以在一张图片中每个目标类别会得到7\*7\*2个bbox和概率值。要得到最终的bbox还得经过一个后处理步骤：NMS (非极大值抑制)。
     <div align="center">
-    <img src="/img/nms.png" width="600" align="center/">
+    <img src="/img/nms.png" width="600">
     </div>
 
 
@@ -323,7 +323,7 @@ one-stage目标检测的主流方法，速度比rcnn系列模型要快很多，�
 <p>2、SSD还加入了Prior box，类似于RPN的anchor；</p>
 <ul>
 <li><h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><div align="center">
-<img src="/img/ssd0.png" width="800" align="center/">
+<img src="/img/ssd0.png" width="800">
 </div>
 
 
@@ -335,7 +335,7 @@ one-stage目标检测的主流方法，速度比rcnn系列模型要快很多，�
 <p>  3、进行bbox regression，特征图每个点经过regressor生成2*4*num_priorbox维度的输出。每个prior box得到一组(x1,y1,x2,y2)和四个坐标值的方差预测，8个数。</p>
 <ul>
 <li><h4 id="Prior-box"><a href="#Prior-box" class="headerlink" title="Prior box"></a>Prior box</h4><p><div align="center">
-<img src="/img/priorbox.jpg" width="500" align="center/">
+<img src="/img/priorbox.jpg" width="500">
 </div><br>SSD按照如下规则生成prior box：</p>
 <ul>
 <li><p>以feature map上每个点为中心，生成一系列同心的prior box</p>
@@ -371,15 +371,15 @@ FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率p_t高的样本�
 FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><h3 id="10、FPN"><a href="#10、FPN" class="headerlink" title="10、FPN"></a>10、FPN</h3><p>feature pyramid networks (特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题。在目标检测中，一个目标类别可能有很多种尺度，比如在街头，远处的行人和近处的行人尺度就相差很大。这种多尺度问题用传统网络来做精度不够令人满意。因为目标图像再经过深层卷积网络后，语义信息增强但位置信息减弱，所以最终检测效果会受到影响。一个简单的思路是把目标图像进行多尺度缩放，一起交给模型进行训练。显然这种方法十分耗费计算资源和训练时间。所以作者希望提出一种网络结构，让图像在经过网络后既能提取出深层的语义信息，也能保留原图的位置信息。</p>
 <p>图像在经过一些卷积层和池化层后，一般都是通道数变多，特征图变小。参见resnet：</p>
 <div align="center">
-<img src="/img/resnet.png" width="800px" align="center/">
+<img src="/img/resnet.png" width="800px">
 </div>
 可以看出，卷积层[C2,C3,C4,C5]特征图每次长宽缩小为原来的\dfrac{1}{2}。**这个过程可以看成金字塔结构由底向上走，图像的坐标信息逐渐减弱，但语义信息随着通道数的增加而增强。**这就是FPN的第一阶段，金字塔向上走的过程。
 <div align="center">
-<img src="/img/fpn1.jpg" width="700px" align="center/">
+<img src="/img/fpn1.jpg" width="700px">
 </div>
 接下来是FPN的第二阶段：自顶向下——深层的特征图和浅层特征图的融合。如下图所示，**深层的特征图通过上采样变换成原来的2倍，下一层的特征图进行1\*1卷积增加通道数，两层相加，逐层往下走。这个过程使图像的深层语义信息得以保留，并且引入了底层的位置信息。到了底部后，再进行一次3\*3的卷积，去除上采样的混叠现象。**
 <div align="center">
-<img src="/img/fpn2.jpg" width="700px" align="center/">
+<img src="/img/fpn2.jpg" width="700px">
 </div>
 
 </0.3则标定为负样本。>
