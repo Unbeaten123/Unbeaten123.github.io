@@ -243,7 +243,7 @@
 <h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="0、mAP评估指标？"><a href="#0、mAP评估指标？" class="headerlink" title="0、mAP评估指标？"></a>0、mAP评估指标？</h3><p>mAP是每个类别AP的平均值，而AP是PR曲线下的面积。</p>
 <p>目标检测中，TP是IOU&gt;0.5的检测框数量，FP是IOU<0.5的检测框和对同一个gt多余的检测框数量。fn是没有被检测出来的gt的数量。 <!--="" more="" --=""></0.5的检测框和对同一个gt多余的检测框数量。fn是没有被检测出来的gt的数量。></p>
 <h3 id="1、IOU是什么？用代码写一个IOU函数"><a href="#1、IOU是什么？用代码写一个IOU函数" class="headerlink" title="1、IOU是什么？用代码写一个IOU函数"></a>1、IOU是什么？用代码写一个IOU函数</h3><p>IOU的意思是是交并比。</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/iou.png" width="400px" align="center/"></p>
+<p><img src="" width="400px" align="center/"></p>
 <p>它的公式可以表示为：</p>
 <script type="math/tex; mode=display">
 IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#并集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(au, bu, area_intersection)</span>:</span></span><br><span class="line">    area_a = (au[<span class="number">2</span>] - au[<span class="number">0</span>]) * (au[<span class="number">3</span>] - au[<span class="number">1</span>])</span><br><span class="line">    area_b = (bu[<span class="number">2</span>] - bu[<span class="number">0</span>]) * (bu[<span class="number">3</span>] - bu[<span class="number">1</span>])</span><br><span class="line">    area_union = area_a + area_b - area_intersection</span><br><span class="line">    <span class="keyword">return</span> area_union</span><br><span class="line"></span><br><span class="line"><span class="comment">#交集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">intersection</span><span class="params">(ai, bi)</span>:</span></span><br><span class="line">    x = max(ai[<span class="number">0</span>], bi[<span class="number">0</span>])</span><br><span class="line">    y = max(ai[<span class="number">1</span>], bi[<span class="number">1</span>])</span><br><span class="line">    w = min(ai[<span class="number">2</span>], bi[<span class="number">2</span>]) - x</span><br><span class="line">    h = min(ai[<span class="number">3</span>], bi[<span class="number">3</span>]) - y</span><br><span class="line">    <span class="keyword">if</span> w &lt; <span class="number">0</span> <span class="keyword">or</span> h &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> w*h</span><br><span class="line"></span><br><span class="line"><span class="comment">#交并比</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iou</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="comment"># a and b should be (x1,y1,x2,y2)</span></span><br><span class="line">    <span class="keyword">if</span> a[<span class="number">0</span>] &gt;= a[<span class="number">2</span>] <span class="keyword">or</span> a[<span class="number">1</span>] &gt;= a[<span class="number">3</span>] <span class="keyword">or</span> b[<span class="number">0</span>] &gt;= b[<span class="number">2</span>] <span class="keyword">or</span> b[<span class="number">1</span>] &gt;= b[<span class="number">3</span>]:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span></span><br><span class="line">    area_i = intersection(a, b)</span><br><span class="line">    area_u = union(a, b, area_i)</span><br><span class="line">    <span class="keyword">return</span> float(area_i) / float(area_u + <span class="number">1e-6</span>)</span><br></pre></td></tr></table></figure>
@@ -259,7 +259,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>(5)     SVM和回归是事后操作，在SVM和回归过程中CNN特征没有被学习更新。</p>
 <h3 id="3、SPP-Net"><a href="#3、SPP-Net" class="headerlink" title="3、SPP Net"></a>3、SPP Net</h3><p>一句话来说就是用SPP layer从不同大小的窗口提取出同样长度的特征向量。之后fast rcnn的ROI层就是借鉴了SPP Net的这种思路。</p>
 <p>一张图片放入CNN网络中经过多层转化后，会生成多张特征图：</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/spp.png" width="600px" align="center/"></p>
+<p><img src="" width="600px" align="center/"></p>
 <p>而在原图中任意一个窗口在这些特征图中都有对应的窗口，SPP就是在这些对应的窗口中做池化操作使每张特征图都生成21维的特征向量。</p>
 <p>具体做法是，在conv5层得到的特征图是256层，每层都做一次spatial pyramid pooling。先把每个特征图分割成多个不同尺寸的网格，比如网格分别为4*4、2*2、1*1,然后每个网格做max pooling，这样256层特征图就形成了16*256，4*256，1*256维特征，他们连起来就形成了一个固定长度的特征向量，将这个向量输入到后面的全连接层。</p>
 <h3 id="4、Fast-RCNN"><a href="#4、Fast-RCNN" class="headerlink" title="4、Fast RCNN"></a>4、Fast RCNN</h3><p>1、利用selective search 算法在图像中从上到下提取2000个左右的建议窗口(Region Proposal)；</p>
@@ -273,7 +273,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <h3 id="5、Faster-RCNN"><a href="#5、Faster-RCNN" class="headerlink" title="5、Faster RCNN"></a>5、Faster RCNN</h3><p>faster rcnn=fast rcnn+rpn层；</p>
 <ul>
 <li><h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>RPN层的作用是选出一些候选区域供fast rcnn网络的训练和预测，起加速作用。<strong>rpn的核心是anchor机制，即对于一个卷积后的锚点可以对应回原图的不同宽高比例，不同大小的区域。在faster rcnn中anchor数量设置为k=9。</strong></p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/anchor.png" width="500px" align="center/"></p>
+<p><img src="" width="500px" align="center/"></p>
 <p>原图像经过一个卷积网络会得到H*W*256的feature map，在论文里的H<em>W是原图像的\dfrac{1}{16}，特征图可以理解为原图的一种缩放。<strong>那么，对于每个anchor，有一个256维度的特征向量来描述。这个特征向量对应原图像中k个anchor</strong>；接下来每个anchor的256维向量都要经过两个分支进行训练：一个分支是候选区域分类，256-&gt;2\</em>k，一共k组输出，每组分别表示目标和前景的概率；一个分支是bbox regression，256-&gt;4*k，一共k组输出，每一组4维向量分别表示候选区域的位置和大小：(t_x,t_y,t_w,t_h)。</p>
 <p>其中，每个anchor是否为真实区域取决于IOU的大小，与任意一个真实区域的IOU&gt;0.7则为标定为正样本，与所有真实区域的IOU&lt;0.3则标定为负样本。</p>
 <p>RPN层和fast rcnn是共享特征图的，只不过RPN层是利用anchor机制事先选择得到候选框。这部分候选框映射到的特征图的区域经过ROI pooling得到相同大小的特征向量，传递给后面两个分支：fc层分类和回归。</p>
@@ -283,18 +283,18 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <ul>
 <li><h4 id="RoIAlign"><a href="#RoIAlign" class="headerlink" title="RoIAlign"></a>RoIAlign</h4><p>mask rcnn不仅需要检测候选框的类别，还需要给出目标类别的mask映射。mask映射应该遵循平移等价性，就是说框移动，输出的mask也会相应移动 (平移不变性是指框移动，输出也不会变化，比如分类器)。</p>
 <p>所以，传统的fast rcnn在这一点上有着较大的缺陷，因为它在卷积过程和ROI层经过了两次量化损失。比如说，原图像256*256，而特征图是16*16，缩小为原来的\dfrac{1}{16}。那么原图中坐标17映射到特征图上就是1.0625，小数部分会被舍去。而在ROI层，如果框的大小是15*15，要进行7*7的pooling，又是一次损失。</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/roialign.png" width="700px" align="center/"></p>
+<p><img src="" width="700px" align="center/"></p>
 <p>这种损失会导致生成的mask和目标无法对齐。所以，RoIAlign为了得到浮点数坐标的像素值，利用了双线性插值算法。 像上图种每个bin里面的四个点的像素值，都是由这种方法得到的，之后再进行正常的max pooling操作。</p>
 </li>
 <li><h4 id="mask-rcnn-structure"><a href="#mask-rcnn-structure" class="headerlink" title="mask rcnn structure"></a>mask rcnn structure</h4><p>mask rcnn和faster rcnn除了RoIAlign的区别外，另一个区别就是加了一个mask的分支，如下图：</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/maskrcnn.png" width="700px" align="center/"></p>
+<p><img src="" width="700px" align="center/"></p>
 <p>以ResNet为例：候选区域经过RoIAlign层得到7*7<em>2048的feature map，mask分支是通过FCN网络来实现的，最终得到了14\</em>14*80的输出，这里的80就是类别数，也就是有80个mask，但只有一个是对应于目标类别的。所以需要等另一个分支预测得到区域类别后选择对应的mask输出。</p>
 </li>
 </ul>
 <h3 id="7、yolo"><a href="#7、yolo" class="headerlink" title="7、yolo"></a>7、yolo</h3><p>one-stage目标检测的主流方法，速度比rcnn系列模型要快很多，在一些注重速度的目标检测系统中经常会用到。</p>
 <ul>
 <li><h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>该框架假设一张448*448的图片被划分成S*S的网格 (论文中S=7)，经过如下的网络结构后输出了S*S*N的向量，每个N维向量对应于一个格子的预测信息。其中N=B*5+C，B是认为设置的要预测的bbox数量，C是目标类别数 (论文中分别是2和20)；所以N=30。</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/yolov1.png" width="800px" align="center/"></p>
+<p><img src="" width="800px" align="center/"></p>
 <p>这里记录几个关键点：</p>
 <ul>
 <li><p>其中bbox的位置信息是一个5维向量：(x,y,w,h)，类别预测向量是20维。坐标x,y代表了预测的bbox的中心与栅格边界的相对值。 坐标w,h代表了预测的bounding box的width、height相对于整幅图像width,height的比例。</p>
@@ -306,10 +306,10 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 \operatorname { Pr } \left( \text { Class } _ { i } | \text { Object } \right) * \operatorname { Pr } ( \text { Object } ) * \text {IOU}_{\text{pred}}^{\text{truth}} = \operatorname { Pr } \left( \text { Class } _ { i } \right) * \text{IOU}_{\text{pred}}^{\text{truth}}</script></li>
 <li></li>
 </ul>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/yololossfunc.png" width="800px" align="center/"></p>
+<p><img src="" width="800px" align="center/"></p>
 <ul>
 <li><p>因为每个格子都会给出两个bbox的预测，所以在一张图片中每个目标类别会得到7*7*2个bbox和概率值。要得到最终的bbox还得经过一个后处理步骤：NMS (非极大值抑制)。</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/nms.png" width="600" align="center/"></p>
+<p><img src="" width="600" align="center/"></p>
 </li>
 </ul>
 </li>
@@ -321,7 +321,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>1、yolo只用最高层的特征图 (7*7*1024)来进行预测，这样做速度很快但在检测小物体上就不尽人意。SSD效仿了特征金字塔的思路，<strong>在6种尺度的特征图上进行softmax分类和bbox回归</strong>；</p>
 <p>2、SSD还加入了Prior box，类似于RPN的anchor；</p>
 <ul>
-<li><h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/ssd0.png" width="800" align="center/"></p>
+<li><h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><p><img src="" width="800" align="center/"></p>
 </li>
 </ul>
 <p>  <strong>conv4_3</strong>网络分为了3条线路:</p>
@@ -329,7 +329,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>  2、经过bn层后+一次卷积后特征图每个点生成了4*num_priorbox大小的特征，这些特征用于后面bbox regression。</p>
 <p>  3、进行bbox regression，特征图每个点经过regressor生成2*4*num_priorbox维度的输出。每个prior box得到一组(x1,y1,x2,y2)和四个坐标值的方差预测，8个数。</p>
 <ul>
-<li><h4 id="Prior-box"><a href="#Prior-box" class="headerlink" title="Prior box"></a>Prior box</h4><p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/priorbox.jpg" width="500" align="center/"></p>
+<li><h4 id="Prior-box"><a href="#Prior-box" class="headerlink" title="Prior box"></a>Prior box</h4><p><img src="" width="500" align="center/"></p>
 <p>SSD按照如下规则生成prior box：</p>
 <ul>
 <li><p>以feature map上每个点为中心，生成一系列同心的prior box</p>
@@ -364,11 +364,11 @@ FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率p_t高的样本�
 <script type="math/tex; mode=display">
 FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><h3 id="10、FPN"><a href="#10、FPN" class="headerlink" title="10、FPN"></a>10、FPN</h3><p>feature pyramid networks (特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题。在目标检测中，一个目标类别可能有很多种尺度，比如在街头，远处的行人和近处的行人尺度就相差很大。这种多尺度问题用传统网络来做精度不够令人满意。因为目标图像再经过深层卷积网络后，语义信息增强但位置信息减弱，所以最终检测效果会受到影响。一个简单的思路是把目标图像进行多尺度缩放，一起交给模型进行训练。显然这种方法十分耗费计算资源和训练时间。所以作者希望提出一种网络结构，让图像在经过网络后既能提取出深层的语义信息，也能保留原图的位置信息。</p>
 <p>图像在经过一些卷积层和池化层后，一般都是通道数变多，特征图变小。参见resnet：</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/resnet.png" width="800px" align="center/"></p>
+<p><img src="" width="800px" align="center/"></p>
 <p>可以看出，卷积层[C2,C3,C4,C5]特征图每次长宽缩小为原来的\dfrac{1}{2}。<strong>这个过程可以看成金字塔结构由底向上走，图像的坐标信息逐渐减弱，但语义信息随着通道数的增加而增强。</strong>这就是FPN的第一阶段，金字塔向上走的过程。</p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/fpn1.jpg" width="700px" align="center/"></p>
+<p><img src="" width="700px" align="center/"></p>
 <p>接下来是FPN的第二阶段：自顶向下——深层的特征图和浅层特征图的融合。如下图所示，<strong>深层的特征图通过上采样变换成原来的2倍，下一层的特征图进行1*1卷积增加通道数，两层相加，逐层往下走。这个过程使图像的深层语义信息得以保留，并且引入了底层的位置信息。到了底部后，再进行一次3*3的卷积，去除上采样的混叠现象。</strong></p>
-<p><img src="F:/clone/InterviewExperienceCollection/KnowledgePoint/fpn2.jpg" width="700px" align="center/"></p>
+<p><img src="" width="700px" align="center/"></p>
 
       
 
