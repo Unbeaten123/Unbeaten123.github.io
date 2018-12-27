@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
 <meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
-<meta property="og:updated_time" content="2018-12-26T13:34:42.075Z">
+<meta property="og:updated_time" content="2018-12-27T10:34:42.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -190,60 +190,36 @@
 <li>GloVe: GloVe由Stanford大学的NLP Group在2014年发表的<a href="https://www.aclweb.org/anthology/D14-1162" target="_blank" rel="noopener">论文</a>中提出的, 与word2vec和fasttext不同, 其研究对象是单词之间的共现率, 先构造一个共现矩阵<script type="math/tex">X</script>, <script type="math/tex">X_{ij}</script>表示上下文单词<script type="math/tex">i</script>和<script type="math/tex">j</script>在特定上下文窗口大小下的共同出现的次数, 距离越远的单词其共现率的计算权重越小. 其损失函数核心部分是一个平方损失函数<script type="math/tex">(w_i^T * \tilde{w_j} + b_i + \tilde{b_j} - log(X_{ij}))^2</script>, <script type="math/tex">w_i</script>和<script type="math/tex">w_j</script>即为目标词向量, 这个损失函数的含义是希望两个共现的单词的表示应该和他们共现的频率的对数尽可能的接近.</li>
 <li>Paragram: paragram是在paraphrase语料库上利用Skip-Gram模型得到的词向量为基础输入RNN进行fine-tuning训练得到词向量, 其本身并没有什么特殊之处.</li>
 </ol>
-<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><font face="黑体" size="5.5" color="#FF0000"><strong>预处理</strong></font><br> 
-预处理中包含了数据清洗、文本序列/向量化等操作
-
-### 数据清洗
-由于Quora官方的给数据相对来说比较"干净", 数据清洗就主要是对特殊字符和拼写错误单词的处理以便经过预处理后, 单词能够在所给的Embedding文件中找到对应的向量表示
-我们所做的清洗包括:
-1. 把特殊字符诸如", . ! ? + -"等单独隔开防止影响到单词的表示
-2. 把"what's, I've"等分开为"what is, I have"
-3. 把"qoura, qouta"等错误拼写的单词替换为正确的拼写单词
-4. 把所有非字母的字符全部移除并填充缺失值
-
-### 序列/向量化
-向量化的目的是为了把输入的文本序列转换成一个序列化、向量化的表示以便于时序模型如LSTM和GRU读取训练. 我们使用keras的Tokenizer来进行文本序列化处理, 简单来说Tokenizer需要我们给定一个参数num_words表示需要从预料中保存出现频率最高的num_words个单词用于生成向量. 实际上Tokenizer就是在所提供的预料数据上使用fit_on_texts 方法生成一个字典, 使得每个单词有着对应的word_index, 再使用texts_to_sequences方法将每条预料转换成对应的向量表示, 这个向量表示实际上就是这条预料中的单词出现在字典中的index, 在后续的深度模型中我们会使用字典生成预训练词向量矩阵, 随后根据这个index向量来获取各个单词对应的词向量(如果单词不存在于预训练词向量中, 则用所有词向量的均值和标准差作为高斯分布函数 np.random.normal 的参数生成相应的向量表示). 在比赛中我们尝试不同的num_words最终设置了num_words = 95000
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">somestr = [<span class="string">'ha ha gua angry'</span>,<span class="string">'howa ha gua excited naive'</span>]</span><br><span class="line">tok = tt.Tokenizer()</span><br><span class="line">tok.fit_on_texts(somestr)</span><br><span class="line">tok.word_index</span><br><span class="line">Out[<span class="number">90</span>]: &#123;<span class="string">'angry'</span>: <span class="number">3</span>, <span class="string">'excited'</span>: <span class="number">5</span>, <span class="string">'gua'</span>: <span class="number">2</span>, <span class="string">'ha'</span>: <span class="number">1</span>, <span class="string">'howa'</span>: <span class="number">4</span>, <span class="string">'naive'</span>: <span class="number">6</span>&#125;</span><br><span class="line">tok.texts_to_sequences(somestr)</span><br><span class="line">Out[<span class="number">91</span>]: [[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>]]</span><br></pre></td></tr></table></figure>
-
-### 填充序列保持长度一致
-经过Tokenizer对每条样本的向量化处理后还有一个问题就是各条处理后的训练样本长度是不一致的, 这样无法直接被keras的RNN模型所使用, 所以我们采用了keras的pad_sequence方法对所有的训练数据做填充/截断处理, 我们统计了所有训练数据的平均长度约为70, 所以我们将所有的样本按照长度70来填充/截断.
-
-<font face="黑体" size="5.5" color="#FF0000"><strong>模型选择</strong></font><br>  
-模型选择花费了我们很多时间尝试, 由于限制了kernel的使用时间, 所以模型方面不能太复杂, 我们主要在特征工程 + 传统机器学习模型和深度模型之间做实验选择
-### 传统机器学习模型
-由于这个比赛和提取语义有很大关系, 传统的机器学习模型不是很适用, 我们尝试过特征工程加上LightGBM, 但是LB得分很不如人意所以我们基本放弃了传统机器学习的思路.
-### 深度模型
-深度模型在实际使用中表现最好, 很遗憾由于不能使用外部数据导致一些state-of-art的模型比如ACL 2018上发表的[ULMFiT](http://www.aclweb.org/anthology/P18-1031)和Google AI Language与2018年10月提出的[BERT](https://arxiv.org/pdf/1810.04805.pdf?fbclid=IwAR3FQiWQzP7stmPWZ4kzrGmiUaN81UpiNeq4GWthrxmwgX0B9f1CvuXJC2E)都无法使用, 我们在线下测试了这些模型的表现十分出色, 但是线上无法使用也无法得知最终的表现会如何, 在线上我们尝试过很多模型包括:  
-1. **单模型**: CNN, LSTM, GRU, [SRU](https://arxiv.org/abs/1709.02755), [QRNN](https://arxiv.org/abs/1611.01576)以及[IndRNN](https://arxiv.org/abs/1803.04831)
-2. **多模型结合**: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, BiLSTM+BiGRU+Attention+Pooling, BiLSTM+BiGRU+Capsule+CRF 
-3. **多任务模型**: 不仅仅以区分出insincere问题为目标, 我们可以在训练的过程中加入其他的目标同时学习, 例如先对每条数据进行简单的语义分析得出一个情感分数, 把这个分数作为标签与原来的insincere标签一起作为新的标签, 通过联合的训练两个目标带来的好处包括: 1. 加入了更多的特征信息, 降低过拟合的风险; 2. 模型在学习的过程中可能会获取一些额外的信息以供原目标任务参考.    
-最终确定确定的模型框架如下图:  采用五折交叉验证
-<div align="center">
+<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><p><font face="黑体" size="5.5" color="#FF0000"><strong>预处理</strong></font><br><br>预处理中包含了数据清洗、文本序列/向量化等操作</p>
+<h3 id="数据清洗"><a href="#数据清洗" class="headerlink" title="数据清洗"></a>数据清洗</h3><p>由于Quora官方的给数据相对来说比较”干净”, 数据清洗就主要是对特殊字符和拼写错误单词的处理以便经过预处理后, 单词能够在所给的Embedding文件中找到对应的向量表示<br>我们所做的清洗包括:</p>
+<ol>
+<li>把特殊字符诸如”, . ! ? + -“等单独隔开防止影响到单词的表示</li>
+<li>把”what’s, I’ve”等分开为”what is, I have”</li>
+<li>把”qoura, qouta”等错误拼写的单词替换为正确的拼写单词</li>
+<li>把所有非字母的字符全部移除并填充缺失值</li>
+</ol>
+<h3 id="序列-向量化"><a href="#序列-向量化" class="headerlink" title="序列/向量化"></a>序列/向量化</h3><p>向量化的目的是为了把输入的文本序列转换成一个序列化、向量化的表示以便于时序模型如LSTM和GRU读取训练. 我们使用keras的Tokenizer来进行文本序列化处理, 简单来说Tokenizer需要我们给定一个参数num_words表示需要从预料中保存出现频率最高的num_words个单词用于生成向量. 实际上Tokenizer就是在所提供的预料数据上使用fit_on_texts 方法生成一个字典, 使得每个单词有着对应的word_index, 再使用texts_to_sequences方法将每条预料转换成对应的向量表示, 这个向量表示实际上就是这条预料中的单词出现在字典中的index, 在后续的深度模型中我们会使用字典生成预训练词向量矩阵, 随后根据这个index向量来获取各个单词对应的词向量(如果单词不存在于预训练词向量中, 则用所有词向量的均值和标准差作为高斯分布函数 np.random.normal 的参数生成相应的向量表示). 在比赛中我们尝试不同的num_words最终设置了num_words = 95000<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">somestr = [<span class="string">'ha ha gua angry'</span>,<span class="string">'howa ha gua excited naive'</span>]</span><br><span class="line">tok = tt.Tokenizer()</span><br><span class="line">tok.fit_on_texts(somestr)</span><br><span class="line">tok.word_index</span><br><span class="line">Out[<span class="number">90</span>]: &#123;<span class="string">'angry'</span>: <span class="number">3</span>, <span class="string">'excited'</span>: <span class="number">5</span>, <span class="string">'gua'</span>: <span class="number">2</span>, <span class="string">'ha'</span>: <span class="number">1</span>, <span class="string">'howa'</span>: <span class="number">4</span>, <span class="string">'naive'</span>: <span class="number">6</span>&#125;</span><br><span class="line">tok.texts_to_sequences(somestr)</span><br><span class="line">Out[<span class="number">91</span>]: [[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>]]</span><br></pre></td></tr></table></figure></p>
+<h3 id="填充序列保持长度一致"><a href="#填充序列保持长度一致" class="headerlink" title="填充序列保持长度一致"></a>填充序列保持长度一致</h3><p>经过Tokenizer对每条样本的向量化处理后还有一个问题就是各条处理后的训练样本长度是不一致的, 这样无法直接被keras的RNN模型所使用, 所以我们采用了keras的pad_sequence方法对所有的训练数据做填充/截断处理, 我们统计了所有训练数据的平均长度约为70, 所以我们将所有的样本按照长度70来填充/截断.</p>
+<p><font face="黑体" size="5.5" color="#FF0000"><strong>模型选择</strong></font><br><br>模型选择花费了我们很多时间尝试, 由于限制了kernel的使用时间, 所以模型方面不能太复杂, 我们主要在特征工程 + 传统机器学习模型和深度模型之间做实验选择</p>
+<h3 id="传统机器学习模型"><a href="#传统机器学习模型" class="headerlink" title="传统机器学习模型"></a>传统机器学习模型</h3><p>由于这个比赛和提取语义有很大关系, 传统的机器学习模型不是很适用, 我们尝试过特征工程加上LightGBM, 但是LB得分很不如人意所以我们基本放弃了传统机器学习的思路.</p>
+<h3 id="深度模型"><a href="#深度模型" class="headerlink" title="深度模型"></a>深度模型</h3><p>深度模型在实际使用中表现最好, 很遗憾由于不能使用外部数据导致一些state-of-art的模型比如ACL 2018上发表的<a href="http://www.aclweb.org/anthology/P18-1031" target="_blank" rel="noopener">ULMFiT</a>和Google AI Language与2018年10月提出的<a href="https://arxiv.org/pdf/1810.04805.pdf?fbclid=IwAR3FQiWQzP7stmPWZ4kzrGmiUaN81UpiNeq4GWthrxmwgX0B9f1CvuXJC2E" target="_blank" rel="noopener">BERT</a>都无法使用, 我们在线下测试了这些模型的表现十分出色, 但是线上无法使用也无法得知最终的表现会如何, 在线上我们尝试过很多模型包括:  </p>
+<ol>
+<li><strong>单模型</strong>: CNN, LSTM, GRU, <a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">SRU</a>, <a href="https://arxiv.org/abs/1611.01576" target="_blank" rel="noopener">QRNN</a>以及<a href="https://arxiv.org/abs/1803.04831" target="_blank" rel="noopener">IndRNN</a></li>
+<li><strong>多模型结合</strong>: CNN+LSTM, LSTM+GRU, GRU+LSTM, LSTM+SRU, BiLSTM+BiGRU+Attention+Pooling, BiLSTM+BiGRU+Capsule+CRF </li>
+<li><strong>多任务模型</strong>: 不仅仅以区分出insincere问题为目标, 我们可以在训练的过程中加入其他的目标同时学习, 例如先对每条数据进行简单的语义分析得出一个情感分数, 把这个分数作为标签与原来的insincere标签一起作为新的标签, 通过联合的训练两个目标带来的好处包括: 1. 加入了更多的特征信息, 降低过拟合的风险; 2. 模型在学习的过程中可能会获取一些额外的信息以供原目标任务参考.<br>最终确定确定的模型框架如下图:  采用五折交叉验证<div align="center">
 <img src="/img/model.png" width="700" height="800"> 
 </div>
 
-<font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font>  
-    Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 发现针对不同的网络结构两种操作各有胜负, 但整体来说取平均的得分更高且更节省内存空间.  <br>
-<font face="黑体" size="4" color="#0000FF"><strong>为什么是LSTM+GRU?</strong></font>  
-    因为我们测试过不同的组合, 发现LSTM层后紧接着一个GRU层的表现最佳. GRU+LSTM效果也明显差于前者. 关于LSTM和GRU的原理网上有很多介绍, 这里不赘述.<br>
-<font face="黑体" size="4" color="#0000FF"><strong>关于Attention:</strong></font> 
-    Attention机制最先在计算机视觉中被应用于图片识别的问题, 之后在自然语言处理(NLP)和计算机视觉(CV)中经常结合递归神经网络结构RNN、GRU、LSTM等深度学习算法, 被称之为Recurrent Attention Model(RAM), 其核心就是一个Encoder-Decoder的过程, 本质就是加权. Google Translate团队在论文 $$<<attention is="" all="" your="" need="">>$$ 中将Attention定义为: 一个查询和键值对映射到输出的方法，Q、K、V均为向量，输出通过对V进行加权求和得到，权重就是Q、K相似度.  
-    传统的encoder不论输入长短都将输入映射成一个固定维度的隐向量, 这样在序列很长时模型难以学习到合理的隐向量表示, 且输入序列的每个时刻 $$x$$ 对输出 $$y$$ 影响都相同, 这显然不合理. 引入Attention之后, 每个输入时刻 $$x_i$$ 都对应一个中间隐状态 $$h_i$$, 其相对于 $$t$$ 时刻输出的Attention score计算方法为: $$t$$ 时刻输出的隐状态 $$H_t$$ 和 每个输入时刻隐状态 $$h_i$$ 进行点积运算得到.  
-    常用Attention机制还包括Self-Attention以及Multi-heads Attention, 前者不是考率输入和输出之间的注意力权重, 而是仅考虑输入/输出序列本身之间的注意力关系, Self-Attention在计算过程中会直接将输入(出)中任意两个时刻的关系直接通过一个计算步骤直接联系起来而无需考虑距离，因此解决了长距离依赖问题. 除此外，Self-Attention对于增加计算的并行性也有直接帮助作用. 而Multi-heads Attention则可以简单的理解为多次Attention的结果进行拼接, 每次Attention的参数矩阵 $$W$$ 不一样而已.<br>
-<font face="黑体" size="4" color="#0000FF"><strong>关于Capsule:</strong></font>
-
-<pre><code>&lt;br&gt;
-</code></pre><font face="黑体" size="4" color="#0000FF"><strong>关于CRF:</strong></font>
-
-<pre><code>&lt;br&gt;
-</code></pre><font face="黑体" size="4" color="#0000FF"><strong>关于SRU、QRNN和IndRNN:</strong></font>  
-    SRU设计动机是解决 **RNN的训练速度太慢**、**模型的应用性和实验的可重复性**、**网络结构的可解释性**三个问题, 按照[论文](https://arxiv.org/abs/1709.02755)里的实验显示, SRU最高可以比keras优化的CuDNNLSTM快10倍! 但是实际使用过程中我们发现在该任务上SRU的keras实现速度是比不上CuDNNLSTM的, 不知道是keras实现的代码不够完善还是我们的网络结构不利于SRU的发挥所致, SRU的详细介绍[在这](https://www.zhihu.com/question/65244705/answer/229364472)  
-    QRNN设计动机是**RNN在计算时，有时间的依赖性，并行度受限；而CNN受制于有限的receptive field, 因此, 信息传递太慢**, QRNN希望能综合RNN和CNN的优点，尽量避免各自的缺陷, 但是在我们使用的过程中发现精度较低且速度没有明显加快, QRNN的详细介绍[在这](https://blog.csdn.net/jackytintin/article/details/77945354)  
-    IndRNN**既可以利用CNN的多层网络，又可以利用RNN的循环连接**. 特别适合于解决时序相关问题，比如视频分析，动作识别，NLP之类. 同样和SRU以及QRNN一样精度低于CuDNNLSTM/GRU, 需要堆叠多层才能达到相同精度但速度因此降低导致无法使用, 关于IndRNN的详细介绍[在这](https://www.zhihu.com/question/266379600/answer/358655349)  <br>
-<font face="黑体" size="4" color="#0000FF"><strong>关于BERT和ULMFiT:</strong></font>
-
-<pre><code>&lt;br&gt;
-</code></pre><p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是学习率的衰减改变、目标函数的改变等, 如<a href="https://arxiv.org/pdf/1506.01186" target="_blank" rel="noopener">CLR</a>、<a href="https://arxiv.org/abs/1704.00109" target="_blank" rel="noopener">快照集成Snapshot</a>、<a href="https://arxiv.org/abs/1608.03983" target="_blank" rel="noopener">余弦退火集合热重启SGDR</a>和<a href="https://arxiv.org/pdf/1803.05407" target="_blank" rel="noopener">随机加权平均SWA</a>以及目标函数的改进, 何恺明针对不平衡类别设计的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>, 还有Google Brain团队在ICLR 2018上发表的<a href="https://arxiv.org/pdf/1711.00489" target="_blank" rel="noopener">论文</a>, 不对学习率进行衰减调整而对batch_szie做文章的技巧.<br><br><br><strong>Trick 1. CLR(Cyclical Learning Rate, 周期学习率)</strong>: 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角变化和指数变化)以及一个指数模式下的衰减参数gamma.   </p>
+</li>
+</ol>
+<p><font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font><br>    Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 发现针对不同的网络结构两种操作各有胜负, 但整体来说取平均的得分更高且更节省内存空间.  <br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>为什么是LSTM+GRU?</strong></font><br>    因为我们测试过不同的组合, 发现LSTM层后紧接着一个GRU层的表现最佳. GRU+LSTM效果也明显差于前者. 关于LSTM和GRU的原理网上有很多介绍, 这里不赘述.<br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>关于Attention:</strong></font><br>    Attention机制最先在计算机视觉中被应用于图片识别的问题, 之后在自然语言处理(NLP)和计算机视觉(CV)中经常结合递归神经网络结构RNN、GRU、LSTM等深度学习算法, 被称之为Recurrent Attention Model(RAM), 其核心就是一个Encoder-Decoder的过程, 本质就是加权. Google Translate团队在论文 <script type="math/tex"><<Attention is All Your Need>></script> 中将Attention定义为: 一个查询和键值对映射到输出的方法，Q、K、V均为向量，输出通过对V进行加权求和得到，权重就是Q、K相似度.<br>    传统的encoder不论输入长短都将输入映射成一个固定维度的隐向量, 这样在序列很长时模型难以学习到合理的隐向量表示, 且输入序列的每个时刻 <script type="math/tex">x</script> 对输出 <script type="math/tex">y</script> 影响都相同, 这显然不合理. 引入Attention之后, 每个输入时刻 <script type="math/tex">x_i</script> 都对应一个中间隐状态 <script type="math/tex">h_i</script>, 其相对于 <script type="math/tex">t</script> 时刻输出的Attention score计算方法为: <script type="math/tex">t</script> 时刻输出的隐状态 <script type="math/tex">H_t</script> 和 每个输入时刻隐状态 <script type="math/tex">h_i</script> 进行点积运算得到.<br>    常用Attention机制还包括Self-Attention以及Multi-heads Attention, 前者不是考率输入和输出之间的注意力权重, 而是仅考虑输入/输出序列本身之间的注意力关系, Self-Attention在计算过程中会直接将输入(出)中任意两个时刻的关系直接通过一个计算步骤直接联系起来而无需考虑距离，因此解决了长距离依赖问题. 除此外，Self-Attention对于增加计算的并行性也有直接帮助作用. 而Multi-heads Attention则可以简单的理解为多次Attention的结果进行拼接, 每次Attention的参数矩阵 <script type="math/tex">W</script> 不一样而已.<br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>关于Capsule:</strong></font><br>    hello<br>    <br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>关于CRF:</strong></font><br>    hello<br>    <br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>关于SRU、QRNN和IndRNN:</strong></font><br>    SRU设计动机是解决 <strong>RNN的训练速度太慢</strong>、<strong>模型的应用性和实验的可重复性</strong>、<strong>网络结构的可解释性</strong>三个问题, 按照<a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">论文</a>里的实验显示, SRU最高可以比keras优化的CuDNNLSTM快10倍! 但是实际使用过程中我们发现在该任务上SRU的keras实现速度是比不上CuDNNLSTM的, 不知道是keras实现的代码不够完善还是我们的网络结构不利于SRU的发挥所致, SRU的详细介绍<a href="https://www.zhihu.com/question/65244705/answer/229364472" target="_blank" rel="noopener">在这</a><br>    QRNN设计动机是<strong>RNN在计算时，有时间的依赖性，并行度受限；而CNN受制于有限的receptive field, 因此, 信息传递太慢</strong>, QRNN希望能综合RNN和CNN的优点，尽量避免各自的缺陷, 但是在我们使用的过程中发现精度较低且速度没有明显加快, QRNN的详细介绍<a href="https://blog.csdn.net/jackytintin/article/details/77945354" target="_blank" rel="noopener">在这</a><br>    IndRNN<strong>既可以利用CNN的多层网络，又可以利用RNN的循环连接</strong>. 特别适合于解决时序相关问题，比如视频分析，动作识别，NLP之类. 同样和SRU以及QRNN一样精度低于CuDNNLSTM/GRU, 需要堆叠多层才能达到相同精度但速度因此降低导致无法使用, 关于IndRNN的详细介绍<a href="https://www.zhihu.com/question/266379600/answer/358655349" target="_blank" rel="noopener">在这</a>  <br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>关于BERT和ULMFiT:</strong></font><br>    hello<br>    <br></p>
+<p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是学习率的衰减改变、目标函数的改变等, 如<a href="https://arxiv.org/pdf/1506.01186" target="_blank" rel="noopener">CLR</a>、<a href="https://arxiv.org/abs/1704.00109" target="_blank" rel="noopener">快照集成Snapshot</a>、<a href="https://arxiv.org/abs/1608.03983" target="_blank" rel="noopener">余弦退火集合热重启SGDR</a>和<a href="https://arxiv.org/pdf/1803.05407" target="_blank" rel="noopener">随机加权平均SWA</a>以及目标函数的改进, 何恺明针对不平衡类别设计的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>, 还有Google Brain团队在ICLR 2018上发表的<a href="https://arxiv.org/pdf/1711.00489" target="_blank" rel="noopener">论文</a>, 不对学习率进行衰减调整而对batch_szie做文章的技巧.<br><br><br><strong>Trick 1. CLR(Cyclical Learning Rate, 周期学习率)</strong>: 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角变化和指数变化)以及一个指数模式下的衰减参数gamma.   </p>
 <div align="center">
 <img src="/img/clr.png" width="400" height="200"> 
 </div>
@@ -273,7 +249,7 @@
 
 <p><strong>Trick 6. Don’t decay the learning rate, increase your batch size!</strong>: 这是ICLR 2018的论文, 作者也没起个好记的名字, 我就只好把论文名字放这了, 看起来还是很有气势的. 不同于衰减学习率, 作者提出了在增加Batch Size的同时保持学习率的策略, 既可以保证test中不掉点, 还可以减少参数更新的次数; 作者表示还可以既增加学习率又增大Batch Size, 如此可以基本保持test中不掉点又进一步减少参数更新次数. 作者在论文中给出了详细的实验对比, 有兴趣的可以看看, 我们在比赛中尝试了这样的做法, 没什么效果. </p>
 <h1 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h1><h3 id="深度模型的可重复性"><a href="#深度模型的可重复性" class="headerlink" title="深度模型的可重复性"></a>深度模型的可重复性</h3><p>由于使用到了CuDNNLSTM和CuDNNGRU, 其网络权重初始化具有很大的随机性, 使得同样的代码跑出来的结果在LB上的得分足足有 <script type="math/tex">\pm</script>0.005 的差距! 经过各种测试, 定义下面的代码并在开始训练前调用函数即可保证网络结果的可复现性, 要注意除了网络权重随机化造成的影响, 还有是否使用随机种子对训练数据进行shuffle以及处理embedding时缺失单词是否随机生成一个向量等细微之处都会影响最终的结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">seed_torch</span><span class="params">(seed=<span class="number">1029</span>)</span>:</span></span><br><span class="line">    random.seed(seed)</span><br><span class="line">    os.environ[<span class="string">'PYTHONHASHSEED'</span>] = str(seed)</span><br><span class="line">    np.random.seed(seed)</span><br><span class="line">    torch.manual_seed(seed)</span><br><span class="line">    torch.cuda.manual_seed(seed)</span><br><span class="line">    torch.backends.cudnn.deterministic = <span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
-</attention>
+
       
 
       
@@ -652,21 +628,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
