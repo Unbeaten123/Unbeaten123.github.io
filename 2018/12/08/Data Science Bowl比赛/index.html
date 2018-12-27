@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Data Science Bowl | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kaggle的Object Detection比赛Data Science Bowl总结  [TOC] 目标检测0、mAP评估指标？mAP是每个类别AP的平均值，而AP是PR曲线下的面积。 目标检测中，TP是IOU&amp;gt;0.5的检测框数量，FP是IOU">
+  <meta name="description" content="Kaggle的Object Detection比赛Data Science Bowl总结  目标检测0、mAP评估指标？mAP是每个类别AP的平均值，而AP是PR曲线下的面积。 目标检测中，TP是IOU&amp;gt;0.5的检测框数量，FP是IOU">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Data Science Bowl">
 <meta property="og:url" content="http://yoursite.com/2018/12/08/Data Science Bowl比赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  [TOC] 目标检测0、mAP评估指标？mAP是每个类别AP的平均值，而AP是PR曲线下的面积。 目标检测中，TP是IOU&amp;gt;0.5的检测框数量，FP是IOU">
+<meta property="og:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  目标检测0、mAP评估指标？mAP是每个类别AP的平均值，而AP是PR曲线下的面积。 目标检测中，TP是IOU&amp;gt;0.5的检测框数量，FP是IOU">
 <meta property="og:image" content="f:/clone/InterviewExperienceCollection/KnowledgePoint/iou.png">
 <meta property="og:image" content="f:/clone/InterviewExperienceCollection/KnowledgePoint/spp.png">
 <meta property="og:image" content="f:/clone/InterviewExperienceCollection/KnowledgePoint/anchor.png">
@@ -27,10 +27,10 @@
 <meta property="og:image" content="f:/clone/InterviewExperienceCollection/KnowledgePoint/resnet.png">
 <meta property="og:image" content="f:/clone/InterviewExperienceCollection/KnowledgePoint/fpn1.jpg">
 <meta property="og:image" content="f:/clone/InterviewExperienceCollection/KnowledgePoint/fpn2.jpg">
-<meta property="og:updated_time" content="2018-12-27T10:06:34.727Z">
+<meta property="og:updated_time" content="2018-12-27T10:08:35.612Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
-<meta name="twitter:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  [TOC] 目标检测0、mAP评估指标？mAP是每个类别AP的平均值，而AP是PR曲线下的面积。 目标检测中，TP是IOU&amp;gt;0.5的检测框数量，FP是IOU">
+<meta name="twitter:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  目标检测0、mAP评估指标？mAP是每个类别AP的平均值，而AP是PR曲线下的面积。 目标检测中，TP是IOU&amp;gt;0.5的检测框数量，FP是IOU">
 <meta name="twitter:image" content="f:/clone/InterviewExperienceCollection/KnowledgePoint/iou.png">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
@@ -190,7 +190,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Kaggle的Object Detection比赛Data Science Bowl总结 </p>
-<p>[TOC]</p>
 <h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="0、mAP评估指标？"><a href="#0、mAP评估指标？" class="headerlink" title="0、mAP评估指标？"></a>0、mAP评估指标？</h3><p>mAP是每个类别AP的平均值，而AP是PR曲线下的面积。</p>
 <p>目标检测中，TP是IOU&gt;0.5的检测框数量，FP是IOU<0.5的检测框和对同一个gt多余的检测框数量。fn是没有被检测出来的gt的数量。 <!--="" more="" --=""></0.5的检测框和对同一个gt多余的检测框数量。fn是没有被检测出来的gt的数量。></p>
 <h3 id="1、IOU是什么？用代码写一个IOU函数"><a href="#1、IOU是什么？用代码写一个IOU函数" class="headerlink" title="1、IOU是什么？用代码写一个IOU函数"></a>1、IOU是什么？用代码写一个IOU函数</h3><p>IOU的意思是是交并比。</p>
