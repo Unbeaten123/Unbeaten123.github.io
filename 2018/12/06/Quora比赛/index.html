@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
 <meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
-<meta property="og:updated_time" content="2018-12-28T14:55:22.664Z">
+<meta property="og:updated_time" content="2018-12-28T14:57:29.360Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -225,7 +225,7 @@
 <script type="math/tex; mode=display">p(y_i | y_{i-1}, x_i) = \frac{1}{Z(x_i, y_{i-1})} exp(\sum_a) \lambda_a f_a(x_i, y_i)</script><p>其中, <script type="math/tex">\frac{1}{Z(x_i, y_{i-1})}</script> 是归一化部分, <script type="math/tex">f_a(x_i, y_i)</script> 是特征函数, 函数需要人为定义, <script type="math/tex">\lambda</script> 是特征函数的权重, 通过训练得到.<br>MEMM 与 HMM 不同之处在于隐状态 <script type="math/tex">y_i</script> 不仅与观测值 <script type="math/tex">x_i</script> 有关, 还与上一时刻的隐状态 <script type="math/tex">y_{i-1}</script> 有关, MEMM 的流程:<br>step 1. 预定义特征函数 <script type="math/tex">f_a(x_i, y_i)</script><br>step 2. 在数据集上训练模型<br>step 3. 用训练好的模型做序列标注或序列概率问题<br>MEMM 的最大问题在于标记偏置陷入局部最优, 其原因在于归一化部分是局部归一化, 这个问题同样被 CRF 所解决.<br><strong>3)  CRF:</strong><br>条件随机场(Conditional Random Fields, CRF)是一个<strong>判别式模型</strong>, 其定义为给定随机变量 <script type="math/tex">X</script> (如观测序列) 条件下, 随机变量 <script type="math/tex">Y</script> (对应的隐状态序列) 的马尔科夫随机场. 一般在 NLP 领域中我们说的 CRF 都是指链式 CRF 如下图所示:  </p>
 <div align="center">
 <img src="/img/CRF.png" width="300" height="250"> 
-</div> 
+</div> <br>
 其公式表示为:  
 $$p(Y | X) = \frac{1}{Z(X)}\prod_i \psi_i(Y_i | X) = \frac{1}{Z(X)}\prod_i e^{\sum_k \lambda_k f_k(X, Y_{i-1}, Y_i, i)} =  \frac{1}{Z(X)}e^{\sum_i \sum_k \lambda_k f_k(X, Y_{i-1}, Y_i, i)}$$  
 这个公式的含义就是给定整个观测序列 $$X = {x_1, x_2, ..., x_i}$$ 的条件下, 计算出隐状态序列 $$Y = {y_1, y_2, ..., y_i}$$ 的概率, $$\frac{1}{Z(X)}$$ 是全局归一化解决 MEMM 模型的标记偏置问题, 下标 $$k$$ 表示构造的第几个特征函数, 每个特征函数的权重是 $$\lambda_k$$. CRF 的使用流程和 MEMM 类似. 最后总结一下 HMM、 MEMM 和 CRF.  
