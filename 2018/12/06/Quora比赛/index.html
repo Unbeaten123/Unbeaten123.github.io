@@ -16,12 +16,13 @@
 <meta property="og:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
 <meta property="og:image" content="http://yoursite.com/img/model.png">
 <meta property="og:image" content="http://yoursite.com/img/Transformer.png">
+<meta property="og:image" content="http://yoursite.com/img/BERT.png">
 <meta property="og:image" content="http://yoursite.com/img/clr.png">
 <meta property="og:image" content="http://yoursite.com/img/Snapshot.png">
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
 <meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
-<meta property="og:updated_time" content="2018-12-28T06:50:13.219Z">
+<meta property="og:updated_time" content="2018-12-28T10:12:20.810Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -219,9 +220,11 @@
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Capsule:</strong></font><br>    hello<br>    <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于CRF:</strong></font><br>    hello<br>    <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于SRU、QRNN和IndRNN:</strong></font><br>    SRU设计动机是解决 <strong>RNN的训练速度太慢</strong>、<strong>模型的应用性和实验的可重复性</strong>、<strong>网络结构的可解释性</strong>三个问题, 按照<a href="https://arxiv.org/abs/1709.02755" target="_blank" rel="noopener">论文</a>里的实验显示, SRU最高可以比keras优化的CuDNNLSTM快10倍! 但是实际使用过程中我们发现在该任务上SRU的keras实现速度是比不上CuDNNLSTM的, 不知道是keras实现的代码不够完善还是我们的网络结构不利于SRU的发挥所致, SRU的详细介绍<a href="https://www.zhihu.com/question/65244705/answer/229364472" target="_blank" rel="noopener">在这</a><br>    QRNN设计动机是<strong>RNN在计算时，有时间的依赖性，并行度受限；而CNN受制于有限的receptive field, 因此, 信息传递太慢</strong>, QRNN希望能综合RNN和CNN的优点，尽量避免各自的缺陷, 但是在我们使用的过程中发现精度较低且速度没有明显加快, QRNN的详细介绍<a href="https://blog.csdn.net/jackytintin/article/details/77945354" target="_blank" rel="noopener">在这</a><br>    IndRNN<strong>既可以利用CNN的多层网络，又可以利用RNN的循环连接</strong>. 特别适合于解决时序相关问题，比如视频分析，动作识别，NLP之类. 同样和SRU以及QRNN一样精度低于CuDNNLSTM/GRU, 需要堆叠多层才能达到相同精度但速度因此降低导致无法使用, 关于IndRNN的详细介绍<a href="https://www.zhihu.com/question/266379600/answer/358655349" target="_blank" rel="noopener">在这</a>  <br></p>
-<p><font face="黑体" size="4" color="#0000FF"><strong>关于ELMO和BERT:</strong></font><br>    <strong>ELMO</strong>: ELMO和BERT都是无法使用的额外数据, 由于BERT的主要对比对象就是ELMO, 所以在这里简要介绍一下ELMO模型的原理.<br>    以往的做法是通过语言模型训练词向量, 其缺点是对于每一个单词都有唯一的一个embedding表示, 而对于多义词显然这种做法不符合直觉, 而单词的意思又和上下文相关, ELMo的做法是我们只预训练language model, 而word embedding是通过输入的句子实时输出的, 这样单词的意思就是上下文相关的了, 这样就很大程度上缓解了歧义的发生. ELMO是双向语言模型BiLM, 联合最大化前向和后向预测单词概率, 具体做法是将句子输入多层BiLSTM获取BiLSTM的不同层内部隐状态进行softmax得到预测单词的表示(多层隐状态加权), 其效果不错但是速度比较慢(ELMO的词向量不像之前与训练模型是fixed, 需要实时的输入句子获取表示, 实际应用中大多是把ELMO的输出和传统词向量的训练输出concat).<br>    <strong>BERT</strong>: 首先, BERT的出现证明了一个非常深的模型可以显著提高NLP任务的准确率, 而这个模型可以从无标记数据集中预训练得到, 可以算是NLP领域中一个”里程碑”式的发现, 使得NLP领域也有着像CV方向的ResNet一样的深层骨干预训练网络(之前用的大多都是浅层语言模型的预训练数据如 ELMO、GloVe、Fasttext等).<br>    要了解BERT, 首先要知道<strong>Transformer</strong>, 在这里简要介绍下 Transformer, Transformer 也是在大名鼎鼎的 <script type="math/tex"><<Attention is All Your Need>></script> 中提出的, Transformer 也属于 encoder-decoder 框架, 输入序列首先经过 word embedding, 再和 positional encoding(Transformer 是不考虑序列顺序的, 通过 positional encoding 将词在序列中的位置信息编码成向量)相加后, 输入到 encoder 中. 输出序列经过的处理和输入序列一样, 然后输入到 decoder. 最后, decoder 的输出经过一个线性层, 再接 Softmax. encoder和decoder都有6层, 如下图所示, Transformer 的核心就是 self-attention 和 multi-head attention, 前者用于替代RNN/CNN结构来捕捉长距离依赖, 后者则是使用不同的 attention 矩阵参数进行多次 self-attention 操作拼接后作为最终的 self-attention 输出.<br>    <div align="center">
+<p><font face="黑体" size="4" color="#0000FF"><strong>关于ELMO、GPT和BERT:</strong></font><br>    ELMO、GPT和BERT都是无法使用的额外数据, 由于BERT的主要对比对象就是 ELMO 和 GPT, 所以在这里简要介绍一下ELMO 和 GPT模型的原理, 然后介绍 BERT.<br>    <strong>ELMO</strong>: 以往获取词向量做法是通过语言模型训练词向量, 其缺点是对于每一个单词都有唯一的一个embedding表示, 而对于多义词显然这种做法不符合直觉, 而单词的意思又和上下文相关, ELMo的做法是我们只预训练language model, 而word embedding是通过输入的句子实时输出的, 这样单词的意思就是上下文相关的了, 这样就很大程度上缓解了歧义的发生. ELMO是双向语言模型BiLM, 联合最大化前向和后向预测单词概率, 具体做法是将句子输入多层BiLSTM获取BiLSTM的不同层内部隐状态进行softmax得到预测单词的表示(多层隐状态加权), 其效果不错但是速度比较慢(ELMO的词向量不像之前与训练模型是fixed, 需要实时的输入句子获取表示, 实际应用中大多是把ELMO的输出和传统词向量的训练输出concat). ELMO 的两大缺陷在于: 一是没有使用大家普遍认为提取特征能力更强的 Transformer 替代 LSTM 来提取特征; 二是 ELMO 的双向拼接特征融合不如 BERT 的一体化特征融合方式.<br>    <strong>GPT</strong>: GPT 是 Open AI 提出的, 简而言之, GPT 和 ELMO 类似是个两阶段模型, 先预训练语言模型再根据这个预训练模型 fine-tuning 完成下游任务. 区别于 ELMO, GPT 使用 Transformer 来作为特征提取器, 但是 GPT 的语言模型是单向的(只使用预测单词之前的单词). 其缺点在于语言模型是单向的, 这无疑会损失很多信息. 此外, GPT 的下游任务的网络结构设计也较麻烦需要和 GPT 模型的网络结构靠拢.<br>    <strong>ELMO 和 GPT 的出现极大的启发了 BERT</strong>, 下面介绍 BERT 模型.<br>    <strong>BERT</strong>: 首先, BERT的出现证明了一个非常深的模型可以显著提高NLP任务的准确率, 而这个模型可以从无标记数据集中预训练得到, 可以算是NLP领域中一个”里程碑”式的发现, 使得NLP领域也有着像 CV 方向的 ResNet 一样的深层骨干预训练网络(之前用的大多都是浅层语言模型的预训练数据如 ELMO、GloVe、Fasttext等).<br>    要了解BERT, 首先要知道<strong>Transformer</strong>, 在这里简要介绍下 Transformer, Transformer 也是在大名鼎鼎的 <script type="math/tex"><<Attention is All Your Need>></script> 中提出的, Transformer 也属于 encoder-decoder 框架, 输入序列首先经过 word embedding, 再和 positional encoding(Transformer 是不考虑序列顺序的, 通过 positional encoding 将词在序列中的位置信息编码成向量)相加后, 输入到 encoder 中. 输出序列经过的处理和输入序列一样, 然后输入到 decoder. 最后, decoder 的输出经过一个线性层, 再接 Softmax. encoder和decoder都有6层, 如下图所示, Transformer 的核心就是 self-attention 和 multi-head attention, 前者用于替代RNN/CNN结构来捕捉长距离依赖, 后者则是使用不同的 attention 矩阵参数进行多次 self-attention 操作拼接后作为最终的 self-attention 输出. 由于需要堆叠多层 self-attention 才能获取满意的结果, 在这个比赛中我们受时间的限制无法使用 Transformer.<br>    <div align="center">
     <img src="/img/Transformer.png" width="400" height="650"> 
-    </div><br>    左半部分的Nx代表encoder中一层的结构, 每层包含两个部分, 第一部分是 multi-head self-attention, 另一部分是一个前馈神经网络, 两个部分都有一个残差连接和 layer normalization; 右半部分的Nx代表 decoder 中一层的结构, 每层包含三个部分, 前馈神经网络部分和 encoder 一样, multi-head context-attention 部分如其名是指 encoder 和 decoder 之间的 attention 该部分的输入来自 encoder, 除此之外还有一个 masked multi-head self-attention, 所谓 masked 就是对一些位置进行掩盖如置0以获取不同的效果.<br>    <br></p>
+    </div><br>    左半部分的Nx代表encoder中一层的结构, 每层包含两个部分, 第一部分是 multi-head self-attention, 另一部分是一个前馈神经网络, 两个部分都有一个残差连接和 layer normalization; 右半部分的Nx代表 decoder 中一层的结构, 每层包含三个部分, 前馈神经网络部分和 encoder 一样, multi-head context-attention 部分如其名是指 encoder 和 decoder 之间的 attention 该部分的输入来自 encoder, 除此之外还有一个 masked multi-head self-attention, 所谓 masked 就是对一些位置进行掩盖如置0以获取不同的效果.<br>    <strong>回到BERT本身</strong>, 有了前人的工作 ELMO 和 GPT, 使得 BERT 可以做到取其精华去其糟粕. BERT 和 ELMO 以及 GPT 一样都是两阶段模型, 先预训练语言模型, 然后在此基础上进行 fine-tuning 完成下游任务. BERT 和 ELMO 以及 GPT 的关系如下图:<br>    <div align="center">
+    <img src="/img/BERT.png" width="800" height="200"> 
+    </div><br>    对比可以看出, BERT 和 GPT 十分相似, 只不过 BERT 是双向语言模型. BERT 的模型创新性并不强, 其关键就在于如何构造双向 Transformer 语言模型. 这里就涉及到两个技术:<br>    <strong>1)  Masked LM</strong>: 所谓 Masked LM 其本质就是 CBOW 的改良版, CBOW 是用上下文预测中间词, 而 Masked LM 则随机的把15%的单词抠掉(用 mask 掩码替换), 然后去预测被抠掉的单词, 但是有个问题是如果这样做会让模型认为输出是针对这些 mask 掩码的, 所以这15%的单词中只有80%被真正替换成掩码, 剩下的10%替换成随机单词, 还有10%则保持不动, 这样既可以同时利用左右上下文的同时还能避免模型学习目标紊乱.<br>    <strong>2)  Next Setence Prediction</strong>: 所谓 NSP 技术就是做预训练时, 分两种情况选择两个句子, 一是选择语料中真正相连的两个句子, 另一种是第二个句子随机从语料中摘取拼接到第一个句子后面, 除了传统语言模型的预测任务之外, 这里会附带做一个句子关系预测, 判断第二个句子是不是和第一个相关. 这样做既有利于下游句子关系判断的任务,又把预训练部分变成一个多任务过程, 算是一个创新点.<br>    <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于ULMFiT:</strong></font><br>    <strong>BERT</strong>: 首先, BERT的出现证明了一个非常深的模型可以显著提高NLP任务的准确率, 而这个模型可以从无标记数据集中预训练得到, 可以算是NLP领域中一个”里程碑”式的发现, 使得NLP领域也有着像CV方向的ResNet一样的骨干预训练网络(之前用的大多都是浅层语言模型的预训练数据如ELMO、GloVe、Fasttext等).<br>    <br></p>
 <p><font face="黑体" size="5.5" color="#FF0000"><strong>参数优化</strong></font><br><br>参数优化部分主要是学习率的衰减改变、目标函数的改变等, 如<a href="https://arxiv.org/pdf/1506.01186" target="_blank" rel="noopener">CLR</a>、<a href="https://arxiv.org/abs/1704.00109" target="_blank" rel="noopener">快照集成Snapshot</a>、<a href="https://arxiv.org/abs/1608.03983" target="_blank" rel="noopener">余弦退火集合热重启SGDR</a>和<a href="https://arxiv.org/pdf/1803.05407" target="_blank" rel="noopener">随机加权平均SWA</a>以及目标函数的改进, 何恺明针对不平衡类别设计的<a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">Focal Loss</a>, 还有Google Brain团队在ICLR 2018上发表的<a href="https://arxiv.org/pdf/1711.00489" target="_blank" rel="noopener">论文</a>, 不对学习率进行衰减调整而对batch_szie做文章的技巧.<br><br><br><strong>Trick 1. CLR(Cyclical Learning Rate, 周期学习率)</strong>: 是Leslie Smith在2015年的一篇论文中提到的动态调整学习率方案, 以往调整学习率的方案大多是逐步降低或使用指数函数从而使得模型趋于稳定, 但是Smith认为与其单调降低学习率不如让学习率在合理的范围内进行周期性变化, 这样可以以更少的训练步骤提高模型精度. Smith认为最佳学习率出在base_lr和max_lr之间, 其背后的原理可以简单的理解为: 如果最佳学习率在[base_lr, max_lr]之间周期变化, 那么大多数情况下会得到一个接近最有学习率的学习率. 此外, 还有利于模型摆脱鞍点. CLR的主要参数为: base_lr(学习率波动区间的最小值)、max_lr(学习率波动区间的最大值, 不一定会达到)、step_size(半个学习率循环的步长, 作者建议取值为训练轮数 = 训练样本数 / batch_size 的2~8倍)、mode(学习率变化的模式, 包括三角变化和指数变化)以及一个指数模式下的衰减参数gamma.   </p>
 <div align="center">
@@ -632,21 +635,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
