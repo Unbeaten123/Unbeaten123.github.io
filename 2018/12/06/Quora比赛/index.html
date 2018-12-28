@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
 <meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
-<meta property="og:updated_time" content="2018-12-28T14:51:18.420Z">
+<meta property="og:updated_time" content="2018-12-28T14:53:35.302Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle的NLP比赛Quora Insincere Questions Classification总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛,">
@@ -226,6 +226,7 @@
 <div align="center">
 <img src="/img/CRF.png" width="300" height="250"> 
 </div> 
+其公式表示为:  
 $$p(Y | X) = \frac{1}{Z(X)}\prod_i \psi_i(Y_i | X) = \frac{1}{Z(X)}\prod_i e^{\sum_k \lambda_k f_k(X, Y_{i-1}, Y_i, i)} =  \frac{1}{Z(X)}e^{\sum_i \sum_k \lambda_k f_k(X, Y_{i-1}, Y_i, i)}$$  
 这个公式的含义就是给定整个观测序列 $$X = {x_1, x_2, ..., x_i}$$ 的条件下, 计算出隐状态序列 $$Y = {y_1, y_2, ..., y_i}$$ 的概率, $$\frac{1}{Z(X)}$$ 是全局归一化解决 MEMM 模型的标记偏置问题, 下标 $$k$$ 表示构造的第几个特征函数, 每个特征函数的权重是 $$\lambda_k$$. CRF 的使用流程和 MEMM 类似. 最后总结一下 HMM、 MEMM 和 CRF.  
 **CRF不仅解决了HMM输出独立性假设的问题, 还解决了MEMM的标注偏置问题, MEMM容易陷入局部最优是因为只在局部做归一化, 而CRF统计了全局概率, 在做归一化时考虑了数据在全局的分布吗, 而不是仅仅在局部归一化, 这样就解决了MEMM中的标记偏置的问题, 使得序列标注的解码变得最优解. 但是 CRF 的缺点就是参数多计算量大复杂度高.**
