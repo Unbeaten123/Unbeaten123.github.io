@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/resnet.png">
 <meta property="og:image" content="http://yoursite.com/img/fpn1.jpg">
 <meta property="og:image" content="http://yoursite.com/img/fpn2.jpg">
-<meta property="og:updated_time" content="2018-12-27T11:49:20.666Z">
+<meta property="og:updated_time" content="2018-12-31T03:11:36.311Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
@@ -195,8 +195,9 @@
 <h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="0、mAP评估指标？"><a href="#0、mAP评估指标？" class="headerlink" title="0、mAP评估指标？"></a>0、mAP评估指标？</h3><p>mAP(mean Average Precision, 平均精度均值)是目标检测指标, 在目标检测中, 每一类都可以根据 recall 和 precision绘制P-R曲线, AP就是该曲线下的面积, mAP就是所有类AP的平均值. </p>
 <p>目标检测中, TP是IOU&gt;0.5的检测框数量, FP是IOU&lt;0.5的检测框和对同一个GT(Ground Truth, 真值框)多余的检测框数量. FN是没有被检测出来的GT的数量. </p>
 <h3 id="1、IOU是什么？用代码写一个IOU函数"><a href="#1、IOU是什么？用代码写一个IOU函数" class="headerlink" title="1、IOU是什么？用代码写一个IOU函数"></a>1、IOU是什么？用代码写一个IOU函数</h3><p>IOU的意思是是交并比. </p>
-<p><img src="/img/IOU.png" width="400px" align="center/"></p>
-<p>它的公式可以表示为：</p>
+<p><div align="center">
+<img src="/img/IOU.png" width="400px">
+</div> <br><br>它的公式可以表示为：</p>
 <script type="math/tex; mode=display">
 IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#并集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(au, bu, area_intersection)</span>:</span></span><br><span class="line">    area_a = (au[<span class="number">2</span>] - au[<span class="number">0</span>]) * (au[<span class="number">3</span>] - au[<span class="number">1</span>])</span><br><span class="line">    area_b = (bu[<span class="number">2</span>] - bu[<span class="number">0</span>]) * (bu[<span class="number">3</span>] - bu[<span class="number">1</span>])</span><br><span class="line">    area_union = area_a + area_b - area_intersection</span><br><span class="line">    <span class="keyword">return</span> area_union</span><br><span class="line"></span><br><span class="line"><span class="comment">#交集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">intersection</span><span class="params">(ai, bi)</span>:</span></span><br><span class="line">    x = max(ai[<span class="number">0</span>], bi[<span class="number">0</span>])</span><br><span class="line">    y = max(ai[<span class="number">1</span>], bi[<span class="number">1</span>])</span><br><span class="line">    w = min(ai[<span class="number">2</span>], bi[<span class="number">2</span>]) - x</span><br><span class="line">    h = min(ai[<span class="number">3</span>], bi[<span class="number">3</span>]) - y</span><br><span class="line">    <span class="keyword">if</span> w &lt; <span class="number">0</span> <span class="keyword">or</span> h &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> w*h</span><br><span class="line"></span><br><span class="line"><span class="comment">#交并比</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iou</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="comment"># a and b should be (x1,y1,x2,y2)</span></span><br><span class="line">    <span class="keyword">if</span> a[<span class="number">0</span>] &gt;= a[<span class="number">2</span>] <span class="keyword">or</span> a[<span class="number">1</span>] &gt;= a[<span class="number">3</span>] <span class="keyword">or</span> b[<span class="number">0</span>] &gt;= b[<span class="number">2</span>] <span class="keyword">or</span> b[<span class="number">1</span>] &gt;= b[<span class="number">3</span>]:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span></span><br><span class="line">    area_i = intersection(a, b)</span><br><span class="line">    area_u = union(a, b, area_i)</span><br><span class="line">    <span class="keyword">return</span> float(area_i) / float(area_u + <span class="number">1e-6</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="2、RCNN"><a href="#2、RCNN" class="headerlink" title="2、RCNN"></a>2、RCNN</h3><p>1、利用选择性搜索算法从图像中提取2000个左右的region proposal；</p>
@@ -700,21 +701,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
