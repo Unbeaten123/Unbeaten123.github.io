@@ -8,16 +8,16 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>2018腾讯广告算法大赛 | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="腾讯广告算法大赛(CTR)总结">
+  <meta name="description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2018腾讯广告算法大赛">
 <meta property="og:url" content="http://yoursite.com/2018/12/08/腾讯广告算法大赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="腾讯广告算法大赛(CTR)总结">
-<meta property="og:updated_time" content="2018-12-08T10:46:17.735Z">
+<meta property="og:description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
+<meta property="og:updated_time" content="2018-12-31T03:10:08.844Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018腾讯广告算法大赛">
-<meta name="twitter:description" content="腾讯广告算法大赛(CTR)总结">
+<meta name="twitter:description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -176,7 +176,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>腾讯广告算法大赛(CTR)总结 </p>
-
+<p>这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍, 导致我们所采用的两个模型中的 LightGBM 模型因超出内存导致最终无法完赛.<br><a id="more"></a></p>
+<p>下面主要介绍本次比赛的一些相关知识点, 分为数据预处理、特征工程和模型选择三个方面.  </p>
+<h1 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h1><p>预处理部分主要就是把训练数据处理成计算机模型能够使用的格式.  </p>
+<h2 id="单、多取值离散特征进行-one-hot-稀疏编码"><a href="#单、多取值离散特征进行-one-hot-稀疏编码" class="headerlink" title="单、多取值离散特征进行 one-hot 稀疏编码"></a>单、多取值离散特征进行 one-hot 稀疏编码</h2><p>这一步主要就是把离散型单取值和多取值特征进行 one-hot 编码, 比如 age 这一特征是单取值特征, 对所有 age 中出现的数字进行 one-hot 稀疏编码; 而 interest1 特征就是多取值特征, 同样也做 one-hot 稀疏编码处理.  </p>
+<h2 id="部分连续值特征离散化后进行-one-hot-稀疏编码"><a href="#部分连续值特征离散化后进行-one-hot-稀疏编码" class="headerlink" title="部分连续值特征离散化后进行 one-hot 稀疏编码"></a>部分连续值特征离散化后进行 one-hot 稀疏编码</h2><p>我们注意到部分离散值特征的分布是满足长尾分布或者均匀分布的, 对于长尾分布的连续值特征, 我们将”尾部”统一按0处理, 其他部分则按数量比例划分切割点进行离散化后再 one-hot 编码. 而对于均匀分布的连续值特征则直接均匀的划分并进行 one-hot 编码处理.  </p>
+<h2 id="hashtrick把数据保存为二进制数据流"><a href="#hashtrick把数据保存为二进制数据流" class="headerlink" title="hashtrick把数据保存为二进制数据流"></a>hashtrick把数据保存为二进制数据流</h2><p>这一部分主要是针对 FFM(Field-aware Factorization Machine) 模型来设计的, 先把数据以字典的形式处理, 然后经过一个 hash 函数给特征划分 field 及每个 field 内的特征编号.  </p>
+<h1 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h1><p><strong>首先, 在特征工程上我们吃了很大的亏, 这个比赛是有第一届的, 很多强特征挖掘都公布在 Github 上了, 但是我们很遗憾没有想过去挖掘这方面的信息.</strong>  </p>
+<h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1>
       
 
       
@@ -546,5 +553,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>

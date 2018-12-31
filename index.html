@@ -177,7 +177,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>腾讯广告算法大赛(CTR)总结 </p>
-
+<p>这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍, 导致我们所采用的两个模型中的 LightGBM 模型因超出内存导致最终无法完赛.<br>
+        
+          <a class="article-more-a" href="/2018/12/08/腾讯广告算法大赛/#more">more >></a>
+        
       
 
       
@@ -721,5 +724,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
