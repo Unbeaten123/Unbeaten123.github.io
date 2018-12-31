@@ -6,32 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Data Science Bowl | Zhizhou Yu&#39;s Blog</title>
+  <title>2018腾讯广告算法大赛 | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
+  <meta name="description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Data Science Bowl">
-<meta property="og:url" content="http://yoursite.com/2018/12/08/Data Science Bowl比赛/index.html">
+<meta property="og:title" content="2018腾讯广告算法大赛">
+<meta property="og:url" content="http://yoursite.com/2018/08/14/腾讯广告算法大赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
-<meta property="og:image" content="http://yoursite.com/img/IOU.png">
-<meta property="og:image" content="http://yoursite.com/img/spp.png">
-<meta property="og:image" content="http://yoursite.com/img/anchor.png">
-<meta property="og:image" content="http://yoursite.com/img/roialign.png">
-<meta property="og:image" content="http://yoursite.com/img/maskrcnn.png">
-<meta property="og:image" content="http://yoursite.com/img/yolov1.png">
-<meta property="og:image" content="http://yoursite.com/img/yololossfunc.png">
-<meta property="og:image" content="http://yoursite.com/img/nms.png">
-<meta property="og:image" content="http://yoursite.com/img/ssd0.png">
-<meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:image" content="http://yoursite.com/img/resnet.png">
-<meta property="og:image" content="http://yoursite.com/img/fpn1.jpg">
-<meta property="og:image" content="http://yoursite.com/img/fpn2.jpg">
-<meta property="og:updated_time" content="2018-12-31T03:11:36.311Z">
+<meta property="og:description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
+<meta property="og:updated_time" content="2018-12-31T03:16:05.749Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Data Science Bowl">
-<meta name="twitter:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
-<meta name="twitter:image" content="http://yoursite.com/img/IOU.png">
+<meta name="twitter:title" content="2018腾讯广告算法大赛">
+<meta name="twitter:description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -169,160 +155,35 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Data Science Bowl比赛" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-腾讯广告算法大赛" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Data Science Bowl
+      2018腾讯广告算法大赛
     </h1>
   
 
         
-        <a href="/2018/12/08/Data Science Bowl比赛/" class="archive-article-date">
-  	<time datetime="2018-12-08T08:02:23.828Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-08</time>
+        <a href="/2018/08/14/腾讯广告算法大赛/" class="archive-article-date">
+  	<time datetime="2018-08-13T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-14</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Kaggle的Object Detection比赛Data Science Bowl总结 </p>
-<h1 id="比赛简介"><a href="#比赛简介" class="headerlink" title="比赛简介"></a>比赛简介</h1><p>Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识</p>
-<a id="more"></a>
-<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="0、mAP评估指标？"><a href="#0、mAP评估指标？" class="headerlink" title="0、mAP评估指标？"></a>0、mAP评估指标？</h3><p>mAP(mean Average Precision, 平均精度均值)是目标检测指标, 在目标检测中, 每一类都可以根据 recall 和 precision绘制P-R曲线, AP就是该曲线下的面积, mAP就是所有类AP的平均值. </p>
-<p>目标检测中, TP是IOU&gt;0.5的检测框数量, FP是IOU&lt;0.5的检测框和对同一个GT(Ground Truth, 真值框)多余的检测框数量. FN是没有被检测出来的GT的数量. </p>
-<h3 id="1、IOU是什么？用代码写一个IOU函数"><a href="#1、IOU是什么？用代码写一个IOU函数" class="headerlink" title="1、IOU是什么？用代码写一个IOU函数"></a>1、IOU是什么？用代码写一个IOU函数</h3><p>IOU的意思是是交并比. </p>
-<p><div align="center">
-<img src="/img/IOU.png" width="400px">
-</div> <br><br>它的公式可以表示为：</p>
-<script type="math/tex; mode=display">
-IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#并集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(au, bu, area_intersection)</span>:</span></span><br><span class="line">    area_a = (au[<span class="number">2</span>] - au[<span class="number">0</span>]) * (au[<span class="number">3</span>] - au[<span class="number">1</span>])</span><br><span class="line">    area_b = (bu[<span class="number">2</span>] - bu[<span class="number">0</span>]) * (bu[<span class="number">3</span>] - bu[<span class="number">1</span>])</span><br><span class="line">    area_union = area_a + area_b - area_intersection</span><br><span class="line">    <span class="keyword">return</span> area_union</span><br><span class="line"></span><br><span class="line"><span class="comment">#交集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">intersection</span><span class="params">(ai, bi)</span>:</span></span><br><span class="line">    x = max(ai[<span class="number">0</span>], bi[<span class="number">0</span>])</span><br><span class="line">    y = max(ai[<span class="number">1</span>], bi[<span class="number">1</span>])</span><br><span class="line">    w = min(ai[<span class="number">2</span>], bi[<span class="number">2</span>]) - x</span><br><span class="line">    h = min(ai[<span class="number">3</span>], bi[<span class="number">3</span>]) - y</span><br><span class="line">    <span class="keyword">if</span> w &lt; <span class="number">0</span> <span class="keyword">or</span> h &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> w*h</span><br><span class="line"></span><br><span class="line"><span class="comment">#交并比</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iou</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="comment"># a and b should be (x1,y1,x2,y2)</span></span><br><span class="line">    <span class="keyword">if</span> a[<span class="number">0</span>] &gt;= a[<span class="number">2</span>] <span class="keyword">or</span> a[<span class="number">1</span>] &gt;= a[<span class="number">3</span>] <span class="keyword">or</span> b[<span class="number">0</span>] &gt;= b[<span class="number">2</span>] <span class="keyword">or</span> b[<span class="number">1</span>] &gt;= b[<span class="number">3</span>]:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span></span><br><span class="line">    area_i = intersection(a, b)</span><br><span class="line">    area_u = union(a, b, area_i)</span><br><span class="line">    <span class="keyword">return</span> float(area_i) / float(area_u + <span class="number">1e-6</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="2、RCNN"><a href="#2、RCNN" class="headerlink" title="2、RCNN"></a>2、RCNN</h3><p>1、利用选择性搜索算法从图像中提取2000个左右的region proposal；</p>
-<p>2、把这些region proposal缩放成227*227的大小并用5层卷积两层全连接的CNN提取特征；</p>
-<p>3、用SVM训练CNN提取出来的特征；</p>
-<p>4、对SVM分好类的region proposal做bbox regression, 用回归值来矫正建议窗口, 生成预测的窗口坐标. </p>
-<p>缺点：</p>
-<p>(1)     训练分为多个阶段, 步骤繁琐：微调网络+训练SVM+训练边框回归器；</p>
-<p>(2)     训练耗时, 占用磁盘空间大；5000张图像产生几百G的特征文件；</p>
-<p>(3)     速度慢：使用GPU, VGG16模型处理一张图像需要47s；</p>
-<p>(4)     测试速度慢：每个候选区域需要运行整个前向CNN计算；</p>
-<p>(5)     SVM和回归是事后操作, 在SVM和回归过程中CNN特征没有被学习更新. </p>
-<h3 id="3、SPP-Net"><a href="#3、SPP-Net" class="headerlink" title="3、SPP Net"></a>3、SPP Net</h3><p>一句话来说就是用SPP layer从不同大小的窗口提取出同样长度的特征向量. 之后fast rcnn的ROI层就是借鉴了SPP Net的这种思路. </p>
-<p>一张图片放入CNN网络中经过多层转化后, 会生成多张特征图：</p>
-<p><img src="/img/spp.png" width="600px" align="center/"></p>
-<p>而在原图中任意一个窗口在这些特征图中都有对应的窗口, SPP就是在这些对应的窗口中做池化操作使每张特征图都生成21维的特征向量. </p>
-<p>具体做法是, 在conv5层得到的特征图是256层, 每层都做一次spatial pyramid pooling. 先把每个特征图分割成多个不同尺寸的网格, 比如网格分别为4*4、2*2、1*1,然后每个网格做max pooling, 这样256层特征图就形成了16*256, 4*256, 1*256维特征, 他们连起来就形成了一个固定长度的特征向量, 将这个向量输入到后面的全连接层. </p>
-<h3 id="4、Fast-RCNN"><a href="#4、Fast-RCNN" class="headerlink" title="4、Fast RCNN"></a>4、Fast RCNN</h3><p>1、利用selective search 算法在图像中从上到下提取2000个左右的建议窗口(Region Proposal)；</p>
-<p>2、将整张图片输入CNN, 进行特征提取；</p>
-<p>3、把建议窗口映射到CNN的最后一层卷积feature map上；</p>
-<p>4、通过RoI pooling层使每个建议窗口生成固定尺寸的feature map；</p>
-<p>5、利用Softmax Loss(探测分类概率) 和Smooth L1 Loss(探测边框回归)对分类概率和边框回归(Bounding box regression)联合训练. </p>
-<p><strong>相比R-CNN, 主要两处不同:</strong></p>
-<p>(1)最后一层卷积层后加了一个ROI pooling layer, <strong>ROI是SPP Net的简化版本, SPP Net是对一个对应窗口进行4*4, 2*2, 1*1的pooling, 也就是说一个区域的对应特征图能出来21维的特征向量；而ROI layer只进行7*7的池化, 所以只会出来49维的特征向量</strong>. </p>
-<p>(2)损失函数使用了多任务损失函数(multi-task loss), 将边框回归直接加入到CNN网络中训练. </p>
-<h3 id="5、Faster-RCNN"><a href="#5、Faster-RCNN" class="headerlink" title="5、Faster RCNN"></a>5、Faster RCNN</h3><p>faster rcnn=fast rcnn+rpn层；</p>
-<ul>
-<li><h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>RPN层的作用是选出一些候选区域供fast rcnn网络的训练和预测, 起加速作用. <strong>rpn的核心是anchor机制, 即对于一个卷积后的锚点可以对应回原图的不同宽高比例, 不同大小的区域. 在faster rcnn中anchor数量设置为k=9. </strong></p>
-<p><img src="/img/anchor.png" width="500px" align="center/"></p>
-<p>原图像经过一个卷积网络会得到H*W*256的feature map, 在论文里的H<em>W是原图像的\dfrac{1}{16}, 特征图可以理解为原图的一种缩放. <strong>那么, 对于每个anchor, 有一个256维度的特征向量来描述. 这个特征向量对应原图像中k个anchor</strong>；接下来每个anchor的256维向量都要经过两个分支进行训练：一个分支是候选区域分类, 256-&gt;2\</em>k, 一共k组输出, 每组分别表示目标和前景的概率；一个分支是bbox regression, 256-&gt;4*k, 一共k组输出, 每一组4维向量分别表示候选区域的位置和大小：(t_x,t_y,t_w,t_h). </p>
-<p>其中, 每个anchor是否为真实区域取决于IOU的大小, 与任意一个真实区域的IOU&gt;0.7则为标定为正样本, 与所有真实区域的IOU&lt;0.3则标定为负样本. </p>
-<p>RPN层和fast rcnn是共享特征图的, 只不过RPN层是利用anchor机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过ROI pooling得到相同大小的特征向量, 传递给后面两个分支：fc层分类和回归. </p>
-</li>
-</ul>
-<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>mask rcnn是基于faster rcnn工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为mask rcnn = faster rcnn+RoIAlign+mask分支. </p>
-<ul>
-<li><h4 id="RoIAlign"><a href="#RoIAlign" class="headerlink" title="RoIAlign"></a>RoIAlign</h4><p>mask rcnn不仅需要检测候选框的类别, 还需要给出目标类别的mask映射. mask映射应该遵循平移等价性, 就是说框移动, 输出的mask也会相应移动 (平移不变性是指框移动, 输出也不会变化, 比如分类器). </p>
-<p>所以, 传统的fast rcnn在这一点上有着较大的缺陷, 因为它在卷积过程和ROI层经过了两次量化损失. 比如说, 原图像256*256, 而特征图是16*16, 缩小为原来的\dfrac{1}{16}. 那么原图中坐标17映射到特征图上就是1.0625, 小数部分会被舍去. 而在ROI层, 如果框的大小是15*15, 要进行7*7的pooling, 又是一次损失. </p>
-<p><img src="/img/roialign.png" width="700px" align="center/"></p>
-<p>这种损失会导致生成的mask和目标无法对齐. 所以, RoIAlign为了得到浮点数坐标的像素值, 利用了双线性插值算法.  像上图种每个bin里面的四个点的像素值, 都是由这种方法得到的, 之后再进行正常的max pooling操作. </p>
-</li>
-<li><h4 id="mask-rcnn-structure"><a href="#mask-rcnn-structure" class="headerlink" title="mask rcnn structure"></a>mask rcnn structure</h4><p>mask rcnn和faster rcnn除了RoIAlign的区别外, 另一个区别就是加了一个mask的分支, 如下图：</p>
-<p><img src="/img/maskrcnn.png" width="700px" align="center/"></p>
-<p>以ResNet为例：候选区域经过RoIAlign层得到7*7<em>2048的feature map, mask分支是通过FCN网络来实现的, 最终得到了14\</em>14*80的输出, 这里的80就是类别数, 也就是有80个mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的mask输出. </p>
-</li>
-</ul>
-<h3 id="7、yolo"><a href="#7、yolo" class="headerlink" title="7、yolo"></a>7、yolo</h3><p>one-stage目标检测的主流方法, 速度比rcnn系列模型要快很多, 在一些注重速度的目标检测系统中经常会用到. </p>
-<ul>
-<li><h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>该框架假设一张448*448的图片被划分成S*S的网格 (论文中S=7), 经过如下的网络结构后输出了S*S*N的向量, 每个N维向量对应于一个格子的预测信息. 其中N=B*5+C, B是认为设置的要预测的bbox数量, C是目标类别数 (论文中分别是2和20)；所以N=30. </p>
-<p><img src="/img/yolov1.png" width="800px" align="center/"></p>
-<p>这里记录几个关键点：</p>
-<ul>
-<li><p>其中bbox的位置信息是一个5维向量：(x,y,w,h), 类别预测向量是20维. 坐标x,y代表了预测的bbox的中心与栅格边界的相对值.  坐标w,h代表了预测的bounding box的width、height相对于整幅图像width,height的比例. </p>
-</li>
-<li><p><strong>ground truth box只有一个, 要同时预测多个bbox信息的目的是起到一种集成的作用. 这些bbox位置大小信息的输出在训练过程中都是以同一个ground truth box的信息来计算loss的. </strong></p>
-</li>
-<li><p>输出类别概率的公式为：</p>
-<script type="math/tex; mode=display">
-\operatorname { Pr } \left( \text { Class } _ { i } | \text { Object } \right) * \operatorname { Pr } ( \text { Object } ) * \text {IOU}_{\text{pred}}^{\text{truth}} = \operatorname { Pr } \left( \text { Class } _ { i } \right) * \text{IOU}_{\text{pred}}^{\text{truth}}</script></li>
-<li></li>
-</ul>
-<p><img src="/img/yololossfunc.png" width="800px" align="center/"></p>
-<ul>
-<li><p>因为每个格子都会给出两个bbox的预测, 所以在一张图片中每个目标类别会得到7*7*2个bbox和概率值. 要得到最终的bbox还得经过一个后处理步骤：NMS (非极大值抑制). </p>
-<p><img src="/img/nms.png" width="600" align="center/"></p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><h4 id="yolo-v2"><a href="#yolo-v2" class="headerlink" title="yolo v2"></a>yolo v2</h4></li>
-</ul>
-<h3 id="8、SSD"><a href="#8、SSD" class="headerlink" title="8、SSD"></a>8、<a href="https://zhuanlan.zhihu.com/p/31427288" target="_blank" rel="noopener">SSD</a></h3><p>除了yolo, SSD是目标检测领域one-stage方法的另一主流框架, 和yolo的区别如下：</p>
-<p>1、yolo只用最高层的特征图 (7*7*1024)来进行预测, 这样做速度很快但在检测小物体上就不尽人意. SSD效仿了特征金字塔的思路, <strong>在6种尺度的特征图上进行softmax分类和bbox回归</strong>；</p>
-<p>2、SSD还加入了Prior box, 类似于RPN的anchor；</p>
-<ul>
-<li><h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><p><img src="/img/ssd0.png" width="800" align="center/"></p>
-</li>
-</ul>
-<p>  <strong>conv4_3</strong>网络分为了3条线路:</p>
-<p>  1、经过bn层+一次卷积后进行softmax分类, 预测目标类别；因为特征图大小为38*38*512, 每个位置对应于一个512维的特征向量, 所以相当于进行38*38次512维向量的softmax分类. </p>
-<p>  2、经过bn层后+一次卷积后特征图每个点生成了4*num_priorbox大小的特征, 这些特征用于后面bbox regression. </p>
-<p>  3、进行bbox regression, 特征图每个点经过regressor生成2*4*num_priorbox维度的输出. 每个prior box得到一组(x1,y1,x2,y2)和四个坐标值的方差预测, 8个数. </p>
-<ul>
-<li><h4 id="Prior-box"><a href="#Prior-box" class="headerlink" title="Prior box"></a>Prior box</h4><p><img src="/img/priorbox.jpg" width="500" align="center/"></p>
-<p>SSD按照如下规则生成prior box：</p>
-<ul>
-<li><p>以feature map上每个点为中心, 生成一系列同心的prior box</p>
-</li>
-<li><p>正方形prior box最小边长和最大边长为：</p>
-<script type="math/tex; mode=display">
-min\_size\\
-\sqrt{min\_size*max\_size}</script></li>
-<li></li>
-</ul>
-<script type="math/tex; mode=display">
-\sqrt{aspect\_ratio}*min\_size\\
-1/\sqrt{aspect\_ratio}*min\_size</script><p>每个feature map对应的min_size和max_size由以下公式决定：</p>
-<ul>
-<li>对于conv4_3：k = 1, min_size = s1*300, max_size = s2*300</li>
-<li>对于conv-7：k = 2, min_size = s2*300, max_size = s3*300</li>
-</ul>
-</li>
-</ul>
-<h3 id="9、Focal-Loss"><a href="#9、Focal-Loss" class="headerlink" title="9、Focal Loss"></a>9、Focal Loss</h3><p>Focal loss是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给负样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对loss的贡献变小, 让难分类样本和数量少的类别对loss的贡献变大. </p>
-<script type="math/tex; mode=display">
-CE(p,y)=CE(p_t)=-log\ p_t\\
-\text{subject to: } p_t=\left\{\begin{array}{cc} 
-p,& if\ \ y=1\\ 
-1-p,& otherwise 
-\end{array}\right.</script><p>上面的公式是交叉熵损失 (对于类别t的loss), 是目标检测中常用的损失函数. 对于two-stage方法而言, 这个损失函数并没有什么不足因为有RPN进行初步的候选区域采样. 所以对于后面的网络, 正负样本比例不会有严重失衡的情况. 但<strong>对于one-stage方法来说, 采样得到的样本框大部分都是背景, 这种情况下负样本占了loss的大部分贡献, 会影响正样本的分类性能. </strong></p>
-<p>一个直观的方法是在样本少的类别前面加上一个大于1的权重:</p>
-<script type="math/tex; mode=display">
-CE(p_t)=-\alpha_tlog\ p_t</script><p>但这种办法只能解决样本少的类别问题, 并没有解决样本分类难易的问题. 因此有了如下的形式：</p>
-<script type="math/tex; mode=display">
-FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率p_t高的样本, FL loss认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, FL loss认为它们难以分类, 给的权重也比较高；所以模型会侧重训练这些样本. 综合以上两种形式可得：</p>
-<script type="math/tex; mode=display">
-FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><h3 id="10、FPN"><a href="#10、FPN" class="headerlink" title="10、FPN"></a>10、FPN</h3><p>feature pyramid networks (特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题. 在目标检测中, 一个目标类别可能有很多种尺度, 比如在街头, 远处的行人和近处的行人尺度就相差很大. 这种多尺度问题用传统网络来做精度不够令人满意. 因为目标图像再经过深层卷积网络后, 语义信息增强但位置信息减弱, 所以最终检测效果会受到影响. 一个简单的思路是把目标图像进行多尺度缩放, 一起交给模型进行训练. 显然这种方法十分耗费计算资源和训练时间. 所以作者希望提出一种网络结构, 让图像在经过网络后既能提取出深层的语义信息, 也能保留原图的位置信息. </p>
-<p>图像在经过一些卷积层和池化层后, 一般都是通道数变多, 特征图变小. 参见resnet：</p>
-<p><img src="/img/resnet.png" width="800px" align="center/"></p>
-<p>可以看出, 卷积层[C2,C3,C4,C5]特征图每次长宽缩小为原来的\dfrac{1}{2}. <strong>这个过程可以看成金字塔结构由底向上走, 图像的坐标信息逐渐减弱, 但语义信息随着通道数的增加而增强. </strong>这就是FPN的第一阶段, 金字塔向上走的过程. </p>
-<p><img src="/img/fpn1.jpg" width="700px" align="center/"></p>
-<p>接下来是FPN的第二阶段：自顶向下——深层的特征图和浅层特征图的融合. 如下图所示, <strong>深层的特征图通过上采样变换成原来的2倍, 下一层的特征图进行1*1卷积增加通道数, 两层相加, 逐层往下走. 这个过程使图像的深层语义信息得以保留, 并且引入了底层的位置信息. 到了底部后, 再进行一次3*3的卷积, 去除上采样的混叠现象. </strong></p>
-<p><img src="/img/fpn2.jpg" width="700px" align="center/"></p>
-
+        <p>腾讯广告算法大赛(CTR)总结 </p>
+<p>这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍, 导致我们所采用的两个模型中的 LightGBM 模型因超出内存导致最终无法完赛.<br><a id="more"></a></p>
+<p>下面主要介绍本次比赛的一些相关知识点, 分为数据预处理、特征工程和模型选择三个方面.  </p>
+<h1 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h1><p>预处理部分主要就是把训练数据处理成计算机模型能够使用的格式.  </p>
+<h2 id="单、多取值离散特征进行-one-hot-稀疏编码"><a href="#单、多取值离散特征进行-one-hot-稀疏编码" class="headerlink" title="单、多取值离散特征进行 one-hot 稀疏编码"></a>单、多取值离散特征进行 one-hot 稀疏编码</h2><p>这一步主要就是把离散型单取值和多取值特征进行 one-hot 编码, 比如 age 这一特征是单取值特征, 对所有 age 中出现的数字进行 one-hot 稀疏编码; 而 interest1 特征就是多取值特征, 同样也做 one-hot 稀疏编码处理.  </p>
+<h2 id="部分连续值特征离散化后进行-one-hot-稀疏编码"><a href="#部分连续值特征离散化后进行-one-hot-稀疏编码" class="headerlink" title="部分连续值特征离散化后进行 one-hot 稀疏编码"></a>部分连续值特征离散化后进行 one-hot 稀疏编码</h2><p>我们注意到部分离散值特征的分布是满足长尾分布或者均匀分布的, 对于长尾分布的连续值特征, 我们将”尾部”统一按0处理, 其他部分则按数量比例划分切割点进行离散化后再 one-hot 编码. 而对于均匀分布的连续值特征则直接均匀的划分并进行 one-hot 编码处理.  </p>
+<h2 id="hashtrick把数据保存为二进制数据流"><a href="#hashtrick把数据保存为二进制数据流" class="headerlink" title="hashtrick把数据保存为二进制数据流"></a>hashtrick把数据保存为二进制数据流</h2><p>这一部分主要是针对 FFM(Field-aware Factorization Machine) 模型来设计的, 先把数据以字典的形式处理, 然后经过一个 hash 函数给特征划分 field 及每个 field 内的特征编号.  </p>
+<h1 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h1><p><strong>首先, 在特征工程上我们吃了很大的亏, 这个比赛是有第一届的, 很多强特征挖掘都公布在 Github 上了, 但是我们很遗憾没有想过去挖掘这方面的信息.</strong>  </p>
+<h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1>
       
 
       
@@ -401,7 +262,7 @@ FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><h3 id="10、FPN"><a href="#10
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/12/08/Data Science Bowl比赛/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/08/14/腾讯广告算法大赛/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -415,18 +276,18 @@ FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><h3 id="10、FPN"><a href="#10
   
 <nav id="article-nav">
   
-    <a href="/2018/12/08/腾讯广告算法大赛/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/01/13/Quora比赛/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          2018腾讯广告算法大赛
+          Quora Insincere Questions Classification
         
       </div>
     </a>
   
   
-    <a href="/2018/12/08/Spooky比赛/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Spooky Author Classification</div>
+    <a href="/2018/05/25/Data Science Bowl比赛/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Data Science Bowl</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -701,5 +562,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
