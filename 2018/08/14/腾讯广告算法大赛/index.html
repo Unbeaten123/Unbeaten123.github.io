@@ -8,16 +8,16 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>2018腾讯广告算法大赛 | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
+  <meta name="description" content="腾讯广告算法大赛(CTR, Click-Through Rate)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2018腾讯广告算法大赛">
 <meta property="og:url" content="http://yoursite.com/2018/08/14/腾讯广告算法大赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
-<meta property="og:updated_time" content="2018-12-31T03:16:05.749Z">
+<meta property="og:description" content="腾讯广告算法大赛(CTR, Click-Through Rate)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛">
+<meta property="og:updated_time" content="2018-12-31T06:57:00.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018腾讯广告算法大赛">
-<meta name="twitter:description" content="腾讯广告算法大赛(CTR)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍">
+<meta name="twitter:description" content="腾讯广告算法大赛(CTR, Click-Through Rate)总结  这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -175,15 +175,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>腾讯广告算法大赛(CTR)总结 </p>
+        <p>腾讯广告算法大赛(CTR, Click-Through Rate)总结 </p>
 <p>这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据(4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.6%), 复赛中由于特征工程较为复杂而数据量增大为5倍, 导致我们所采用的两个模型中的 LightGBM 模型因超出内存导致最终无法完赛.<br><a id="more"></a></p>
 <p>下面主要介绍本次比赛的一些相关知识点, 分为数据预处理、特征工程和模型选择三个方面.  </p>
 <h1 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h1><p>预处理部分主要就是把训练数据处理成计算机模型能够使用的格式.  </p>
-<h2 id="单、多取值离散特征进行-one-hot-稀疏编码"><a href="#单、多取值离散特征进行-one-hot-稀疏编码" class="headerlink" title="单、多取值离散特征进行 one-hot 稀疏编码"></a>单、多取值离散特征进行 one-hot 稀疏编码</h2><p>这一步主要就是把离散型单取值和多取值特征进行 one-hot 编码, 比如 age 这一特征是单取值特征, 对所有 age 中出现的数字进行 one-hot 稀疏编码; 而 interest1 特征就是多取值特征, 同样也做 one-hot 稀疏编码处理.  </p>
+<h2 id="单、多取值离散特征进行-one-hot-稀疏编码"><a href="#单、多取值离散特征进行-one-hot-稀疏编码" class="headerlink" title="单、多取值离散特征进行 one-hot 稀疏编码"></a>单、多取值离散特征进行 one-hot 稀疏编码</h2><p>这一步主要就是把离散型单取值和多取值特征进行 one-hot 编码, 比如 age 这一特征是单取值特征, 对所有 age 中出现的数字进行 one-hot 稀疏编码; 而 interest 特征就是多取值特征, 同样也做 one-hot 稀疏编码处理.  </p>
 <h2 id="部分连续值特征离散化后进行-one-hot-稀疏编码"><a href="#部分连续值特征离散化后进行-one-hot-稀疏编码" class="headerlink" title="部分连续值特征离散化后进行 one-hot 稀疏编码"></a>部分连续值特征离散化后进行 one-hot 稀疏编码</h2><p>我们注意到部分离散值特征的分布是满足长尾分布或者均匀分布的, 对于长尾分布的连续值特征, 我们将”尾部”统一按0处理, 其他部分则按数量比例划分切割点进行离散化后再 one-hot 编码. 而对于均匀分布的连续值特征则直接均匀的划分并进行 one-hot 编码处理.  </p>
-<h2 id="hashtrick把数据保存为二进制数据流"><a href="#hashtrick把数据保存为二进制数据流" class="headerlink" title="hashtrick把数据保存为二进制数据流"></a>hashtrick把数据保存为二进制数据流</h2><p>这一部分主要是针对 FFM(Field-aware Factorization Machine) 模型来设计的, 先把数据以字典的形式处理, 然后经过一个 hash 函数给特征划分 field 及每个 field 内的特征编号.  </p>
-<h1 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h1><p><strong>首先, 在特征工程上我们吃了很大的亏, 这个比赛是有第一届的, 很多强特征挖掘都公布在 Github 上了, 但是我们很遗憾没有想过去挖掘这方面的信息.</strong>  </p>
-<h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1>
+<h2 id="hashtrick把数据保存为二进制数据流"><a href="#hashtrick把数据保存为二进制数据流" class="headerlink" title="hashtrick把数据保存为二进制数据流"></a>hashtrick把数据保存为二进制数据流</h2><p>这一部分主要是针对 FFM(Field-aware Factorization Machine) 模型(这个模型会在后文介绍)来设计的, 先把数据以字典的形式处理, 然后经过一个 hash 函数给特征划分 field 及每个 field 内的特征编号. 保存为二进制数据流的形式可以加速读写文件的速度并且占用更小的磁盘空间.  </p>
+<h1 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h1><p><strong>首先, 在特征工程上我们吃了很大的亏, 这个比赛是有第一届的, 很多强特征挖掘都公布在 Github 上了, 但是我们很遗憾没有想过去挖掘这方面的信息.</strong> 另外, 在数据预处理部分中对离散值、连续值的处理也算是特征工程的一部分</p>
+<h2 id="特征交叉"><a href="#特征交叉" class="headerlink" title="特征交叉"></a>特征交叉</h2><p>特征交叉是指把明显具有关联度的特征进行组合以期获取一个更为好的新特征, 我们主要做了双、三特征交叉.<br>比如 age 这一特征和 consumptionAbility(消费能力) 具有明显关联, 一般认为年轻人较中老年人的消费力更强; 而 前两者和 education 学历特征又具有明显的关联, 可以分别做双特征组合, 也可以把这三者组合作为一个新特征.  </p>
+<h2 id="特征转化率"><a href="#特征转化率" class="headerlink" title="特征转化率"></a>特征转化率</h2><p>特征转化率是指统计满足某种属性的样本中正样本所占的比例, 例如, 我们可以统计 age=10 的正样本的比例, 但是注意直接这样统计之后作为新特征毫无疑问会暴露标签信息, 学习器会发现所有正样本的比例都符合一定规律. 因此, 我们需要用 k 折交叉来做这个特征. 具体地, 讲述数据分为5折, 前四折数据中统计 age=10 的正样本比例, 对于第5折数据我们使用前四折数据中的统计结果作为特征, 5次轮流对每折数据标记新特征.  </p>
+<h2 id="tfidf特征"><a href="#tfidf特征" class="headerlink" title="tfidf特征"></a>tfidf特征</h2><p>对于 interest、topic 等多值特征, 我们考虑使用 tfidf 来对这种特征做处理. tfidf(term frequency inverse document frequency)的主要思想是: 如果某个词或短语在一篇文章中出现的频率 tf 高, 并且在其他文章中很少出现, 则认为此词或者短语具有很好的类别区分能力, 适合用来分类. 在这里, 词或短语就是每个 interest 中出现的不同特征值, 文章就是不同样本对应的 interest、topic 多值特征.  </p>
+<h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p>回顾 CTR 领域的模型, 大致发展方向是 LR <script type="math/tex">\rightarrow</script> GBDT等树模型 <script type="math/tex">\rightarrow</script> FM/FFM <script type="math/tex">\rightarrow</script> DeepFM等深度模型.<br>LR 由于太简单, 我们主要尝试了后三个发展阶段的模型, 基于 Baseline 改进的 LightGBM、FFM 和 DeepFM. 最终的情况是 LightGBM 模型效果最好, FFM 模型其次, DeepFM 模型则未能成功使用. 依靠前两个模型的融合得到了初赛58名的成绩.  </p>
+<h2 id="LightGBM"><a href="#LightGBM" class="headerlink" title="LightGBM"></a>LightGBM</h2><p>LightGBM 模型是 Microsoft 提出的一个 state-of-art 提升树模型, 针对之前的 Xgboost 做出了改善, 通过 <strong>GOSS(Gradient-based One-Side Sampling)</strong> 和 <strong>EFB(Exclusive Feature Bundling)</strong>两项技术使得 LightGBM 模型在获取同等精度的情况下速度提升 <strong>20倍</strong> 以上, 而本次比赛的数据量也确实验证了 LightGBM 的速度优势, 我们尝试了 Xgboost 模型, 同样的训练数据 LightGBM 只用了一天跑完, Xgboost 则根本无法在可接受时间内完成, 此外 LightGBM 的内存占用也优于 Xgboost, 因此我们舍弃了 Xgboost.   </p>
+<ol>
+<li><strong>GOSS</strong>:</li>
+<li><strong>EFB</strong>:<br>上述是 LightGBM 的理论基础, 因为有 LightGBM 的 Baseline 实现, 针对该模型我们主要做的是参数调优争取在已有的特征基础上获取最好的结果, 查看 LightGBM 的文档, 我们队一些参数进行了调试, 首先影响最大的肯定是学习率参数, 这个参数太大的话速度回变快但是精度降低, 太小的话速度又太慢, num_leaves、max_depth 等参数可以控制过拟合. 为了获取较好的参数, 我们抽取了 10% 的训练数据来做参数优化, 利用这一小部分数据的表现来决定参数最终的配置.  <h2 id="FFM-Field-Factorization-Machine"><a href="#FFM-Field-Factorization-Machine" class="headerlink" title="FFM(Field Factorization Machine)"></a>FFM(Field Factorization Machine)</h2>FFM 是由 FM 演化而来的, 首先介绍一下 FM<h3 id="FM-Factorization-Machine-降维版本的特征二阶组合"><a href="#FM-Factorization-Machine-降维版本的特征二阶组合" class="headerlink" title="FM(Factorization Machine): 降维版本的特征二阶组合"></a>FM(Factorization Machine): 降维版本的特征二阶组合</h3>FM 之前用的方法是人工特征工程加上 LR, 为了更好地捕捉特征往往需要人为的判断组合一些特征, 例如 “男性大学生” 和 “点击游戏类广告” 两个特征就会是个很好的组合特征. 人工组合特征存在特征爆炸, 特征难以识别等问题. 因此, 提出了线性模型的二阶多项式(2d-polynomial)推广模型 FM:  <script type="math/tex; mode=display">y_{poly} = \sigma(<\uprightarrwo{w}, \uprightarrow{x}> + \sum_{i=1}^{n}\sum_{j=1}^{n}w_{ij}\cdot x_i \cdot x_j)</script></li>
+</ol>
+<h2 id="DeepFM"><a href="#DeepFM" class="headerlink" title="DeepFM"></a>DeepFM</h2><p>深度模型在这个比赛之前我们几乎没怎么接触过, 所以这个模型最终我们没能成功使用</p>
+
       
 
       

@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Data Science Bowl | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
+  <meta name="description" content="Kaggle的Object Detection比赛Data Science Bowl总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 这个比赛最终我们侥幸拿到了一块银牌(170/3634, Top 5%).">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Data Science Bowl">
 <meta property="og:url" content="http://yoursite.com/2018/05/25/Data Science Bowl比赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
+<meta property="og:description" content="Kaggle的Object Detection比赛Data Science Bowl总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 这个比赛最终我们侥幸拿到了一块银牌(170/3634, Top 5%).">
 <meta property="og:image" content="http://yoursite.com/img/IOU.png">
 <meta property="og:image" content="http://yoursite.com/img/spp.png">
 <meta property="og:image" content="http://yoursite.com/img/anchor.png">
@@ -27,10 +27,10 @@
 <meta property="og:image" content="http://yoursite.com/img/resnet.png">
 <meta property="og:image" content="http://yoursite.com/img/fpn1.jpg">
 <meta property="og:image" content="http://yoursite.com/img/fpn2.jpg">
-<meta property="og:updated_time" content="2018-12-31T03:16:06.242Z">
+<meta property="og:updated_time" content="2018-12-31T06:39:06.083Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
-<meta name="twitter:description" content="Kaggle的Object Detection比赛Data Science Bowl总结  比赛简介Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识">
+<meta name="twitter:description" content="Kaggle的Object Detection比赛Data Science Bowl总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 这个比赛最终我们侥幸拿到了一块银牌(170/3634, Top 5%).">
 <meta name="twitter:image" content="http://yoursite.com/img/IOU.png">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
@@ -189,9 +189,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Kaggle的Object Detection比赛Data Science Bowl总结 </p>
-<h1 id="比赛简介"><a href="#比赛简介" class="headerlink" title="比赛简介"></a>比赛简介</h1><p>Kaggle的一个目标检测类比赛, 这篇博客主要总结一下和比赛相关的基础知识</p>
-<a id="more"></a>
+        <p>Kaggle的Object Detection比赛Data Science Bowl总结</p>
+<h1 id="比赛简介"><a href="#比赛简介" class="headerlink" title="比赛简介"></a>比赛简介</h1><p>Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 这个比赛最终我们侥幸拿到了一块银牌(170/3634, Top 5%).<br><a id="more"></a></p>
 <h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="0、mAP评估指标？"><a href="#0、mAP评估指标？" class="headerlink" title="0、mAP评估指标？"></a>0、mAP评估指标？</h3><p>mAP(mean Average Precision, 平均精度均值)是目标检测指标, 在目标检测中, 每一类都可以根据 recall 和 precision绘制P-R曲线, AP就是该曲线下的面积, mAP就是所有类AP的平均值. </p>
 <p>目标检测中, TP是IOU&gt;0.5的检测框数量, FP是IOU&lt;0.5的检测框和对同一个GT(Ground Truth, 真值框)多余的检测框数量. FN是没有被检测出来的GT的数量. </p>
 <h3 id="1、IOU是什么？用代码写一个IOU函数"><a href="#1、IOU是什么？用代码写一个IOU函数" class="headerlink" title="1、IOU是什么？用代码写一个IOU函数"></a>1、IOU是什么？用代码写一个IOU函数</h3><p>IOU的意思是是交并比. </p>
