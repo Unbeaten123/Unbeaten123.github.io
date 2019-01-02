@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/resnet.png">
 <meta property="og:image" content="http://yoursite.com/img/fpn1.jpg">
 <meta property="og:image" content="http://yoursite.com/img/fpn2.jpg">
-<meta property="og:updated_time" content="2019-01-02T07:19:04.931Z">
+<meta property="og:updated_time" content="2019-01-02T07:24:10.206Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -229,15 +229,13 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>2、通过 RPN 生成 region proposal, 通过 softmax 判断 anchors 属于 foreground 或 background 并用 bbox 回归修正 anchors 获取精确的 region proposal;</p>
 <p>3、RoI Pooling, 根据 feature maps 和 region proposal 提取 proposal feature maps 传给全连接层测过判断类别; </p>
 <p>4、根据 proposal feature maps 计算类别并再次使用 bbox 回归获取最终精确的预测位置. </p>
-<ul>
-<li><h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>Faster RCNN 抛弃选择搜索算法生成候选窗口, 使用 RPN 层选出一些候选区窗口供 fast rcnn 网络的训练和预测, 起加速作用. rpn 的核心是 anchor 机制, 即对于一个卷积后的每一个锚点 (下图中 sliding window 中的点) 可以对应回原图的不同宽高比例, 不同大小的区域. 在 faster rcnn 中 anchor 数量设置为 k=9. <strong>通过引入 anchors 使得 faster rcnn 具备了多尺度映射.</strong><br><div align="center">
+<h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>Faster RCNN 抛弃选择搜索算法生成候选窗口, 使用 RPN 层选出一些候选区窗口供 fast rcnn 网络的训练和预测, 起加速作用. rpn 的核心是 anchor 机制, 即对于一个卷积后的每一个锚点 (下图中 sliding window 中的点) 可以对应回原图的不同宽高比例, 不同大小的区域. 在 faster rcnn 中 anchor 数量设置为 k=9. <strong>通过引入 anchors 使得 faster rcnn 具备了多尺度映射.</strong></p>
+<p><div align="center">
 <img src="/img/anchor.png" width="450px" align="center/">
-</div> <br><br>原图像经过一个卷积网络会得到 H*W*256 的 feature map, 在论文里的 H*W 是原图像的 <script type="math/tex">\dfrac{1}{16}</script>, 特征图可以理解为原图的一种缩放. <strong>那么, 对于每个 anchor, 有一个 256 维的特征向量来描述. 这个特征向量对应原图像中 anchor 及邻近的 9 个点的池化 (对应上图中 sliding window, 这样做的原因推测是结果更鲁棒)</strong>; 接下来每个 anchor 的 256 维向量都要经过两个分支进行训练: 一个分支是候选区域二分类, 256 -&gt; 2*k, 一共 k 组输出, 每组分别表示 foreground(包含检测目标) 和 background 的概率; 一个分支是 bbox regression, 256 -&gt; 4*k, 一共 k 组输出, 每一组 4 维向量分别表示候选区域对应的四个坐标偏移量: <script type="math/tex">(t_x, t_y, t_w, t_h)</script>. </p>
+</div> <br><br>原图像经过一个卷积网络会得到 H*W*256 的 feature map, 在论文里的 H*W 是原图像的 <script type="math/tex">\frac{1}{16}</script>, 特征图可以理解为原图的一种缩放. <strong>那么, 对于每个 anchor, 有一个 256 维的特征向量来描述. 这个特征向量对应原图像中 anchor 及邻近的 9 个点的池化 (对应上图中 sliding window, 这样做的原因推测是结果更鲁棒)</strong>; 接下来每个 anchor 的 256 维向量都要经过两个分支进行训练: 一个分支是候选区域二分类, 256 -&gt; 2*k, 一共 k 组输出, 每组分别表示 foreground(包含检测目标) 和 background 的概率; 一个分支是 bbox regression, 256 -&gt; 4*k, 一共 k 组输出, 每一组 4 维向量分别表示候选区域对应的四个坐标偏移量: <script type="math/tex">(t_x, t_y, t_w, t_h)</script>. </p>
 <p>其中, 每个 anchor 是否为真实区域取决于 IOU 的大小, 与任意一个真实区域的 IOU &gt; 0.7 则为标定为正样本, 与所有真实区域的 IOU &lt; 0.3 则标定为负样本. 使用所有的 anchors 训练过多, 实际训练中作者采用了 128 个正样本和 128 个负样本来训练. </p>
 <p>RPN 层和 fast rcnn 是共享特征图的, 只不过 RPN 层是利用 anchor 机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过 ROI pooling 得到相同大小的特征向量, 传递给后面两个分支: 全连接层分类和 bbox 回归. </p>
-</li>
-</ul>
-<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>mask rcnn是基于faster rcnn工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为mask rcnn = faster rcnn+RoIAlign+mask分支. </p>
+<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn是基于faster rcnn工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为mask rcnn = faster rcnn+RoIAlign+mask分支. </p>
 <ul>
 <li><h4 id="RoIAlign"><a href="#RoIAlign" class="headerlink" title="RoIAlign"></a>RoIAlign</h4><p>mask rcnn不仅需要检测候选框的类别, 还需要给出目标类别的mask映射. mask映射应该遵循平移等价性, 就是说框移动, 输出的mask也会相应移动 (平移不变性是指框移动, 输出也不会变化, 比如分类器). </p>
 <p>所以, 传统的fast rcnn在这一点上有着较大的缺陷, 因为它在卷积过程和ROI层经过了两次量化损失. 比如说, 原图像256*256, 而特征图是16*16, 缩小为原来的\dfrac{1}{16}. 那么原图中坐标17映射到特征图上就是1.0625, 小数部分会被舍去. 而在ROI层, 如果框的大小是15*15, 要进行7*7的pooling, 又是一次损失. </p>
