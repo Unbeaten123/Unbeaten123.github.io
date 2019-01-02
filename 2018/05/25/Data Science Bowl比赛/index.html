@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/resnet.png">
 <meta property="og:image" content="http://yoursite.com/img/fpn1.jpg">
 <meta property="og:image" content="http://yoursite.com/img/fpn2.jpg">
-<meta property="og:updated_time" content="2019-01-02T06:20:48.283Z">
+<meta property="og:updated_time" content="2019-01-02T07:19:04.931Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -224,13 +224,17 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p><strong>相比R-CNN, 主要两处不同:</strong></p>
 <p>(1)最后一层卷积层后加了一个 RoI pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 是对一个对应窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域的对应特征图能出来 21 维的特征向量；而 RoI layer 只进行 7*7 的池化, 所以只会出来 49 维的特征向量</strong>. </p>
 <p>(2)损失函数使用了多任务损失函数 (multi-task loss), 将边框回归直接加入到 CNN 网络中训练. </p>
-<h3 id="5、Faster-RCNN"><a href="#5、Faster-RCNN" class="headerlink" title="5、Faster RCNN"></a>5、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以概括成: faster rcnn = fast rcnn + rpn 层.  </p>
+<h3 id="5、Faster-RCNN"><a href="#5、Faster-RCNN" class="headerlink" title="5、Faster RCNN"></a>5、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. 其流程如下:  </p>
+<p>1、将整个图片输入 CNN, 提取图像的 feature maps, 被后续的 RPN 和全连接层所共享;</p>
+<p>2、通过 RPN 生成 region proposal, 通过 softmax 判断 anchors 属于 foreground 或 background 并用 bbox 回归修正 anchors 获取精确的 region proposal;</p>
+<p>3、RoI Pooling, 根据 feature maps 和 region proposal 提取 proposal feature maps 传给全连接层测过判断类别; </p>
+<p>4、根据 proposal feature maps 计算类别并再次使用 bbox 回归获取最终精确的预测位置. </p>
 <ul>
-<li><h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>RPN层的作用是选出一些候选区域供fast rcnn网络的训练和预测, 起加速作用. <strong>rpn的核心是anchor机制, 即对于一个卷积后的锚点可以对应回原图的不同宽高比例, 不同大小的区域. 在faster rcnn中anchor数量设置为k=9. </strong></p>
-<p><img src="/img/anchor.png" width="500px" align="center/"></p>
-<p>原图像经过一个卷积网络会得到H*W*256的feature map, 在论文里的H<em>W是原图像的\dfrac{1}{16}, 特征图可以理解为原图的一种缩放. <strong>那么, 对于每个anchor, 有一个256维度的特征向量来描述. 这个特征向量对应原图像中k个anchor</strong>；接下来每个anchor的256维向量都要经过两个分支进行训练：一个分支是候选区域分类, 256-&gt;2\</em>k, 一共k组输出, 每组分别表示目标和前景的概率；一个分支是bbox regression, 256-&gt;4*k, 一共k组输出, 每一组4维向量分别表示候选区域的位置和大小：(t_x,t_y,t_w,t_h). </p>
-<p>其中, 每个anchor是否为真实区域取决于IOU的大小, 与任意一个真实区域的IOU&gt;0.7则为标定为正样本, 与所有真实区域的IOU&lt;0.3则标定为负样本. </p>
-<p>RPN层和fast rcnn是共享特征图的, 只不过RPN层是利用anchor机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过ROI pooling得到相同大小的特征向量, 传递给后面两个分支：fc层分类和回归. </p>
+<li><h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>Faster RCNN 抛弃选择搜索算法生成候选窗口, 使用 RPN 层选出一些候选区窗口供 fast rcnn 网络的训练和预测, 起加速作用. rpn 的核心是 anchor 机制, 即对于一个卷积后的每一个锚点 (下图中 sliding window 中的点) 可以对应回原图的不同宽高比例, 不同大小的区域. 在 faster rcnn 中 anchor 数量设置为 k=9. <strong>通过引入 anchors 使得 faster rcnn 具备了多尺度映射.</strong><br><div align="center">
+<img src="/img/anchor.png" width="450px" align="center/">
+</div> <br><br>原图像经过一个卷积网络会得到 H*W*256 的 feature map, 在论文里的 H*W 是原图像的 <script type="math/tex">\dfrac{1}{16}</script>, 特征图可以理解为原图的一种缩放. <strong>那么, 对于每个 anchor, 有一个 256 维的特征向量来描述. 这个特征向量对应原图像中 anchor 及邻近的 9 个点的池化 (对应上图中 sliding window, 这样做的原因推测是结果更鲁棒)</strong>; 接下来每个 anchor 的 256 维向量都要经过两个分支进行训练: 一个分支是候选区域二分类, 256 -&gt; 2*k, 一共 k 组输出, 每组分别表示 foreground(包含检测目标) 和 background 的概率; 一个分支是 bbox regression, 256 -&gt; 4*k, 一共 k 组输出, 每一组 4 维向量分别表示候选区域对应的四个坐标偏移量: <script type="math/tex">(t_x, t_y, t_w, t_h)</script>. </p>
+<p>其中, 每个 anchor 是否为真实区域取决于 IOU 的大小, 与任意一个真实区域的 IOU &gt; 0.7 则为标定为正样本, 与所有真实区域的 IOU &lt; 0.3 则标定为负样本. 使用所有的 anchors 训练过多, 实际训练中作者采用了 128 个正样本和 128 个负样本来训练. </p>
+<p>RPN 层和 fast rcnn 是共享特征图的, 只不过 RPN 层是利用 anchor 机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过 ROI pooling 得到相同大小的特征向量, 传递给后面两个分支: 全连接层分类和 bbox 回归. </p>
 </li>
 </ul>
 <h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>mask rcnn是基于faster rcnn工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为mask rcnn = faster rcnn+RoIAlign+mask分支. </p>
@@ -301,20 +305,16 @@ min\_size\\
 </ul>
 </li>
 </ul>
-<h3 id="9、Focal-Loss"><a href="#9、Focal-Loss" class="headerlink" title="9、Focal Loss"></a>9、Focal Loss</h3><p>Focal loss是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给负样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对loss的贡献变小, 让难分类样本和数量少的类别对loss的贡献变大. </p>
-<script type="math/tex; mode=display">
-CE(p,y)=CE(p_t)=-log\ p_t\\
+<h3 id="9、Focal-Loss"><a href="#9、Focal-Loss" class="headerlink" title="9、Focal Loss"></a>9、Focal Loss</h3><p>Focal loss是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给负样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对loss的贡献变小, 让难分类样本和数量少的类别对loss的贡献变大.  </p>
+<script type="math/tex; mode=display">CE(p,y)=CE(p_t)=-log\ p_t\\
 \text{subject to: } p_t=\left\{\begin{array}{cc} 
 p,& if\ \ y=1\\ 
 1-p,& otherwise 
-\end{array}\right.</script><p>上面的公式是交叉熵损失 (对于类别t的loss), 是目标检测中常用的损失函数. 对于two-stage方法而言, 这个损失函数并没有什么不足因为有RPN进行初步的候选区域采样. 所以对于后面的网络, 正负样本比例不会有严重失衡的情况. 但<strong>对于one-stage方法来说, 采样得到的样本框大部分都是背景, 这种情况下负样本占了loss的大部分贡献, 会影响正样本的分类性能. </strong></p>
-<p>一个直观的方法是在样本少的类别前面加上一个大于1的权重:</p>
-<script type="math/tex; mode=display">
-CE(p_t)=-\alpha_tlog\ p_t</script><p>但这种办法只能解决样本少的类别问题, 并没有解决样本分类难易的问题. 因此有了如下的形式：</p>
-<script type="math/tex; mode=display">
-FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率p_t高的样本, FL loss认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, FL loss认为它们难以分类, 给的权重也比较高；所以模型会侧重训练这些样本. 综合以上两种形式可得：</p>
-<script type="math/tex; mode=display">
-FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><h3 id="10、FPN"><a href="#10、FPN" class="headerlink" title="10、FPN"></a>10、FPN</h3><p>feature pyramid networks (特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题. 在目标检测中, 一个目标类别可能有很多种尺度, 比如在街头, 远处的行人和近处的行人尺度就相差很大. 这种多尺度问题用传统网络来做精度不够令人满意. 因为目标图像再经过深层卷积网络后, 语义信息增强但位置信息减弱, 所以最终检测效果会受到影响. 一个简单的思路是把目标图像进行多尺度缩放, 一起交给模型进行训练. 显然这种方法十分耗费计算资源和训练时间. 所以作者希望提出一种网络结构, 让图像在经过网络后既能提取出深层的语义信息, 也能保留原图的位置信息. </p>
+\end{array}\right.</script><p>上面的公式是交叉熵损失 (对于类别t的loss), 是目标检测中常用的损失函数. 对于two-stage方法而言, 这个损失函数并没有什么不足因为有RPN进行初步的候选区域采样. 所以对于后面的网络, 正负样本比例不会有严重失衡的情况. 但<strong>对于one-stage方法来说, 采样得到的样本框大部分都是背景, 这种情况下负样本占了loss的大部分贡献, 会影响正样本的分类性能.</strong> </p>
+<p>一个直观的方法是在样本少的类别前面加上一个大于1的权重:  </p>
+<script type="math/tex; mode=display">CE(p_t)=-\alpha_tlog\ p_t</script><p>但这种办法只能解决样本少的类别问题, 并没有解决样本分类难易的问题. 因此有了如下的形式:  </p>
+<script type="math/tex; mode=display">FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率p_t高的样本, FL loss认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, FL loss认为它们难以分类, 给的权重也比较高；所以模型会侧重训练这些样本. 综合以上两种形式可得:  </p>
+<script type="math/tex; mode=display">FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><h3 id="10、FPN"><a href="#10、FPN" class="headerlink" title="10、FPN"></a>10、FPN</h3><p>feature pyramid networks (特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题. 在目标检测中, 一个目标类别可能有很多种尺度, 比如在街头, 远处的行人和近处的行人尺度就相差很大. 这种多尺度问题用传统网络来做精度不够令人满意. 因为目标图像再经过深层卷积网络后, 语义信息增强但位置信息减弱, 所以最终检测效果会受到影响. 一个简单的思路是把目标图像进行多尺度缩放, 一起交给模型进行训练. 显然这种方法十分耗费计算资源和训练时间. 所以作者希望提出一种网络结构, 让图像在经过网络后既能提取出深层的语义信息, 也能保留原图的位置信息. </p>
 <p>图像在经过一些卷积层和池化层后, 一般都是通道数变多, 特征图变小. 参见resnet：</p>
 <p><img src="/img/resnet.png" width="800px" align="center/"></p>
 <p>可以看出, 卷积层[C2,C3,C4,C5]特征图每次长宽缩小为原来的\dfrac{1}{2}. <strong>这个过程可以看成金字塔结构由底向上走, 图像的坐标信息逐渐减弱, 但语义信息随着通道数的增加而增强. </strong>这就是FPN的第一阶段, 金字塔向上走的过程. </p>
