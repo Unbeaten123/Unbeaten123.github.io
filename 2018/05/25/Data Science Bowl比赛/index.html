@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-03T09:08:37.015Z">
+<meta property="og:updated_time" content="2019-01-03T09:09:28.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -236,7 +236,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>RPN 层的处理流程:  </p>
 <ol>
 <li>原图像经过一个 5 层的卷积网络会得到 H*W*256 的 feature map, 在论文里的 H*W 是原图像的 <script type="math/tex">\dfrac{1}{16}</script>;  </li>
-<li>再次通过一个 3*3 的卷积层融合 sliding window 内的 9 个点形成锚点特征向量, 由一个 256 维的特征向量来描述;  </li>
+<li>再次通过一个 3*3 的卷积层融合 sliding window 内的 9 个点形成锚点特征向量, 维度为 256 ;  </li>
 <li>以锚点为中心, 生成 k = 9 个 anchor box 作为初步的候选窗口, 个数 H*W*k;  </li>
 <li>锚点的特征向量经过两个分支进行训练: 一个分支是候选区域二分类, 经过 cls layer, 得到 2k(k组) 个得分, 每组两个值分别表示 foreground(包含检测目标) 和 background(不包含检测目标) 的概率; 另一个分支是 bbox regression, 经过 reg layer, 得到 4k(k组) 个输出, 每组的 4 维向量分别表示候选区域对应的四个坐标: <script type="math/tex">(t_x, t_y, t_w, t_h)</script>.  </li>
 </ol>
