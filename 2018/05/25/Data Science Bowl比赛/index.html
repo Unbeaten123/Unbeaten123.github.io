@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-03T09:11:20.659Z">
+<meta property="og:updated_time" content="2019-01-03T11:04:02.540Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -242,7 +242,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 </ol>
 <p>其中, 每个 anchor 是否为真实区域取决于 IOU 的大小, 与任意一个真实区域的 IOU &gt; 0.7 则为标定为正样本, 与所有真实区域的 IOU &lt; 0.3 则标定为负样本. 使用所有的 anchors 训练过多, 实际训练中作者采用了 128 个正样本和 128 个负样本来训练. </p>
 <p>RPN 层和 fast rcnn 是共享特征图的, 只不过 RPN 层是利用 anchor 机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过 ROI pooling 得到相同大小的特征向量, 传递给后面两个分支: 全连接层分类和 bbox 回归. </p>
-<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn 在 faster rcnn 工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为 Mask RCNN = ResNet-FPN + Fast RCNN + RoIAlign + Mask分支. 而 ResNet-FPN + Fast RCNN 实际上就是 Faster RCNN, 只不过 Faster RCNN 中只有一个 featrue map, 而 ResNet-FPN 对应的是多个 feature map (金字塔).  </p>
+<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn 在 faster rcnn 工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为 Mask RCNN = ResNet-FPN + Fast RCNN + RoIAlign + Mask分支. 而 ResNet-FPN + Fast RCNN 实际上就是 Faster RCNN, 只不过 Faster RCNN 中只有一个 featrue map(conv5 对应的 featrue map), 而 ResNet-FPN 对应的是多个 feature map (conv2、conv3、conv4、conv5 构成的金字塔).  </p>
 <h4 id="FPN"><a href="#FPN" class="headerlink" title="FPN"></a>FPN</h4><p>FPN (Feature Pyramid Networks, 特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题. 在目标检测中, 一个目标类别可能有很多种尺度, 比如在街头, 远处的行人和近处的行人尺度就相差很大. 这种多尺度问题用传统网络来做精度不够令人满意. 因为目标图像再经过深层卷积网络后, 语义信息增强但位置信息减弱, 所以最终检测效果会受到影响. 一个简单的思路是把目标图像进行多尺度缩放, 一起交给模型进行训练. 显然这种方法十分耗费计算资源和训练时间. 所以作者希望提出一种网络结构, 让图像在经过网络后既能提取出深层的语义信息, 也能保留原图的位置信息. </p>
 <p>图像在经过一些卷积层和池化层后, 一般都是通道数变多, 特征图变小. 参见 resnet, Mask RCNN 中使用的 FPN 就是 ResNet-FPN: </p>
 <p><div align="center">
@@ -688,21 +688,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
