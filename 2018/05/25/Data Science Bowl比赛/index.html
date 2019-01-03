@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-03T06:37:36.810Z">
+<meta property="og:updated_time" content="2019-01-03T08:39:21.834Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -219,20 +219,27 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>1、利用 selective search 算法在图像中从上到下提取2000个左右的候选窗口 (Region Proposal 也即是 RoI);</p>
 <p>2、将整张图片输入 CNN, 进行特征提取;</p>
 <p>3、把候选窗口映射到 CNN 的最后一层卷积 feature map 上;</p>
-<p>4、通过 RoI pooling 层为每个候选窗口生成固定尺寸的 feature map 随后经过全连接层映射成 RoI 特征向量;</p>
+<p>4、通过 RoI pooling 层为每个候选窗口生成固定尺寸 (7*7) 的 RoI 特征向量;</p>
 <p>5、利用 Softmax Loss (区域分类损失) 和 Smooth L1 Loss (边框回归损失) 对分类概率和边框回归联合训练. </p>
 <p><strong>相比R-CNN, 主要两处不同:</strong></p>
-<p>(1)最后一层卷积层后加了一个 RoI pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 对一个区域窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域对应的特征图经过 SPP Pooling 最终得到 21 维的特征向量；而 RoI layer 只进行 7*7 的池化, 所以得到的是 49 维的特征向量</strong>. </p>
+<p>(1)最后一层卷积层后加了一个 RoI Pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 对一个区域窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域对应的特征图经过 SPP Pooling 最终得到 21 维的特征向量；而 RoI layer 只进行 7*7 的池化, 所以得到的是 49 维的特征向量</strong>. </p>
 <p>(2)损失函数使用了多任务损失函数 (multi-task loss), 将边框回归直接加入到 CNN 网络中训练. </p>
 <h3 id="5、Faster-RCNN"><a href="#5、Faster-RCNN" class="headerlink" title="5、Faster RCNN"></a>5、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. 其流程如下:  </p>
 <p>1、将整个图片输入 CNN, 提取图像的 feature maps, 被后续的 RPN 和全连接层所共享;</p>
 <p>2、通过 RPN 生成 region proposal, 通过 softmax 判断 anchors 属于 foreground 或 background 并用 bbox 回归修正 anchors 获取精确的 region proposal;</p>
 <p>3、RoI Pooling, 根据 feature maps 和 region proposal 提取 proposal feature maps 传给全连接层测过判断类别; </p>
 <p>4、根据 proposal feature maps 计算类别并再次使用 bbox 回归获取最终精确的预测位置. </p>
-<h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>Faster RCNN 抛弃选择搜索算法生成候选窗口, 使用 RPN 层选出一些候选区窗口供 fast rcnn 网络的训练和预测, 起加速作用. rpn 的核心是 anchor 机制, 即对于一个卷积后的每一个锚点 (下图中 sliding window 中的点) 可以对应回原图的不同宽高比例, 不同大小的区域. 在 faster rcnn 中 anchor 数量设置为 k=9. <strong>通过引入 anchors 使得 faster rcnn 具备了多尺度映射.</strong></p>
+<h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>Faster RCNN 抛弃选择搜索算法生成候选窗口, 使用 RPN 层选出一些候选区窗口供 fast rcnn 网络的训练和预测, 起加速作用. <strong>rpn 的核心是 anchor 机制, 针对经过卷积层之后 feature map 上的每一个点, 再次通过 3*3 的卷积融合包括其在内周围 9 个点的信息 (下图中的 sliding window, 作者没有解释这样的做的原因, 推测是结果更具鲁棒性) 形成一个锚点, 随后以锚点为中心设置不同尺寸的 anchor box 以粗略选取原图对应的不同宽高比例, 不同大小的区域 (这样选取的结果不够精确, 所以需要两次 bbox 回归修正), 在 faster rcnn 中 anchor box 数量设置为 k=9. 通过引入 anchors 使得 faster rcnn 具备了多尺度映射.</strong></p>
 <p><div align="center">
 <img src="/img/anchor.png" width="450px" align="center/">
-</div> <br><br>原图像经过一个卷积网络会得到 H*W*256 的 feature map, 在论文里的 H*W 是原图像的 <script type="math/tex">\frac{1}{16}</script>, 特征图可以理解为原图的一种缩放. <strong>那么, 对于每个 anchor, 有一个 256 维的特征向量来描述. 这个特征向量对应原图像中 anchor 及邻近的 9 个点的池化 (对应上图中 sliding window, 这样做的原因推测是结果更鲁棒)</strong>; 接下来每个 anchor 的 256 维向量都要经过两个分支进行训练: 一个分支是候选区域二分类, 256 -&gt; 2*k, 一共 k 组输出, 每组分别表示 foreground(包含检测目标) 和 background 的概率; 一个分支是 bbox regression, 256 -&gt; 4*k, 一共 k 组输出, 每一组 4 维向量分别表示候选区域对应的四个坐标偏移量: <script type="math/tex">(t_x, t_y, t_w, t_h)</script>. </p>
+</div> <br></p>
+<p>RPN 层的处理流程:  </p>
+<ol>
+<li>原图像经过一个 5 层的卷积网络会得到 H*W*256 的 feature map, 在论文里的 H*W 是原图像的 <script type="math/tex">\dfrac{1}{16}</script>;  </li>
+<li>再次通过一个 3*3 的卷积层融合 sliding window 内的 9 个点形成锚点, 对于每个融合后的锚点, 有一个 256 维的特征向量来描述;  </li>
+<li>以锚点为中心, 生成 k = 9 个 anchor box 作为初步的候选窗口;  </li>
+<li>生成的 k 个 anchor box 都要经过两个分支进行训练: 一个分支是候选区域二分类, 经过 cls layer, 输出 2k(k组) 个得分, 每组两个值分别表示 foreground(包含检测目标) 和 background(不包含检测目标) 的概率; 另一个分支是 bbox regression, 经过 reg layer, 一共 4k(k组) 个输出, 每组的 4 维向量分别表示候选区域对应的四个坐标: <script type="math/tex">(t_x, t_y, t_w, t_h)</script>.  </li>
+</ol>
 <p>其中, 每个 anchor 是否为真实区域取决于 IOU 的大小, 与任意一个真实区域的 IOU &gt; 0.7 则为标定为正样本, 与所有真实区域的 IOU &lt; 0.3 则标定为负样本. 使用所有的 anchors 训练过多, 实际训练中作者采用了 128 个正样本和 128 个负样本来训练. </p>
 <p>RPN 层和 fast rcnn 是共享特征图的, 只不过 RPN 层是利用 anchor 机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过 ROI pooling 得到相同大小的特征向量, 传递给后面两个分支: 全连接层分类和 bbox 回归. </p>
 <h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn 在 faster rcnn 工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为 Mask RCNN = ResNet-FPN + Fast RCNN + RoIAlign + Mask分支. 而 ResNet-FPN + Fast RCNN 实际上就是 Faster RCNN, 只不过 Faster RCNN 中只有一个 featrue map, 而 ResNet-FPN 对应的是多个 feature map (金字塔).  </p>
@@ -681,21 +688,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
