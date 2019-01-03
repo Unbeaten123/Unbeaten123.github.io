@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-02T08:55:28.821Z">
+<meta property="og:updated_time" content="2019-01-03T06:37:36.810Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -36,7 +36,7 @@
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/img/favicon.ico">
+    <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -209,20 +209,20 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>(3)     速度慢：使用GPU, VGG16模型处理一张图像需要47s, 如果采用 AlexNet 精度则降低;</p>
 <p>(4)     测试速度慢：每个候选区域需要运行整个前向CNN计算; </p>
 <p>(5)     SVM和回归是事后操作, 在SVM和回归过程中CNN特征没有被学习更新. </p>
-<h3 id="3、SPP-Net"><a href="#3、SPP-Net" class="headerlink" title="3、SPP Net"></a>3、SPP Net</h3><p>RCNN 的一大问题就是对于提取的每个 regional proposal 都要经过 CNN 前向传播一次, 计算量巨大. 为此, <a href="https://arxiv.org/pdf/1406.4729" target="_blank" rel="noopener">SPP(Spatial Pyramid Pooling)</a> 则考虑既然 regional proposal 都是从原图像中提取的, 为什么不直接原图像输入 CNN 中, 在映射后的 feature maps 中提取 regional proposal, 大大减少了计算量.<br>一句话来说就是用 SPP layer 通过三个 Pooling 窗口 (下图中的蓝、绿、灰窗口, 形成了金字塔形状因此得名 SPP) 从 feature maps 提取出同样维度的特征向量. 之后 fast rcnn 的 RoI 层就是借鉴了 SPP Net 的这种思路. </p>
+<h3 id="3、SPP-Net"><a href="#3、SPP-Net" class="headerlink" title="3、SPP Net"></a>3、SPP Net</h3><p>RCNN 的一大问题就是对于提取的每个 regional proposal 都要经过 CNN 前向传播一次, 计算量巨大. 为此, <a href="https://arxiv.org/pdf/1406.4729" target="_blank" rel="noopener">SPP(Spatial Pyramid Pooling)</a> 则考虑既然 regional proposal 都是从原图像中提取的, 为什么不直接原图像输入 CNN 中, 在映射后的 feature maps 中提取 regional proposal, 通过这样做 SPP 大大减少了计算量.<br>一句话来说就是用 SPP layer 通过三个 Pooling 窗口 (下图中的蓝、绿、灰窗口, 形成了金字塔形状因此得名 SPP) 从 feature maps 提取出同样维度的特征向量. 之后 fast rcnn 的 RoI 层就是借鉴了 SPP Net 的这种思路. </p>
 <p>一张图片放入 CNN 网络中经过多层转化后, 会生成多张(论文中是 256 个卷积核)特征图：</p>
 <p><div align="center">
 <img src="/img/spp.png" width="600px" align="center/">
 </div> <br><br>而在原图中任意一个窗口在这些特征图中都有对应的窗口, SPP 就是在这些对应的窗口中做池化操作使每张特征图都生成21维的特征向量. </p>
-<p>具体做法是, 在 conv5 层得到的特征图是 256 个, 每个都做一次 spatial pyramid pooling. 先把每个特征图分割成多个不同尺寸的网格, 网格分别为4*4、2*2、1*1,然后每个网格做 max pooling, 这样 256 个特征图就形成了16*256, 4*256, 1*256维特征, 他们连起来就形成了一个固定长度的特征向量, 将这个向量输入到后面的全连接层. </p>
-<h3 id="4、Fast-RCNN"><a href="#4、Fast-RCNN" class="headerlink" title="4、Fast RCNN"></a>4、Fast RCNN</h3><p>RCNN、SPP Net 训练时, 提取 region proposal、CNN 特征提取、SVM 分类和 bbox 回归是互相隔离的, <a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener">Fast RCNN</a> 则有几个特点: 1) 特征都暂存在显存上不需要额外磁盘空间, 速度更更快精度更高; 2) 联合训练, 除了提取 region proposal 阶段, 原来的SVM 分类、bbox 回归都联合在 CNN 阶段同时训练, 将原来最后一层的 softmax 替换成区域分类 softmax (替代 SVM 分类) 和 bbox 微调以完成联合训练目标, 输入变为两个, 一个是原图像作为 CNN 输入, 另一个是选择搜索算法给出的可能 region proposal 直接映射到 Conv5 层上; 3) 提出了 RoI (Region of Interest) 层, 算是 SPP 的变种, 将原来的多尺度 (多个 Pooling 窗口) 映射换成单尺度映射.<br>Fast RCNN 的整体流程如下:  </p>
+<p>具体做法是, 在 conv5 层得到的特征图是 256 个, 每个都做一次 spatial pyramid pooling. 先把每个特征图分割成多个不同尺寸的网格, 网格分别为 4*4、2*2、1*1 ,然后每个网格做 max pooling, 这样 256 个特征图就形成了 16*256, 4*256, 1*256 维特征, 他们连起来就形成了一个固定长度的特征向量, 将这个向量输入到后面的全连接层. </p>
+<h3 id="4、Fast-RCNN"><a href="#4、Fast-RCNN" class="headerlink" title="4、Fast RCNN"></a>4、Fast RCNN</h3><p>RCNN、SPP Net 训练时, 提取 region proposal、CNN 特征提取、SVM 分类和 bbox 回归是互相隔离的, <a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener">Fast RCNN</a> 则有几个特点: 1) 特征都暂存在显存上不需要额外磁盘空间, 速度更快、精度更高; 2) 联合训练, 除了提取 region proposal 阶段, 原来的SVM 分类、bbox 回归都联合在 CNN 阶段同时训练, 将原来最后一层的 softmax 替换成区域分类 softmax (替代 SVM 分类) 和 bbox 微调以完成联合训练目标, 输入变为两个, 一个是原图像作为 CNN 输入, 另一个是选择搜索算法给出的可能 region proposal 直接映射到 Conv5 层上; 3) 提出了 RoI (Region of Interest) 层, 算是 SPP 的变种, 将原来的多尺度 (多个 Pooling 窗口) 映射换成单尺度映射.<br>Fast RCNN 的整体流程如下:  </p>
 <p>1、利用 selective search 算法在图像中从上到下提取2000个左右的候选窗口 (Region Proposal 也即是 RoI);</p>
 <p>2、将整张图片输入 CNN, 进行特征提取;</p>
 <p>3、把候选窗口映射到 CNN 的最后一层卷积 feature map 上;</p>
 <p>4、通过 RoI pooling 层为每个候选窗口生成固定尺寸的 feature map 随后经过全连接层映射成 RoI 特征向量;</p>
 <p>5、利用 Softmax Loss (区域分类损失) 和 Smooth L1 Loss (边框回归损失) 对分类概率和边框回归联合训练. </p>
 <p><strong>相比R-CNN, 主要两处不同:</strong></p>
-<p>(1)最后一层卷积层后加了一个 RoI pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 是对一个对应窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域的对应特征图能出来 21 维的特征向量；而 RoI layer 只进行 7*7 的池化, 所以只会出来 49 维的特征向量</strong>. </p>
+<p>(1)最后一层卷积层后加了一个 RoI pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 对一个区域窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域对应的特征图经过 SPP Pooling 最终得到 21 维的特征向量；而 RoI layer 只进行 7*7 的池化, 所以得到的是 49 维的特征向量</strong>. </p>
 <p>(2)损失函数使用了多任务损失函数 (multi-task loss), 将边框回归直接加入到 CNN 网络中训练. </p>
 <h3 id="5、Faster-RCNN"><a href="#5、Faster-RCNN" class="headerlink" title="5、Faster RCNN"></a>5、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. 其流程如下:  </p>
 <p>1、将整个图片输入 CNN, 提取图像的 feature maps, 被后续的 RPN 和全连接层所共享;</p>
@@ -452,20 +452,11 @@ p,& if\ \ y=1\\
     		&copy; 2019 Zhizhou Yu
     	</div>
       	<div class="footer-right">
-						<span id="busuanzi_container_site_pv">
-								本站总访问量<span id="busuanzi_value_site_pv"></span>次
-						</span>
-							
-						<span id="busuanzi_container_site_uv">
-								本站访客数<span id="busuanzi_value_site_uv"></span>人次
-						</span>
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
       	</div>
     </div>
   </div>
 </footer>
-
-
     </div>
     <script>
 	var yiliaConfig = {
@@ -510,8 +501,6 @@ MathJax.Hub.Queue(function() {
 </script>
 
 
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
   <div class="tools-nav header-menu">
@@ -681,21 +670,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
