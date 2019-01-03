@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-03T09:10:49.048Z">
+<meta property="og:updated_time" content="2019-01-03T09:11:20.659Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -229,7 +229,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>2、通过 RPN 生成 region proposal, 通过 softmax 判断 anchors 属于 foreground 或 background 并用 bbox 回归修正 anchors 获取精确的 region proposal;</p>
 <p>3、RoI Pooling, 根据 feature maps 和 region proposal 提取 proposal feature maps 传给全连接层测过判断类别; </p>
 <p>4、根据 proposal feature maps 计算类别并再次使用 bbox 回归获取最终精确的预测位置. </p>
-<h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>Faster RCNN 抛弃选择搜索算法生成候选窗口, 使用 RPN 层选出一些候选区窗口供 fast rcnn 网络的训练和预测, 起加速作用. <strong>rpn 的核心是 anchor 机制, 针对经过卷积层之后 feature map 上的每一个点, 再次通过 3*3 的卷积融合包括其在内周围 9 个点的信息形成一个锚点 (对应下图中的 sliding window 的中心, 作者没有解释这样的做的原因, 推测是结果更具鲁棒性) 特征向量, 融合后维度保持不变仍然是 256 维向量, 随后以锚点为中心设置不同尺寸的 anchor box 以粗略选取原图对应的不同宽高比例, 不同大小的候选区域 (这样选取的结果不够精确, 所以需要两次 bbox 回归修正), 在 faster rcnn 中 anchor box 数量设置为 k=9. 通过引入 anchors 使得 faster rcnn 具备了多尺度映射.</strong></p>
+<h4 id="RPN"><a href="#RPN" class="headerlink" title="RPN"></a>RPN</h4><p>Faster RCNN 抛弃选择搜索算法生成候选窗口, 使用 RPN 层选出一些候选区窗口供 fast rcnn 网络的训练和预测, 起加速作用. <strong>rpn 的核心是 anchor 机制, 针对经过卷积层之后 feature map 上的每一个点, 再次通过 3*3 的卷积融合包括其在内周围 9 个点的信息形成一个锚点特征向量 (对应下图中的 sliding window 的中心, 作者没有解释这样的做的原因, 推测是结果更具鲁棒性), 融合后维度保持不变仍然是 256 维向量, 随后以锚点为中心设置不同尺寸的 anchor box 以粗略选取原图对应的不同宽高比例, 不同大小的候选区域 (这样选取的结果不够精确, 所以需要两次 bbox 回归修正), 在 faster rcnn 中 anchor box 数量设置为 k=9. 通过引入 anchors 使得 faster rcnn 具备了多尺度映射.</strong></p>
 <p><div align="center">
 <img src="/img/anchor.png" width="450px" align="center/">
 </div> <br></p>
