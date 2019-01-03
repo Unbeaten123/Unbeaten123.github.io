@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-02T08:05:13.361Z">
+<meta property="og:updated_time" content="2019-01-02T08:55:28.821Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -94,13 +94,13 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+					<a class="github" target="_blank" href="https://github.com/Unbeaten123" title="github"><i class="icon-github"></i></a>
 		        
-					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+					<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/yu-zhi-zhou-64" title="zhihu"><i class="icon-zhihu"></i></a>
 		        
-					<a class="weixin" target="_blank" href="#" title="weixin"><i class="icon-weixin"></i></a>
+					<a class="weixin" target="_blank" href="/yuzhizhou365" title="weixin"><i class="icon-weixin"></i></a>
 		        
-					<a class="mail" target="_blank" href="/yuzhizhou123@gmail.com" title="mail"><i class="icon-mail"></i></a>
+					<a class="mail" target="_blank" href="/zhizhou.yu@qq.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -137,13 +137,13 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" href="https://github.com/Unbeaten123" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/yu-zhi-zhou-64" title="zhihu"><i class="icon-zhihu"></i></a>
 			        
-						<a class="weixin" target="_blank" href="#" title="weixin"><i class="icon-weixin"></i></a>
+						<a class="weixin" target="_blank" href="/yuzhizhou365" title="weixin"><i class="icon-weixin"></i></a>
 			        
-						<a class="mail" target="_blank" href="/yuzhizhou123@gmail.com" title="mail"><i class="icon-mail"></i></a>
+						<a class="mail" target="_blank" href="/zhizhou.yu@qq.com" title="mail"><i class="icon-mail"></i></a>
 			        
 				</div>
 			</nav>
@@ -235,15 +235,17 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 </div> <br><br>原图像经过一个卷积网络会得到 H*W*256 的 feature map, 在论文里的 H*W 是原图像的 <script type="math/tex">\frac{1}{16}</script>, 特征图可以理解为原图的一种缩放. <strong>那么, 对于每个 anchor, 有一个 256 维的特征向量来描述. 这个特征向量对应原图像中 anchor 及邻近的 9 个点的池化 (对应上图中 sliding window, 这样做的原因推测是结果更鲁棒)</strong>; 接下来每个 anchor 的 256 维向量都要经过两个分支进行训练: 一个分支是候选区域二分类, 256 -&gt; 2*k, 一共 k 组输出, 每组分别表示 foreground(包含检测目标) 和 background 的概率; 一个分支是 bbox regression, 256 -&gt; 4*k, 一共 k 组输出, 每一组 4 维向量分别表示候选区域对应的四个坐标偏移量: <script type="math/tex">(t_x, t_y, t_w, t_h)</script>. </p>
 <p>其中, 每个 anchor 是否为真实区域取决于 IOU 的大小, 与任意一个真实区域的 IOU &gt; 0.7 则为标定为正样本, 与所有真实区域的 IOU &lt; 0.3 则标定为负样本. 使用所有的 anchors 训练过多, 实际训练中作者采用了 128 个正样本和 128 个负样本来训练. </p>
 <p>RPN 层和 fast rcnn 是共享特征图的, 只不过 RPN 层是利用 anchor 机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过 ROI pooling 得到相同大小的特征向量, 传递给后面两个分支: 全连接层分类和 bbox 回归. </p>
-<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn 在 faster rcnn 工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为 Mask RCNN = ResNet-FPN + Fast RCNN + RoIAlign + Mask分支. </p>
+<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn 在 faster rcnn 工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为 Mask RCNN = ResNet-FPN + Fast RCNN + RoIAlign + Mask分支. 而 ResNet-FPN + Fast RCNN 实际上就是 Faster RCNN, 只不过 Faster RCNN 中只有一个 featrue map, 而 ResNet-FPN 对应的是多个 feature map (金字塔).  </p>
 <h4 id="FPN"><a href="#FPN" class="headerlink" title="FPN"></a>FPN</h4><p>FPN (Feature Pyramid Networks, 特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题. 在目标检测中, 一个目标类别可能有很多种尺度, 比如在街头, 远处的行人和近处的行人尺度就相差很大. 这种多尺度问题用传统网络来做精度不够令人满意. 因为目标图像再经过深层卷积网络后, 语义信息增强但位置信息减弱, 所以最终检测效果会受到影响. 一个简单的思路是把目标图像进行多尺度缩放, 一起交给模型进行训练. 显然这种方法十分耗费计算资源和训练时间. 所以作者希望提出一种网络结构, 让图像在经过网络后既能提取出深层的语义信息, 也能保留原图的位置信息. </p>
-<p>图像在经过一些卷积层和池化层后, 一般都是通道数变多, 特征图变小. 参见resnet：</p>
+<p>图像在经过一些卷积层和池化层后, 一般都是通道数变多, 特征图变小. 参见 resnet, Mask RCNN 中使用的 FPN 就是 ResNet-FPN: </p>
 <p><div align="center">
 <img src="/img/resnet.png" width="800px" align="center/">
-</div> <br><br>可以看出, 卷积层[C2,C3,C4,C5]特征图每次长宽缩小为原来的\dfrac{1}{2}. <strong>这个过程可以看成金字塔结构由底向上走, 图像的坐标信息逐渐减弱, 但语义信息随着通道数的增加而增强. </strong>这就是FPN的第一阶段, 金字塔向上走的过程. </p>
+</div> <br></p>
+<p>可以看出, 卷积层 [conv2, conv3, conv4, conv5] 特征图每次长宽缩小为原来的 <script type="math/tex">\frac{1}{2}</script>. <strong>这个过程可以看成金字塔结构由底向上走, 图像的坐标信息逐渐减弱, 但语义信息随着通道数的增加而增强.</strong> 这就是 FPN 的第一阶段, 金字塔向上走的过程. </p>
 <p><div align="center">
 <img src="/img/fpn1.jpg" width="700px" align="center/">
-</div> <br><br>接下来是FPN的第二阶段：自顶向下——深层的特征图和浅层特征图的融合. 如下图所示, <strong>深层的特征图通过上采样变换成原来的2倍, 下一层的特征图进行1*1卷积增加通道数, 两层相加, 逐层往下走. 这个过程使图像的深层语义信息得以保留, 并且引入了底层的位置信息. 到了底部后, 再进行一次3*3的卷积, 去除上采样的混叠现象. </strong></p>
+</div> <br></p>
+<p>接下来是 FPN 的第二阶段：自顶向下——深层的特征图和浅层特征图通过横向连接融合. 如下图所示, <strong>深(顶)层的特征图通过最近邻上采样变换成原来的2倍, 下一层的特征图进行 1*1 卷积降低通道数保持和上层一致, 通过横向连接两层融合, 逐层往下走. 这个过程使图像的深层语义信息得以保留, 并且引入了底层的位置信息. 到了底部后, 再进行一次 3*3 的卷积, 去除上采样的混叠现象.</strong></p>
 <p><div align="center">
 <img src="/img/fpn2.jpg" width="700px" align="center/">
 </div> <br></p>
@@ -255,7 +257,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <h4 id="mask-rcnn-structure"><a href="#mask-rcnn-structure" class="headerlink" title="mask rcnn structure"></a>mask rcnn structure</h4><p>mask rcnn 和 faster rcnn 除了 RoIAlign 的区别外, 另一个区别就是加了一个 mask 的分支, 如下图：</p>
 <p><div align="center">
 <img src="/img/maskrcnn.png" width="700px" align="center/">
-</div> <br><br>以 ResNet 为例：候选区域经过 RoIAlign 层得到 7*7<em>2048 的 feature map, mask 分支是通过全连接层网络来实现的, 最终得到了 14\</em>14*80 的输出, 这里的 80 就是类别数, 也就是有 80 个 mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的 mask 输出. </p>
+</div> <br><br>以 ResNet 为例：候选区域经过 RoIAlign 层得到 7*7*2048 的 feature map, mask 分支是通过全连接层网络来实现的, 最终得到了 14*14*80 的输出, 这里的 80 就是类别数, 也就是有 80 个 mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的 mask 输出. </p>
 <h3 id="7、yolo"><a href="#7、yolo" class="headerlink" title="7、yolo"></a>7、yolo</h3><p>one-stage目标检测的主流方法, 速度比rcnn系列模型要快很多, 在一些注重速度的目标检测系统中经常会用到. </p>
 <h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>该框架假设一张448*448的图片被划分成S*S的网格 (论文中S=7), 经过如下的网络结构后输出了S*S*N的向量, 每个N维向量对应于一个格子的预测信息. 其中N=B*5+C, B是认为设置的要预测的bbox数量, C是目标类别数 (论文中分别是2和20)；所以N=30. </p>
 <p><div align="center">
@@ -287,10 +289,8 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 </div> <br><br>SSD按照如下规则生成prior box：</p>
 <p>以feature map上每个点为中心, 生成一系列同心的prior box</p>
 <p>正方形prior box最小边长和最大边长为：</p>
-<script type="math/tex; mode=display">
-min\_size\\
-\sqrt{min\_size*max\_size}</script><script type="math/tex; mode=display">
-\sqrt{aspect\_ratio}*min\_size\\
+<script type="math/tex; mode=display">min\_size\\
+\sqrt{min\_size*max\_size}</script><script type="math/tex; mode=display">\sqrt{aspect\_ratio}*min\_size\\
 1/\sqrt{aspect\_ratio}*min\_size</script><p>每个feature map对应的min_size和max_size由以下公式决定：</p>
 <p>对于conv4_3：k = 1, min_size = s1*300, max_size = s2*300<br>对于conv-7：k = 2, min_size = s2*300, max_size = s3*300</p>
 <h3 id="9、Focal-Loss"><a href="#9、Focal-Loss" class="headerlink" title="9、Focal Loss"></a>9、Focal Loss</h3><p>Focal loss是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给负样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对loss的贡献变小, 让难分类样本和数量少的类别对loss的贡献变大.  </p>
@@ -607,7 +607,7 @@ MathJax.Hub.Queue(function() {
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">东南大学计算机科学与技术硕士在读&lt;br&gt;&lt;br&gt; 彷徨える孤高の魂は&lt;br&gt;拠り所を必要としねえんだよ&lt;br&gt;&lt;br&gt;此致</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">东南大学计算机科学与技术硕士在读 彷徨える孤高の魂は 拠り所を必要としねえんだよ 此致</div>
   	  	
     	</section>
     
