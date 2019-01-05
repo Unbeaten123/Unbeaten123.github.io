@@ -22,12 +22,7 @@
 <meta property="og:image" content="http://yoursite.com/img/fpn2.jpg">
 <meta property="og:image" content="http://yoursite.com/img/roialign.png">
 <meta property="og:image" content="http://yoursite.com/img/maskrcnn.png">
-<meta property="og:image" content="http://yoursite.com/img/yolov1.png">
-<meta property="og:image" content="http://yoursite.com/img/yololossfunc.png">
-<meta property="og:image" content="http://yoursite.com/img/nms.png">
-<meta property="og:image" content="http://yoursite.com/img/ssd0.png">
-<meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-05T07:44:03.999Z">
+<meta property="og:updated_time" content="2019-01-05T07:45:29.072Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -266,37 +261,63 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <img src="/img/maskrcnn.png" width="700px" align="center/">
 </div> <br><br>以 ResNet 为例：候选区域经过 RoIAlign 层得到 7*7*2048 的 feature map, mask 分支是通过全连接层网络来实现的, 最终得到了 14*14*80 的输出, 这里的 80 就是类别数, 也就是有 80 个 mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的 mask 输出. </p>
 <h3 id="7、yolo"><a href="#7、yolo" class="headerlink" title="7、yolo"></a>7、yolo</h3><p><a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf" target="_blank" rel="noopener">Yolo(You Only Look Once: Unified, real-time object detection)</a> 是 one-stage (rcnn 系列模型先挑选 region proposal, 然后分类回归属于 two-stage)目标检测的主流方法, 虽然精度比 rcnn 系列差但是速度比 rcnn 系列模型要快很多, 在一些注重速度的目标检测系统中经常会用到. </p>
-<h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>输入图片被 resize 成 448*448 的图片, 随后被划分成 S*S 的网格 (论文中 S=7), 经过如下的网络结构后输出了 S*S*N 的向量, 每个 N 维向量对应于一个单元格的预测信息. 其中 N=B<em>5+C, B 是人为设置的要预测每个单元格内需要预测的 bbox 数量, C 是目标类别数 (论文中 B=2 和 C=20), 所以 N=30.<br>每个单元格实际上预测是 bbox 的置信度 (confidence score), 这个置信度包含两个方面, 一是 bbox 内包含检测目标的可能性 <script type="math/tex">Pr(object)</script>; 二是 bbox 的准确度即 bbox 和 ground truth 边界框的 IOU 值. 因此最终置信度得分为: $$\operatorname { Pr } ( \text { Object } ) </em> \text {IOU}_{\text{pred}}^{\text{truth}}$$. </p>
-<p><div align="center">
-<img src="/img/yolov1.png" width="800px" align="center/">
-</div> <br> </p>
-<p>这里记录几个关键点：<br>bbox 的位置信息是一个 5 维向量：<script type="math/tex">(x, y, w, h, c)</script>, 类别预测向量是 20 维. 坐标 <script type="math/tex">(x, y)</script> 代表了预测的 bbox 的中心坐标, 这个中心坐标是相对于单元格左上角而言的偏移值. 坐标 <script type="math/tex">(w, h)</script> 代表了预测的 bbox 的 width、height 相对于整幅图像 width、height 的比例. <script type="math/tex">c</script> 则是置信度得分.  </p>
-<p><strong>ground truth box 只有一个, 要同时预测多个 bbox 信息的目的是起到一种集成的作用. 这些 bbox 位置大小信息的输出在训练过程中都是以同一个 ground truth box 的信息来计算 loss 的. 但这也恰恰是 Yolo 的缺点之一, 一个单元格内不管设置了多少个 bbox 都只预测一组所属类别概率, 到了 Yolo v2 之后类别概率和 bbox 一一对应.</strong></p>
-<p>输出类别概率的公式为：</p>
+<h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>输入图片被 resize 成 448*448 的图片, 随后被划分成 S*S 的网格 (论文中 S=7), 经过如下的网络结构后输出了 S*S*N 的向量, 每个 N 维向量对应于一个单元格的预测信息. 其中 N=B*5+C, B 是人为设置的要预测每个单元格内需要预测的 bbox 数量, C 是目标类别数 (论文中 B=2 和 C=20), 所以 N=30.<br>每个单元格实际上预测是 bbox 的置信度 (confidence score), 这个置信度包含两个方面, 一是 bbox 内包含检测目标的可能性 <script type="math/tex">Pr(object)</script>; 二是 bbox 的准确度即 bbox 和 ground truth 边界框的 IOU 值. 因此最终置信度得分为:  </p>
+<script type="math/tex; mode=display">Pr(Object) * {IOU}_{pred}^{truth}$$. 
+
+<div align=center>
+<img src="/img/yolov1.png" width="800px" align=center/>
+</div> <br> 
+
+这里记录几个关键点：
+bbox 的位置信息是一个 5 维向量：$$(x, y, w, h, c)$$, 类别预测向量是 20 维. 坐标 $$(x, y)$$ 代表了预测的 bbox 的中心坐标, 这个中心坐标是相对于单元格左上角而言的偏移值. 坐标 $$(w, h)$$ 代表了预测的 bbox 的 width、height 相对于整幅图像 width、height 的比例. $$c$$ 则是置信度得分.  
+
+**ground truth box 只有一个, 要同时预测多个 bbox 信息的目的是起到一种集成的作用. 这些 bbox 位置大小信息的输出在训练过程中都是以同一个 ground truth box 的信息来计算 loss 的. 但这也恰恰是 Yolo 的缺点之一, 一个单元格内不管设置了多少个 bbox 都只预测一组所属类别概率, 到了 Yolo v2 之后类别概率和 bbox 一一对应.**
+
+输出类别概率的公式为：</script><p>\operatorname { Pr } \left( \text { Class } _ { i } | \text { Object } \right) <em> \operatorname { Pr } ( \text { Object } ) </em> \text {IOU}_{\text{pred}}^{\text{truth}} = \operatorname { Pr } \left( \text { Class } _ { i } \right) * \text{IOU}_{\text{pred}}^{\text{truth}}</p>
 <script type="math/tex; mode=display">
-\operatorname { Pr } \left( \text { Class } _ { i } | \text { Object } \right) * \operatorname { Pr } ( \text { Object } ) * \text {IOU}_{\text{pred}}^{\text{truth}} = \operatorname { Pr } \left( \text { Class } _ { i } \right) * \text{IOU}_{\text{pred}}^{\text{truth}}</script><p><div align="center">
-<img src="/img/yololossfunc.png" width="800px" align="center/">
-</div> <br></p>
-<p>因为每个格子都会给出两个 bbox 的预测, 所以在一张图片中每个目标类别会得到 7*7*2 个 bbox 和概率值. 要得到最终的 bbox 还得经过一个后处理步骤: NMS (非极大值抑制, 去除冗余 bbox), NMS 首先丢弃分类概率小于预定值的 bbox, 然后对不同 bbox 计算得到的分类概率排序, 选择最大概率的 bbox 假设是 A 加入最终检测结果, 判断剩余的 bbox, 只要其与 A 的 IOU 大于预设阈值就丢弃, 对于其他 objec 的 bbox 重复上述过程直到候选框数量为0.  </p>
-<p><div align="center">
-<img src="/img/nms.png" width="600" align="center/">
-</div> <br></p>
-<h3 id="8、SSD"><a href="#8、SSD" class="headerlink" title="8、SSD"></a>8、<a href="https://zhuanlan.zhihu.com/p/31427288" target="_blank" rel="noopener">SSD</a></h3><p>除了yolo, SSD是目标检测领域one-stage方法的另一主流框架, 和yolo的区别如下：</p>
-<p>1、yolo只用最高层的特征图 (7*7*1024)来进行预测, 这样做速度很快但在检测小物体上就不尽人意. SSD效仿了特征金字塔的思路, <strong>在6种尺度的特征图上进行softmax分类和bbox回归</strong>；</p>
-<p>2、SSD还加入了Prior box, 类似于RPN的anchor；</p>
-<h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><p><div align="center">
-<img src="/img/ssd0.png" width="800" align="center/">
-</div> <br></p>
-<p><strong>conv4_3</strong>网络分为了3条线路:</p>
-<p>1、经过bn层+一次卷积后进行softmax分类, 预测目标类别；因为特征图大小为38*38*512, 每个位置对应于一个512维的特征向量, 所以相当于进行38*38次512维向量的softmax分类. </p>
-<p>2、经过bn层后+一次卷积后特征图每个点生成了4*num_priorbox大小的特征, 这些特征用于后面bbox regression. </p>
-<p>3、进行bbox regression, 特征图每个点经过regressor生成2*4*num_priorbox维度的输出. 每个prior box得到一组(x1,y1,x2,y2)和四个坐标值的方差预测, 8个数. </p>
-<h4 id="Prior-box"><a href="#Prior-box" class="headerlink" title="Prior box"></a>Prior box</h4><p><div align="center">
-<img src="/img/priorbox.jpg" width="500" align="center/">
-</div> <br><br>SSD按照如下规则生成prior box：</p>
-<p>以feature map上每个点为中心, 生成一系列同心的prior box</p>
-<p>正方形prior box最小边长和最大边长为：</p>
-<script type="math/tex; mode=display">min\_size\\
+
+<div align=center>
+<img src="/img/yololossfunc.png" width="800px" align=center/>
+</div> <br>
+
+因为每个格子都会给出两个 bbox 的预测, 所以在一张图片中每个目标类别会得到 7\*7\*2 个 bbox 和概率值. 要得到最终的 bbox 还得经过一个后处理步骤: NMS (非极大值抑制, 去除冗余 bbox), NMS 首先丢弃分类概率小于预定值的 bbox, 然后对不同 bbox 计算得到的分类概率排序, 选择最大概率的 bbox 假设是 A 加入最终检测结果, 判断剩余的 bbox, 只要其与 A 的 IOU 大于预设阈值就丢弃, 对于其他 objec 的 bbox 重复上述过程直到候选框数量为0.  
+
+<div align=center>
+<img src="/img/nms.png" width="600" align=center/>
+</div> <br>
+
+### 8、[SSD](https://zhuanlan.zhihu.com/p/31427288)
+
+除了yolo, SSD是目标检测领域one-stage方法的另一主流框架, 和yolo的区别如下：
+
+1、yolo只用最高层的特征图 (7\*7\*1024)来进行预测, 这样做速度很快但在检测小物体上就不尽人意. SSD效仿了特征金字塔的思路, **在6种尺度的特征图上进行softmax分类和bbox回归**；
+
+2、SSD还加入了Prior box, 类似于RPN的anchor；
+
+#### structure
+<div align=center>
+<img src="/img/ssd0.png" width="800" align=center/>
+</div> <br>
+
+**conv4_3**网络分为了3条线路:
+
+1、经过bn层+一次卷积后进行softmax分类, 预测目标类别；因为特征图大小为38\*38\*512, 每个位置对应于一个512维的特征向量, 所以相当于进行38\*38次512维向量的softmax分类. 
+
+2、经过bn层后+一次卷积后特征图每个点生成了4\*num_priorbox大小的特征, 这些特征用于后面bbox regression. 
+
+3、进行bbox regression, 特征图每个点经过regressor生成2\*4\*num_priorbox维度的输出. 每个prior box得到一组(x1,y1,x2,y2)和四个坐标值的方差预测, 8个数. 
+
+
+#### Prior box
+<div align=center>
+<img src="/img/priorbox.jpg" width="500" align=center/>
+</div> <br>
+SSD按照如下规则生成prior box：
+
+以feature map上每个点为中心, 生成一系列同心的prior box
+
+正方形prior box最小边长和最大边长为：
+$$min\_size\\
 \sqrt{min\_size*max\_size}</script><script type="math/tex; mode=display">\sqrt{aspect\_ratio}*min\_size\\
 1/\sqrt{aspect\_ratio}*min\_size</script><p>每个feature map对应的min_size和max_size由以下公式决定：</p>
 <p>对于conv4_3：k = 1, min_size = s1*300, max_size = s2*300<br>对于conv-7：k = 2, min_size = s2*300, max_size = s3*300</p>
