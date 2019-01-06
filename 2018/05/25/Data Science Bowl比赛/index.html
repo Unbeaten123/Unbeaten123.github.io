@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-06T04:47:06.352Z">
+<meta property="og:updated_time" content="2019-01-06T05:43:46.181Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -304,15 +304,15 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 1/\sqrt{aspect\_ratio}*min\_size</script><p>每个 feature map 对应的 min_size 和 max_size 由以下公式决定:</p>
 <script type="math/tex; mode=display">
 s_k = s_{min} + \dfrac{s_{max} - s_{min}}{m - 1}(k-1), k \in [1, m]</script><p>其中, <script type="math/tex">s_k</script> 表示先验框相对于输入图尺寸 (300*300) 的缩放度, <script type="math/tex">m</script> 指预测时 feature map 的数量, <script type="math/tex">m = 5</script> (conv4_3 不在其中, 该层单独设置 4 个 prior box), <script type="math/tex">s_{min} = 0.2, s_{max} = 0.9</script> 是人为设置的<br>例如:<br>对于 conv4_3: k = 1, min_size = s1*300, max_size = s2*300<br>对于 conv-7: k = 2, min_size = s2*300, max_size = s3*300</p>
-<h3 id="9、Focal-Loss"><a href="#9、Focal-Loss" class="headerlink" title="9、Focal Loss"></a>9、Focal Loss</h3><p>Focal loss是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给负样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对loss的贡献变小, 让难分类样本和数量少的类别对loss的贡献变大.  </p>
+<h3 id="9、Focal-Loss"><a href="#9、Focal-Loss" class="headerlink" title="9、Focal Loss"></a>9、Focal Loss</h3><p>Focal loss 是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对 loss 的贡献变小, 让难分类样本和数量少的类别对 loss 的贡献变大.  </p>
 <script type="math/tex; mode=display">CE(p,y)=CE(p_t)=-log\ p_t\\
 \text{subject to: } p_t=\left\{\begin{array}{cc} 
 p,& if\ \ y=1\\ 
 1-p,& otherwise 
-\end{array}\right.</script><p>上面的公式是交叉熵损失 (对于类别t的loss), 是目标检测中常用的损失函数. 对于two-stage方法而言, 这个损失函数并没有什么不足因为有RPN进行初步的候选区域采样. 所以对于后面的网络, 正负样本比例不会有严重失衡的情况. 但<strong>对于one-stage方法来说, 采样得到的样本框大部分都是背景, 这种情况下负样本占了loss的大部分贡献, 会影响正样本的分类性能.</strong> </p>
-<p>一个直观的方法是在样本少的类别前面加上一个大于1的权重:  </p>
+\end{array}\right.</script><p>上面的公式是交叉熵损失 (对于类别 t 的 loss), 是目标检测中常用的损失函数. 对于 two-stage 方法而言, 这个损失函数并没有什么不足因为有 RPN 进行初步的候选区域采样. 所以对于后面的网络, 正负样本比例不会有严重失衡的情况. 但<strong>对于 one-stage 方法来说, 采样得到的样本框大部分都是背景, 这种情况下负样本占了 loss 的大部分贡献, 会影响正样本的分类性能.</strong> </p>
+<p>一个直观的方法是在样本少的类别前面加上一个大于 1 的权重:  </p>
 <script type="math/tex; mode=display">CE(p_t)=-\alpha_tlog\ p_t</script><p>但这种办法只能解决样本少的类别问题, 并没有解决样本分类难易的问题. 因此有了如下的形式:  </p>
-<script type="math/tex; mode=display">FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率p_t高的样本, FL loss认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, FL loss认为它们难以分类, 给的权重也比较高；所以模型会侧重训练这些样本. 综合以上两种形式可得:  </p>
+<script type="math/tex; mode=display">FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率 <script type="math/tex">p_t</script> 高的样本, Focal loss 认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, Focal loss认为它们难以分类, 给的权重也比较高; 所以模型会侧重训练这些样本. 综合以上两种形式可得:  </p>
 <script type="math/tex; mode=display">FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script>
       
 
