@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-05T07:46:42.997Z">
+<meta property="og:updated_time" content="2019-01-06T03:35:58.453Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我">
@@ -266,7 +266,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <img src="/img/maskrcnn.png" width="700px" align="center/">
 </div> <br><br>以 ResNet 为例：候选区域经过 RoIAlign 层得到 7*7*2048 的 feature map, mask 分支是通过全连接层网络来实现的, 最终得到了 14*14*80 的输出, 这里的 80 就是类别数, 也就是有 80 个 mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的 mask 输出. </p>
 <h3 id="7、yolo"><a href="#7、yolo" class="headerlink" title="7、yolo"></a>7、yolo</h3><p><a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf" target="_blank" rel="noopener">Yolo(You Only Look Once: Unified, real-time object detection)</a> 是 one-stage (rcnn 系列模型先挑选 region proposal, 然后分类回归属于 two-stage)目标检测的主流方法, 虽然精度比 rcnn 系列差但是速度比 rcnn 系列模型要快很多, 在一些注重速度的目标检测系统中经常会用到. </p>
-<h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>输入图片被 resize 成 448*448 的图片, 随后被划分成 S*S 的网格 (论文中 S=7), 经过如下的网络结构后输出了 S*S*N 的向量, 每个 N 维向量对应于一个单元格的预测信息. 其中 N=B*5+C, B 是人为设置的要预测每个单元格内需要预测的 bbox 数量, C 是目标类别数 (论文中 B=2 和 C=20), 所以 N=30.<br>每个单元格实际上预测是 bbox 的置信度 (confidence score), 这个置信度包含两个方面, 一是 bbox 内包含检测目标的可能性 <script type="math/tex">Pr(object)</script>; 二是 bbox 的准确度即 bbox 和 ground truth 边界框的 IOU 值. 因此最终置信度得分为:  </p>
+<h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>输入图片被 resize 成 448*448 的图片, 随后被划分成 S*S 的网格 (论文中 S=7), 经过如下的 CNN 网络结构后输出了 S*S*N 的向量, 每个 N 维向量对应于一个单元格的预测信息. 其中 N=B*5+C, B 是人为设置的要预测每个单元格内需要预测的 bbox 数量, C 是目标类别数 (论文中 B=2 和 C=20), 所以 N=30.<br>每个单元格实际上预测是 bbox 的置信度 (confidence score), 这个置信度包含两个方面, 一是 bbox 内包含检测目标的可能性 <script type="math/tex">Pr(object)</script>; 二是 bbox 的准确度即 bbox 和 ground truth 边界框的 IOU 值. 因此最终置信度得分为:  </p>
 <script type="math/tex; mode=display">Pr(Object) * {IOU}_{pred}^{truth}</script><p><div align="center">
 <img src="/img/yolov1.png" width="800px" align="center/">
 </div> <br> </p>
@@ -281,27 +281,36 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p><div align="center">
 <img src="/img/nms.png" width="600" align="center/">
 </div> <br></p>
-<h3 id="8、SSD"><a href="#8、SSD" class="headerlink" title="8、SSD"></a>8、<a href="https://zhuanlan.zhihu.com/p/31427288" target="_blank" rel="noopener">SSD</a></h3><p>除了yolo, SSD是目标检测领域one-stage方法的另一主流框架, 和yolo的区别如下：</p>
-<p>1、yolo只用最高层的特征图 (7*7*1024)来进行预测, 这样做速度很快但在检测小物体上就不尽人意. SSD效仿了特征金字塔的思路, <strong>在6种尺度的特征图上进行softmax分类和bbox回归</strong>；</p>
-<p>2、SSD还加入了Prior box, 类似于RPN的anchor；</p>
-<h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><p><div align="center">
+<h3 id="8、SSD"><a href="#8、SSD" class="headerlink" title="8、SSD"></a>8、<a href="https://zhuanlan.zhihu.com/p/31427288" target="_blank" rel="noopener">SSD</a></h3><p>除了 yolo, <a href="https://arxiv.org/pdf/1512.02325" target="_blank" rel="noopener">SSD(Single Shot MultiBox Detector)</a>是目标检测领域 one-stage 方法的另一主流框架, 和 yolo 的区别如下: </p>
+<p>1、yolo 只用最高层的特征图 (7*7*1024) 来进行预测, 这样做速度很快但在检测小物体上就不尽人意. SSD 效仿了特征金字塔的思路, <strong>在 6 种尺度的特征图上进行检测, 大尺度特征图（较靠前的特征图）可以用来检测小物体，而小尺度特征图（较靠后的特征图）用来检测大物体</strong>;</p>
+<p>2、SSD 还加入了先验框 Prior box (降低训练难度), 类似于 RPN 的 anchor box, 区别于 yolo, SSD 为每个单元格的所有先验框都输出独立的检测值 (分为两部分, 一是属于各类别的置信度, 二是先验框的坐标信息).</p>
+<h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><p>SSD 的网络结构如下, 和 yolo 一样, SSD 也是只使用 CNN(基于 VGG-16, 把 fc6、fc7 换成了 3*3 和 1*1 的conv6、conv7) 提取特征, 和 yolo 不同的在于 yolo 经过一个全连接层后检测目标, SDD 直接用卷积检测目标. 图中的 conv4_3、conv7、conv8_2、conv9_2、conv10_2 和 conv11_2 是 6 个不同尺度的特征图.  </p>
+<p><div align="center">
 <img src="/img/ssd0.png" width="800" align="center/">
 </div> <br></p>
-<p><strong>conv4_3</strong>网络分为了3条线路:</p>
-<p>1、经过bn层+一次卷积后进行softmax分类, 预测目标类别；因为特征图大小为38*38*512, 每个位置对应于一个512维的特征向量, 所以相当于进行38*38次512维向量的softmax分类. </p>
-<p>2、经过bn层后+一次卷积后特征图每个点生成了4*num_priorbox大小的特征, 这些特征用于后面bbox regression. </p>
-<p>3、进行bbox regression, 特征图每个点经过regressor生成2*4*num_priorbox维度的输出. 每个prior box得到一组(x1,y1,x2,y2)和四个坐标值的方差预测, 8个数. </p>
+<p>每一个特征图又会经过 3 条线路:</p>
+<p>1、生成先验框, 除了 conv4_3 固定使用 4 个先验框, 后面 5 个特征图根据公式生成. </p>
+<p>2、经过 bn 层 + 一次 3*3 卷积后进行 softmax 分类, 预测目标类别的置信度; </p>
+<p>3、经过 bn 层 + 一次 3*3 卷积后生成 bbox 位置特征用于后面的 bbox regression.  </p>
 <h4 id="Prior-box"><a href="#Prior-box" class="headerlink" title="Prior box"></a>Prior box</h4><p><div align="center">
 <img src="/img/priorbox.jpg" width="500" align="center/">
-</div> <br><br>SSD按照如下规则生成prior box：</p>
-<p>以feature map上每个点为中心, 生成一系列同心的prior box</p>
-<p>正方形prior box最小边长和最大边长为：</p>
+</div> <br></p>
+<p>SSD 按照如下规则生成 prior box：</p>
+<p>以 feature map 上每个点为中心, 生成一系列同心的 prior box</p>
+<p>正方形 prior box 最小边长和最大边长为:</p>
 <script type="math/tex; mode=display">min\_size\\
-\sqrt{min\_size*max\_size}</script><script type="math/tex; mode=display">\sqrt{aspect\_ratio}*min\_size\\
-1/\sqrt{aspect\_ratio}*min\_size</script><p>每个feature map对应的min_size和max_size由以下公式决定：</p>
-<p>对于conv4_3：k = 1, min_size = s1*300, max_size = s2*300<br>对于conv-7：k = 2, min_size = s2*300, max_size = s3*300</p>
-<h3 id="9、Focal-Loss"><a href="#9、Focal-Loss" class="headerlink" title="9、Focal Loss"></a>9、Focal Loss</h3><p>Focal loss是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给负样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对loss的贡献变小, 让难分类样本和数量少的类别对loss的贡献变大.  </p>
-<script type="math/tex; mode=display">CE(p,y)=CE(p_t)=-log\ p_t\\
+\sqrt{min\_size*max\_size}</script><p>长方形 prior box 最小边长和最大边长为 (min_size、max_size 和 aspect ratio 是人为设置的):</p>
+<script type="math/tex; mode=display">\sqrt{aspect\_ratio}*min\_size\\
+1/\sqrt{aspect\_ratio}*min\_size</script><p>每个 feature map 对应的 min_size 和 max_size 由以下公式决定:</p>
+<script type="math/tex; mode=display">
+s_k = s_{min} + \dfrac{s_{max} - s_{min}}{m - 1}(k-1), k \in [1, m]</script><script type="math/tex; mode=display">m$$ 指预测时 feature map 的数量, $$m = 5$$ (conv4_3 单独设置 4 个 prior box), $$s_{min} = 0.2, s_{max} = 0.9$$ 是人为设置的  
+对于 conv4_3: k = 1, min_size = s1\*300, max_size = s2\*300
+对于 conv-7: k = 2, min_size = s2\*300, max_size = s3\*300
+
+### 9、Focal Loss
+
+Focal loss是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给负样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对loss的贡献变小, 让难分类样本和数量少的类别对loss的贡献变大.  
+$$CE(p,y)=CE(p_t)=-log\ p_t\\
 \text{subject to: } p_t=\left\{\begin{array}{cc} 
 p,& if\ \ y=1\\ 
 1-p,& otherwise 
