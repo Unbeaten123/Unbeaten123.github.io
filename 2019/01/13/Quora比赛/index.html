@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
 <meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
-<meta property="og:updated_time" content="2019-01-08T07:19:26.018Z">
+<meta property="og:updated_time" content="2019-01-08T09:09:13.266Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
 <meta name="twitter:description" content="Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only">
@@ -217,7 +217,7 @@
 </ol>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Embedding预训练文件的使用:</strong></font><br>    Embedding文件在前面提到有四种, 我们尝试了不同Embedding文件单独使用的效果发现GloVe和Paragram的单文件效果最好, fasttext和word2vec的效果相对较差, 所以我们选定GloVe和Paragram作为最终使用的Embedding文件, 四种Embedding文件表现差异的原因我们推测是: GloVe和Paragram较word2vec和fasttext在学习词向量时除了局部信息(word2vec和fasttext主要考虑n-gram窗口内的单词信息)外还关注全局信息.此外关于如何使用这两个文件, 我们尝试过取平均和拼接两种方式, 发现针对不同的网络结构两种操作各有胜负, 但整体来说取平均的得分更高且更节省内存空间.  <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>为什么是LSTM+GRU?</strong></font><br>    因为我们测试过不同的组合, 发现LSTM层后紧接着一个GRU层的表现最佳. GRU+LSTM效果也明显差于前者. 关于LSTM和GRU的原理网上有很多介绍, 这里不赘述.<br></p>
-<p><font face="黑体" size="4" color="#0000FF"><strong>CNN 应用于文本分类原理简介:&gt;</strong></font><br>    简单来说, 基于词向量把句子表示成矩阵形式 (维度为 <script type="math/tex">NUM_{words} * EMB_{size}}</script>) 当做图像输入来处理, 具体参考<a href="https://zhuanlan.zhihu.com/p/30268946" target="_blank" rel="noopener">这里</a>. <br></p>
+<p><font face="黑体" size="4" color="#0000FF"><strong>CNN 应用于文本分类原理简介:&gt;</strong></font><br>    简单来说, 基于词向量把句子表示成矩阵形式 (维度为 <script type="math/tex">NUM_{words} * EMB_{size}</script>) 当做图像输入来处理, 具体参考<a href="https://zhuanlan.zhihu.com/p/30268946" target="_blank" rel="noopener">这里</a>. <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Attention:</strong></font><br>    Attention机制最先在计算机视觉中被应用于图片识别的问题, 之后在自然语言处理(NLP)和计算机视觉(CV)中经常结合递归神经网络结构RNN、GRU、LSTM等深度学习算法, 被称之为Recurrent Attention Model(RAM), 其核心就是一个Encoder-Decoder的过程, 本质就是加权. Google Translate团队在论文 <script type="math/tex"><<Attention is All Your Need>></script> 中将Attention定义为: 一个查询和键值对映射到输出的方法，Q、K、V均为向量，输出通过对V进行加权求和得到，权重就是Q、K相似度.<br>    传统的encoder不论输入长短都将输入映射成一个固定维度的隐向量, 这样在序列很长时模型难以学习到合理的隐向量表示, 且输入序列的每个时刻 <script type="math/tex">x</script> 对输出 <script type="math/tex">y</script> 影响都相同, 这显然不合理. 引入Attention之后, 每个输入时刻 <script type="math/tex">x_i</script> 都对应一个中间隐状态 <script type="math/tex">h_i</script>, 其相对于 <script type="math/tex">t</script> 时刻输出的Attention score计算方法为: <script type="math/tex">t</script> 时刻输出的隐状态 <script type="math/tex">H_t</script> 和 每个输入时刻隐状态 <script type="math/tex">h_i</script> 进行点积运算得到.<br>    常用Attention机制还包括Self-Attention以及Multi-heads Attention, 前者不是考率输入和输出之间的注意力权重, 而是仅考虑输入/输出序列本身之间的注意力关系, Self-Attention在计算过程中会直接将输入(出)中任意两个时刻的关系直接通过一个计算步骤直接联系起来而无需考虑距离，因此解决了长距离依赖问题. 除此外，Self-Attention对于增加计算的并行性也有直接帮助作用. 而Multi-heads Attention则可以简单的理解为多次Attention的结果进行拼接, 每次Attention的参数矩阵 <script type="math/tex">W</script> 不一样而已.<br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于Capsule:</strong></font><br>    hello<br>    <br></p>
 <p><font face="黑体" size="4" color="#0000FF"><strong>关于CRF:</strong></font><br>    定义 <script type="math/tex">y</script>: 隐状态  <script type="math/tex">x</script>: 观测值<br>    <strong>1)  HMM:</strong><br>    隐马尔可夫模型(Hidden Markov model, HMM)是一个<strong>生成式模型</strong>, 其对隐状态和观测值联合建模, HMM 假设观测序列仅在相邻位置存在依赖关系, 引入了 <script type="math/tex">p(y_i | y_{i-1})</script> 表隐状态转移概率, 那么 HMM 的公式表示为:  </p>
@@ -634,5 +634,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
