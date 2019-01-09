@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/15/知识总结/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta property="og:updated_time" content="2019-01-09T03:25:36.523Z">
+<meta property="og:updated_time" content="2019-01-09T03:28:13.072Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -185,9 +185,9 @@
 <script type="math/tex; mode=display">
 F(x; w) = \sum_{t = 0}^{T} {\alpha_t h_t (x; w_t)} = \sum_{t = 0}^{T} {f_t(x; w_t)}</script><p>其中, <script type="math/tex">x</script> 是输入样本, <script type="math/tex">h</script> 是分类回归树, <script type="math/tex">w</script> 是分类回归树参数, <script type="math/tex">\alpha</script> 是每棵树权重.<br>每一轮通过最小化损失函数求解最优模型:</p>
 <script type="math/tex; mode=display">
-F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>输入: <script type="math/tex">(x_i, y_i), T, L</script> 分别为训练数据、迭代轮数和损失函数 (平方损失函数)<br>1、初始化 <script type="math/tex">f_0</script><br>2、<script type="math/tex">\text{for t = 1 to T do}</script><br>&ensp; 2.1、计算响应:  <script type="math/tex">\tilde{y_i} = -[\dfrac{\partial L(y_i, F(x_i))}{\partial F(x_i)}]_{F(x) = F_{t-1}(x)}, i = 1, 2,..., N</script><br>&ensp; 2.2、学习第 <script type="math/tex">\text{t}</script> 颗树:  </p>
-<script type="math/tex; mode=display">w^* = \mathop{arg min}\limits{w} \sum_{i=1}^{N} (\tilde{y_i} - h_t(x_i; w))^2</script><p>&ensp; 2.3、line search 找步长:  </p>
-<script type="math/tex; mode=display">\rho^* = \mathop{arg min}\limits{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \rho h_t(x_i; w^*))</script><p>&ensp; .4、令 <script type="math/tex">f_t = \rho^* h_t(x; w^*)</script><br>            更新模型:  <script type="math/tex">F_t = F_{t-1} + f_t</script><br>3、 输出 <script type="math/tex">F_T</script> </p>
+F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>输入: <script type="math/tex">(x_i, y_i), T, L</script> 分别为训练数据、迭代轮数和损失函数 (平方损失函数)<br>1、初始化 <script type="math/tex">f_0</script><br>2、<script type="math/tex">\text{for t = 1 to T do}</script><br>&ensp;&ensp; 2.1、计算响应:  <script type="math/tex">\tilde{y_i} = -\left \[ \dfrac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right \]_{F(x) = F_{t-1}(x)}, i = 1, 2,..., N</script><br>&ensp;&ensp; 2.2、学习第 <script type="math/tex">\text{t}</script> 颗树:  </p>
+<script type="math/tex; mode=display">w^* = \mathop{arg min}\limits_{w} \sum_{i=1}^{N} (\tilde{y_i} - h_t(x_i; w))^2</script><p>&ensp;&ensp; 2.3、line search 找步长:  </p>
+<script type="math/tex; mode=display">\rho^* = \mathop{arg min}\limits_{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \rho h_t(x_i; w^*))</script><p>&ensp;&ensp; 2.4、令 <script type="math/tex">f_t = \rho^* h_t(x; w^*)</script><br>&ensp;&ensp; 更新模型:  <script type="math/tex">F_t = F_{t-1} + f_t</script><br>3、 输出 <script type="math/tex">F_T</script> </p>
 <p><font color="#dddd00">XGboost和GBDT的区别:</font><br>Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.<br><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
 <p><font color="#dddd00">XGboost和RF的区别:</font> <a href="https://www.cnblogs.com/notwice/p/8546436.html" target="_blank" rel="noopener">reference here</a></p>
 <p><font color="#dddd00">ROC、AUC等概念的理解:</font> <a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a><br>一句话说明AUC的本质和计算规则：给定一个正例, 一个负例, 预测为正的概率值比预测为负的概率值还要大的可能性.</p>
