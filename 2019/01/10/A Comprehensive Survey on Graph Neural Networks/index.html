@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/img/gcn_survey/7.png">
 <meta property="og:image" content="http://yoursite.com/img/gcn_survey/表1.png">
 <meta property="og:image" content="http://yoursite.com/img/gcn_survey/表2.png">
-<meta property="og:updated_time" content="2019-01-10T14:10:55.796Z">
+<meta property="og:updated_time" content="2019-01-10T14:12:39.255Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A Comprehensive Survey on Graph Neural Networks">
 <meta name="twitter:description" content="A Comprehensive Survey on Graph Neural Networks   Zonghan Wu, Shirui Pan, Member, IEEE   Chengqi Zhang, Senior Member, IEEE   Philip S. Yu, Fellow, IEEE">
@@ -192,28 +192,28 @@
 <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>近年来, 深度学习彻底改变了许多机器学习任务, 从图像分类和视频处理到语音识别和自然语言理解. 这些任务中的数据通常表示在欧几里德空间中. 然而, 越来越多的应用程序从非欧几里德域生成数据, 并表示为具有复杂关系和相互依赖性的图结构. 图数据的复杂性给现有的机器学习算法带来了重大挑战. 最近, 出现了许多关于扩展图形数据的深度学习方法的研究. 在本次调查中, 我们提供了数据挖掘和机器学习领域中图神经网络 (GNN) 的全面概述. 我们提出了一种新的分类法, 将最先进的图神经网络划分为不同的类别. 着眼于图卷积网络, 我们回顾了最近开发的替代架构; 这些学习范例包括图注意网络 (graph attention networks), 图自动编码器 (graph autoencoders), 图生成网络 (graph generative networks) 和图时空网络 (graph spatial-temporal networks). 我们进一步讨论了图神经网络在各个领域的应用, 并总结了现有算法在不同学习任务中的开源代码和基准. 最后, 我们在这个快速发展的领域提出潜在的研究方向. </p>
 <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>尽管深度学习已经在欧几里得数据中取得了很大的成功, 但从非欧几里得域生成的数据已经取得更广泛的应用, 它们需要有效分析. 例如, 在电子商务领域, 一个基于图的学习系统能够利用用户和产品之间的交互以实现高度精准的推荐. 在化学领域, 分子被建模为图, 新药研发需要测定其生物活性. 在论文引用网络中, 论文之间通过引用关系互相连接, 需要将它们分成不同的类别.<br>图数据的复杂性对现有机器学习算法提出了重大挑战, 因为图数据是不规则的. 每张图大小不同、节点无序, 一张图中的每个节点都有不同数目的邻近节点, 使得一些在图像中容易计算的重要运算 (如卷积) 不能再直接应用于图. 此外, 现有机器学习算法的核心假设是实例彼此独立. 然而, 图数据中的每个实例都与周围的其它实例相关, 含有一些复杂的连接信息, 用于捕获数据之间的依赖关系, 包括引用、朋友关系和相互作用.<br>最近, 越来越多的研究开始将深度学习方法应用到图数据领域. 受到深度学习领域进展的驱动, 研究人员在设计图神经网络的架构时借鉴了卷积网络、循环网络和深度自编码器的思想. 为了应对图数据的复杂性, 重要运算的泛化和定义在过去几年中迅速发展. 例如, 图 1 展示了受标准 2D 卷积启发得到的图卷积. </p>
 <p><div align="center">
-<img src="/img/gcn_survey/1.png" width="300" alt="图1"> 
+<img src="/img/gcn_survey/1.png" width="400" alt="图1"> 
 </div> <br></p>
 <h2 id="图神经网络简史"><a href="#图神经网络简史" class="headerlink" title="图神经网络简史"></a>图神经网络简史</h2><p>图神经网络的概念首先由 Gori 等人 (2005) 提出, 并由 Scarselli 等人 (2009) 进一步阐明. 这些早期的研究以迭代的方式通过循环神经架构传播邻近信息来学习目标节点的表示, 直到达到稳定的固定点. 该过程所需计算量庞大, 而近来也有许多研究致力于解决这个难题. 在本文中, 图神经网络代表的是所有用于图数据的深度学习方法.<br>受到卷积网络在计算机视觉领域所获巨大成功的激励, 近来出现了很多为图数据重新定义卷积概念的方法. 这些方法属于图卷积网络 (GCN) 的范畴. Bruna 等人 (2013) 提出了关于图卷积网络的第一项重要研究, 他们基于谱图论 (spectral graph theory) 开发了一种图卷积的变体. 自此, 基于谱的图卷积网络不断拓展、进阶. 由于谱方法通常同时处理整个图, 并且难以并行或扩展到大图上, 基于空间的图卷积网络开始快速发展. 这些方法通过聚集近邻节点的信息, 直接在图结构上执行卷积. 结合采样策略, 计算可以在一批 (batch) 更新的节点而不是在整个图中操作, 这种做法有望提高效率. 除了图卷积网络, 近几年还开发出了很多其他可选择的图神经网络. 这些方法包括图注意力网络 (GAT) 、图自编码器、图生成网络以及图时空网络. </p>
 <h2 id="图神经网络-vs-网络嵌入"><a href="#图神经网络-vs-网络嵌入" class="headerlink" title="图神经网络 vs. 网络嵌入"></a>图神经网络 vs. 网络嵌入</h2><p>对图神经网络的研究与图嵌入或网络嵌入紧密相关, 这也是数据挖掘和机器学习社区日益关注的一个话题. 网络嵌入旨在通过保留网络拓扑结构和节点内容信息, 将网络顶点表示到低维向量空间中, 以使任何后续的图分析任务 (如分类、聚类和推荐) 都可以通过使用简单的现成学习机算法 (如用于分类的支持向量机) 轻松执行. 许多网络嵌入算法都是无监督算法, 它们大致可分为三组, 即矩阵分解、随机游走和深度学习方法. 用于网络嵌入的深度学习方法同时还属于图神经网络, 包括基于图自编码器的算法 (如 DNGR和 SDNE) 和具有无监督训练的图卷积神经网络 (如 GraphSage). 图 2 描述了本文中网络嵌入和图神经网络的区别. </p>
 <p><div align="center">
-<img src="/img/gcn_survey/2.png" width="400" alt="图2"> 
+<img src="/img/gcn_survey/2.png" width="500" alt="图2"> 
 </div> <br></p>
 <h1 id="分类与框架"><a href="#分类与框架" class="headerlink" title="分类与框架"></a>分类与框架</h1><p>这一部分内容给出了图神经网络的分类方法. 我们考虑到了所有能与神经架构组合成图神经网络的可微图模型, 把图神经网络最终分类为：图卷积网络、图注意力网络、图自编码器、图生成网络和图时空网络. 这些网络中, 图卷积网络在捕捉网络结构依存关系上扮演着核心角色. 如下图 3 所示, 属于其他类别的方法部分使用图卷积网络作为基础. </p>
 <p><div align="center">
-<img src="/img/gcn_survey/3.png" width="400" alt="图3"> 
+<img src="/img/gcn_survey/3.png" width="500" alt="图3"> 
 </div> <br></p>
 <h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="Graph-Convolution-Networks-GCN"><a href="#Graph-Convolution-Networks-GCN" class="headerlink" title="Graph Convolution Networks (GCN)"></a>Graph Convolution Networks (GCN)</h3><p>GCN 的关键是学习一个函数 \( f \) 通过节点 \( v_i \) 自己的特征 \( X_i \) 和邻接点特征 \( X_j, j \in N(v_i) \) 来学习节点的表示. 下图 4 展示了 GCN 的学习过程, 通过从邻域聚合特征信息, 一个 GCN 层把每个节点的隐藏表征进行压缩. 在特征聚合之后, 非线性变换被应用到聚合后的输出上. 通过多层堆叠, 每个节点的最终隐藏表征获得了更深层次的邻域信息.    </p>
 <p><div align="center">
-<img src="/img/gcn_survey/4.png" width="400" alt="图4"> 
+<img src="/img/gcn_survey/4.png" width="500" alt="图4"> 
 </div> <br></p>
 <p>GCN 是很多 GNN 模型的基础, 图 5 展示了一些基于 GCN 的 GNN 模型.</p>
 <p><div align="center">
-<img src="/img/gcn_survey/5.png" width="300" alt="图5"> 
+<img src="/img/gcn_survey/5.png" width="400" alt="图5"> 
 </div> <br></p>
 <h3 id="Graph-Attention-Networks-GAT"><a href="#Graph-Attention-Networks-GAT" class="headerlink" title="Graph Attention Networks (GAT)"></a>Graph Attention Networks (GAT)</h3><p>GAT 和 GCN 类似都是聚合邻居特征 (无论是通过直接融合邻接点信息亦或是随机游走得到的子图信息), 只不过其引入了 Attention 机制, 为重要的节点分配更高的权重 (通过端到端模型学习获取), 下图 6 展示了 GAT 和 GCN 的区别.  </p>
 <p><div align="center">
-<img src="/img/gcn_survey/6.png" width="300" alt="图6"> 
+<img src="/img/gcn_survey/6.png" width="400" alt="图6"> 
 </div> <br></p>
 <h3 id="Graph-Auto-encoders-GAE"><a href="#Graph-Auto-encoders-GAE" class="headerlink" title="Graph Auto-encoders (GAE)"></a>Graph Auto-encoders (GAE)</h3><p>GAE 则是以一种非监督方式通过 encoder 获取低维的节点表示, 通过 decoder 重构图, GAE 是最受欢迎的图嵌入方法. 从最初的直接使用邻接矩阵作为 encoder 输入并重构, 演化到输入邻接矩阵并捕获一阶、二阶特征, 再到对属性图以 GCN 作为 encoder 的构建块、以链路预测作为 decoder 重构图的方法. </p>
 <h3 id="Graph-Generative-Networks-GGN"><a href="#Graph-Generative-Networks-GGN" class="headerlink" title="Graph Generative Networks (GGN)"></a>Graph Generative Networks (GGN)</h3><p>GGN 则是想从图数据中生成出合理的结构, 有直接对节点和边信息进行交替分解生成的方法, 也有通过对抗网络生成的方法. 这方面的工作主要贡献在于化合物合成, 生成合理结构的过程就是新的化合物组合的过程. </p>
@@ -228,12 +228,12 @@
 </ol>
 <h2 id="基于空间的图卷积网络-Spatial-based-Graph-Convolutional-Networks"><a href="#基于空间的图卷积网络-Spatial-based-Graph-Convolutional-Networks" class="headerlink" title="基于空间的图卷积网络 (Spatial-based Graph Convolutional Networks)"></a>基于空间的图卷积网络 (Spatial-based Graph Convolutional Networks)</h2><p>基于空间的方法通过聚合来自邻居的特征信息来定义图卷积. 根据堆叠图卷积层的不同方式：<strong>基于循环的空间图卷积 (Recurrent-based Spatial GCN)</strong> 和 <strong>基于组合的空间图卷积 (Composition Based Spatial GCN)</strong>. 前者包括图神经网络 (Graph Neural Networks, GNN) 、门控图神经网络 (Gated Graph Neural Networks, GGNN) 和 随机稳态嵌入 (Stochastic Steady-state Embedding, SSE); 后者涉及了：Message Passing Neural Networks (MPNN)、GraphSage. 两者的区别如下图 7 所示, 基于循环的空间图卷积方法堆叠相同的卷积层以求更新隐状态, 而基于组合的图卷积方法堆叠不同的卷积层来更新隐状态. 此外, 还包括两大类之外的一些变体模型, 包括 Diffusion Convolution Neural Networks (DCNN)、PATCHY-SAN、Large-scale Graph Convolution Networks (LGCN)、Mixture Model Network (MoNet).  </p>
 <p><div align="center">
-<img src="/img/gcn_survey/7.png" width="300" alt="图7"> 
+<img src="/img/gcn_survey/7.png" width="400" alt="图7"> 
 </div> <br></p>
 <p>基于循环的方法试图获得节点的稳定状态, 基于组合的方法试图结合更高阶的邻域信息. 在每个卷积层中, 两者都必须在训练期间更新所有节点上的隐藏状态.  但是由于它们必须将所有中间状态存储到内存中, 因此不具备高效率.  为了解决这个问题, 已经提出了几种训练策略, 包括基于组合方法的子图训练 (sub-graph training) 模型 GraphSage 和基于循环方法的随机异步训练模型如 SSE. </p>
 <h2 id="基于谱和空间的-GCN-比较"><a href="#基于谱和空间的-GCN-比较" class="headerlink" title="基于谱和空间的 GCN 比较"></a>基于谱和空间的 GCN 比较</h2><p>基于谱和空间的 GCN 模型总结如下表</p>
 <p><div align="center">
-<img src="/img/gcn_survey/表1.png" width="600" alt="表1"> 
+<img src="/img/gcn_survey/表1.png" width="700" alt="表1"> 
 </div> <br></p>
 <p><strong>1、就效率而言</strong>, 基于谱的模型的计算成本随着图大小增加而急剧增加, 因为它们需要同时处理整个图执行特征向量计算, 这使得它们难以并行或扩展到大图形. 基于空间的模型具有处理大图的潜力, 因为它们通过聚合邻居节点直接在图域中执行卷积. 可以按批处理节点进行计算而不是在整个图上. 当邻居节点数量增加时, 则可以使用采样技术以提高效率. </p>
 <p><strong>2、在推广性方面</strong>, 基于谱的模型假定了一个固定大小的图, 使得它们对新的或不同大小的图的推广性很差. 另一方面, 基于空间的模型在每个节点上局部执行图卷积, 其卷积核权重可以容易地在不同位置和结构之间共享. </p>
@@ -241,7 +241,7 @@
 <p><strong>因此, 近年来空间模型引起了越来越多的关注.</strong></p>
 <h1 id="其他图神经网络-Beyond-Graph-Convolutional-Networks"><a href="#其他图神经网络-Beyond-Graph-Convolutional-Networks" class="headerlink" title="其他图神经网络(Beyond Graph Convolutional Networks)"></a>其他图神经网络(Beyond Graph Convolutional Networks)</h1><p>本节概述了图卷积网络之外的其他图神经网络, 包括图注意力神经网络、图自编码器、图生成模型和图时空网络. 下表总结了每个类别下的主要方法, A 表示属性图 (attributed graphs), D 表示有向图, S 表示时空图 (spatial-temporal graphs).</p>
 <p><div align="center">
-<img src="/img/gcn_survey/表2.png" width="600" alt="表2"> 
+<img src="/img/gcn_survey/表2.png" width="700" alt="表2"> 
 </div> <br></p>
 <h2 id="图注意力网络-Graph-Attention-Networks"><a href="#图注意力网络-Graph-Attention-Networks" class="headerlink" title="图注意力网络 (Graph Attention Networks)"></a>图注意力网络 (Graph Attention Networks)</h2><p>注意力机制几乎成为序列任务中的标配. 它的价值在于能够聚焦于对于不同对象最重要的部分. 该机制被证明在多项任务中有用, 如机器翻译和自然语言理解. 由于注意力机制的模型容量越来越大, 图神经网络在聚合信息、集成多个模型的输出、生成重要性导向的随机游走时, 可以从注意力机制中获益良多. </p>
 <p>这部分介绍了图注意力网络的多种方法, 包括:</p>
