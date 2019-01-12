@@ -19,6 +19,11 @@
 <meta property="og:image" content="http://yoursite.com/img/resnetBlock.png">
 <meta property="og:image" content="http://yoursite.com/img/restnetWithRes.png">
 <meta property="og:image" content="http://yoursite.com/img/IOU.png">
+<meta property="og:image" content="http://yoursite.com/img/FCN.png">
+<meta property="og:image" content="http://yoursite.com/img/fcn_net.png">
+<meta property="og:image" content="http://yoursite.com/img/fcn_exp.png">
+<meta property="og:image" content="http://yoursite.com/img/bilinear.png">
+<meta property="og:image" content="http://yoursite.com/img/deconv.gif">
 <meta property="og:image" content="http://yoursite.com/img/spp.png">
 <meta property="og:image" content="http://yoursite.com/img/anchor.png">
 <meta property="og:image" content="http://yoursite.com/img/resnet.png">
@@ -31,7 +36,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-12T05:35:41.057Z">
+<meta property="og:updated_time" content="2019-01-12T07:25:14.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -195,7 +200,8 @@
       
         <p>Kaggle 的 Object Detection 比赛 Data Science Bowl 总结</p>
 <h1 id="比赛简介"><a href="#比赛简介" class="headerlink" title="比赛简介"></a>比赛简介</h1><p>Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming He 大神的 Mask RCNN, 这个比赛最终我们侥幸拿到了一块银牌(170/3634, Top 5%).<br><a id="more"></a></p>
-<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="CNN-中的基本概念"><a href="#CNN-中的基本概念" class="headerlink" title="CNN 中的基本概念"></a>CNN 中的基本概念</h3><h4 id="卷积核-kernel"><a href="#卷积核-kernel" class="headerlink" title="卷积核 (kernel)"></a>卷积核 (kernel)</h4><p>卷积核决定如何挖掘输入数据的 2D 局部特征, 例如 3*3 就是每九个单元格内按照矩阵乘法获取对应位置的输出, 卷积核的大小确定输出的 feature map 尺寸, 如果是 1*1 的卷积核则输入输出尺寸相同, 可以用于升降维, 如下图所示. </p>
+<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="CNN-中的基本概念"><a href="#CNN-中的基本概念" class="headerlink" title="CNN 中的基本概念"></a>CNN 中的基本概念</h3><p><strong>CNN 的强大之处在于它的多层结构能自动学习特征, 并且可以学习到多个层次的特征:<br>&ensp; &ensp; 1. 较浅的卷积层感知域较小, 学习到一些局部区域的特征;<br>&ensp; &ensp; 2. 较深的卷积层具有较大的感知域, 能够学习到更加抽象一些的特征.</strong></p>
+<h4 id="卷积核-kernel"><a href="#卷积核-kernel" class="headerlink" title="卷积核 (kernel)"></a>卷积核 (kernel)</h4><p>卷积核决定如何挖掘输入数据的 2D 局部特征, 例如 3*3 就是每九个单元格内按照矩阵乘法获取对应位置的输出, 卷积核的大小确定输出的 feature map 尺寸, 如果是 1*1 的卷积核则输入输出尺寸相同, 可以用于升降维, 如下图所示. </p>
 <p><div align="center">
 <img src="/img/1*1kernel.png" width="600px">
 </div> <br></p>
@@ -222,7 +228,38 @@
 </div> <br><br>它的公式可以表示为：</p>
 <script type="math/tex; mode=display">
 IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#并集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(au, bu, area_intersection)</span>:</span></span><br><span class="line">    area_a = (au[<span class="number">2</span>] - au[<span class="number">0</span>]) * (au[<span class="number">3</span>] - au[<span class="number">1</span>])</span><br><span class="line">    area_b = (bu[<span class="number">2</span>] - bu[<span class="number">0</span>]) * (bu[<span class="number">3</span>] - bu[<span class="number">1</span>])</span><br><span class="line">    area_union = area_a + area_b - area_intersection</span><br><span class="line">    <span class="keyword">return</span> area_union</span><br><span class="line"></span><br><span class="line"><span class="comment">#交集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">intersection</span><span class="params">(ai, bi)</span>:</span></span><br><span class="line">    x = max(ai[<span class="number">0</span>], bi[<span class="number">0</span>])</span><br><span class="line">    y = max(ai[<span class="number">1</span>], bi[<span class="number">1</span>])</span><br><span class="line">    w = min(ai[<span class="number">2</span>], bi[<span class="number">2</span>]) - x</span><br><span class="line">    h = min(ai[<span class="number">3</span>], bi[<span class="number">3</span>]) - y</span><br><span class="line">    <span class="keyword">if</span> w &lt; <span class="number">0</span> <span class="keyword">or</span> h &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> w*h</span><br><span class="line"></span><br><span class="line"><span class="comment">#交并比</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iou</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="comment"># a and b should be (x1,y1,x2,y2)</span></span><br><span class="line">    <span class="keyword">if</span> a[<span class="number">0</span>] &gt;= a[<span class="number">2</span>] <span class="keyword">or</span> a[<span class="number">1</span>] &gt;= a[<span class="number">3</span>] <span class="keyword">or</span> b[<span class="number">0</span>] &gt;= b[<span class="number">2</span>] <span class="keyword">or</span> b[<span class="number">1</span>] &gt;= b[<span class="number">3</span>]:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span></span><br><span class="line">    area_i = intersection(a, b)</span><br><span class="line">    area_u = union(a, b, area_i)</span><br><span class="line">    <span class="keyword">return</span> float(area_i) / float(area_u + <span class="number">1e-6</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="2、RCNN"><a href="#2、RCNN" class="headerlink" title="2、RCNN"></a>2、RCNN</h3><p>要介绍 Mask RCNN, 首先就从最开始的 <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Girshick_Rich_Feature_Hierarchies_2014_CVPR_paper.pdf" target="_blank" rel="noopener">RCNN(Region-based CNN features)</a> 开始, RCNN 将 CNN 的方法引入目标检测领域, 大大提高了检测效果, 改变了目标检测领域的主要研究思路. 其后的 Fast RCNN、Faster RCNN 以及 Mask RCNN 代表了该领域的最高水准.<br>RCNN 的思路主要分为四个步骤:<br>1、<strong>候选区域生成</strong>: 利用选择性搜索 (Selective Search) 算法从图像中提取 1k~2k 个左右可能是物体的候选区域 (region proposal); 关于选择性搜索算法, 其先将图像分割成小区域 (1k~2k), 然后按照一定的合并规则合并可能性最高的两个相邻区域直到图像只剩一个区域, 最后输出曾经存在过的区域.</p>
+<h3 id="2、U-Net"><a href="#2、U-Net" class="headerlink" title="2、U-Net"></a>2、U-Net</h3><p>传统 CNN 分类模型都是图像级别的分类, 而在语义分割 (semantic segmentation) 则是对图像进行像素级别的分类, 根据像素级的分类我们就可以从图像中分割出目标.</p>
+<h4 id="FCN"><a href="#FCN" class="headerlink" title="FCN"></a>FCN</h4><p>针对语义分割问题, <a href="https://arxiv.org/abs/1411.4038" target="_blank" rel="noopener">FCN (Fully Convolutional Networks)</a> 的提出成为语义分割的基本框架, 后续的很多算法都是在 FCN 的基础上改进的.</p>
+<p>对于一般的分类 CNN 网络, 如 VGG 和 Resnet, 都会在网络的最后加入一些全连接层, 经过 softmax 后就可以获得类别概率信息. 但是这个概率信息是 1 维的, 即只能标识整个图片的类别, 不能标识每个像素点的类别, 所以这种全连接方法不适用于图像分割. 而 FCN 提出可以把后面几个全连接都换成卷积, 这样就可以获得一张 2 维的 feature map (heatmap), 后接 softmax 获得每个像素点的分类信息, 从而解决了分割问题, 如下图所示. </p>
+<p><div align="center">
+<img src="/img/FCN.png" width="600" align="center/">
+</div> <br></p>
+<p>FCN 网络的原理如下图如示: </p>
+<p><div align="center">
+<img src="/img/fcn_net.png" width="600" align="center/">
+</div> <br></p>
+<p>先通过卷积和池化操作的得到不同尺寸的 pool feature. 那么: </p>
+<p>对于 FCN-32s, 直接对 pool5 feature 进行 32 倍<strong>上采样</strong>获得 32x upsampled feature, 再对  32x upsampled feature 每个点做 softmax prediction 获得 32x upsampled feature prediction (即分割图) </p>
+<p>对于 FCN-16s, 首先对 pool5 feature 进行 2 倍上采样获得 2x upsampled feature, 再把 pool4 feature 和 2x upsampled feature 逐点相加, 然后对相加的 feature 进行 16 倍上采样, 并 softmax prediction, 获得 16x upsampled feature prediction. </p>
+<p>对于 FCN-8s, 首先进行 pool4+2x upsampled feature 逐点相加, 然后又进行 pool3+2x upsampled 逐点相加, 即<strong>进行更多次特征融合</strong>. 具体过程与16s类似. </p>
+<p>下图是 FCN-32s、FCN-16s、FCN-8s 的实验对比, 可以看出<strong>使用多层feature融合有利于提高分割准确性</strong></p>
+<p><div align="center">
+<img src="/img/fcn_exp.png" width="500" align="center/">
+</div> <br></p>
+<p>那么什么是<strong>上采样</strong>? 实际上上采样包括两种方式:</p>
+<p><strong>1. Resize, 如双线性插值缩放, 类似于图像缩放:</strong><br>给定下图中四个已知坐标, $Q_{11}, Q_{12}, Q_{21}, Q_{22}$, 待插值点为 $P$, 双线性插值首先在 x 轴方向上对 $R_1, R_2$ 进行插值计算, 然后根据 $R_1, R_2$ 对 $P$ 进行插值计算.   </p>
+<p><div align="center">
+<img src="/img/bilinear.png" width="350" align="center/">
+</div> <br></p>
+<p>其计算过程如下: 给定未知函数 $f$ 在 $Q_{11} = (x_1, y_1), Q_{12} = (x_1, y_2), Q_{21} = (x_2, y_1), Q_{22} = (x_2, y_2)$ 的值, 求 $f$ 在待插值点 $P$ 的值 $P = (x, y)$.<br>首先在 x 轴方向插值得到:</p>
+<script type="math/tex; mode=display">f(R_1) \approx \dfrac{x_2-x}{x_2-x_1} f(Q_{11}) + \dfrac{x-x_1}{x_2-x_1} f(Q_{21})\ \ \ \text{Where}\ \ R_1 = (x, y_1)</script><script type="math/tex; mode=display">f(R_2) \approx \dfrac{x_2-x}{x_2-x_1} f(Q_{12}) + \dfrac{x-x_1}{x_2-x_1} f(Q_{22})\ \ \ \text{Where}\ \ R_2 = (x, y_2)</script><p>然后在 y 轴方向插值得到:</p>
+<script type="math/tex; mode=display">f(P) \approx \dfrac{y_2-y}{y_2-y_1} f(R_1) + \dfrac{y-y_1}{y_2-y_1} f(R_2)</script><p>这样即得到所求 $f(x, y)$. </p>
+<p><strong>2. Deconvolution (Transposed Convolution) 反卷积:</strong><br>反卷积就是对卷积操作的反转, 通过设置填充参数为 0, 步长 stride = 1 完成反卷积操作, 如下动图所示.  </p>
+<p><div>
+<img src="/img/deconv.gif" width="400" align="center/">
+</div> <br></p>
+<p>上采样的意义在于<strong>在于将小尺寸的高维度feature map恢复回去，以便做pixelwise prediction，获得每个点的分类信息</strong>.  </p>
+<h3 id="3、RCNN"><a href="#3、RCNN" class="headerlink" title="3、RCNN"></a>3、RCNN</h3><p>要介绍 Mask RCNN, 首先就从最开始的 <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Girshick_Rich_Feature_Hierarchies_2014_CVPR_paper.pdf" target="_blank" rel="noopener">RCNN(Region-based CNN features)</a> 开始, RCNN 将 CNN 的方法引入目标检测领域, 大大提高了检测效果, 改变了目标检测领域的主要研究思路. 其后的 Fast RCNN、Faster RCNN 以及 Mask RCNN 代表了该领域的最高水准.<br>RCNN 的思路主要分为四个步骤:<br>1、<strong>候选区域生成</strong>: 利用选择性搜索 (Selective Search) 算法从图像中提取 1k~2k 个左右可能是物体的候选区域 (region proposal); 关于选择性搜索算法, 其先将图像分割成小区域 (1k~2k), 然后按照一定的合并规则合并可能性最高的两个相邻区域直到图像只剩一个区域, 最后输出曾经存在过的区域.</p>
 <p>2、<strong>特征提取</strong>: 把这些 region proposal 缩放成 227*227 的大小并用 5 层卷积两层全连接的 CNN 提取特征;</p>
 <p>3、<strong>类别判断</strong>: 用 SVM 训练 CNN 提取出来的各类别特征, 每一类有一个 SVM 分类器;</p>
 <p>4、<strong>位置精修</strong>: 对 SVM 分好类的 region proposal 做边框回归 (bbox regression), 用回归值来矫正建议窗口, 生成预测的窗口坐标. 关于边框回归, 其思想就是平移 + 缩放使得 bbox 更接近 ground truth, 其学习一组参数 <script type="math/tex">W</script>, 使得输入的 bbox <script type="math/tex">X</script> 经过回归变换后和 ground truth <script type="math/tex">Y</script> 非常接近, <script type="math/tex">Y \approx WX</script>. </p>
@@ -232,13 +269,13 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>(3)     速度慢：使用GPU, VGG16模型处理一张图像需要47s, 如果采用 AlexNet 精度则降低;</p>
 <p>(4)     测试速度慢：每个候选区域需要运行整个前向CNN计算; </p>
 <p>(5)     SVM和回归是事后操作, 在SVM和回归过程中CNN特征没有被学习更新. </p>
-<h3 id="3、SPP-Net"><a href="#3、SPP-Net" class="headerlink" title="3、SPP Net"></a>3、SPP Net</h3><p>RCNN 的一大问题就是对于提取的每个 regional proposal 都要经过 CNN 前向传播一次, 计算量巨大. 为此, <a href="https://arxiv.org/pdf/1406.4729" target="_blank" rel="noopener">SPP(Spatial Pyramid Pooling)</a> 则考虑既然 regional proposal 都是从原图像中提取的, 为什么不直接原图像输入 CNN 中, 在映射后的 feature maps 中提取 regional proposal, 通过这样做 SPP 大大减少了计算量.<br>一句话来说就是用 SPP layer 通过三个 Pooling 窗口 (下图中的蓝、绿、灰窗口, 形成了金字塔形状因此得名 SPP) 从 feature maps 提取出同样维度的特征向量. 之后 fast rcnn 的 RoI 层就是借鉴了 SPP Net 的这种思路. </p>
+<h3 id="4、SPP-Net"><a href="#4、SPP-Net" class="headerlink" title="4、SPP Net"></a>4、SPP Net</h3><p>RCNN 的一大问题就是对于提取的每个 regional proposal 都要经过 CNN 前向传播一次, 计算量巨大. 为此, <a href="https://arxiv.org/pdf/1406.4729" target="_blank" rel="noopener">SPP(Spatial Pyramid Pooling)</a> 则考虑既然 regional proposal 都是从原图像中提取的, 为什么不直接原图像输入 CNN 中, 在映射后的 feature maps 中提取 regional proposal, 通过这样做 SPP 大大减少了计算量.<br>一句话来说就是用 SPP layer 通过三个 Pooling 窗口 (下图中的蓝、绿、灰窗口, 形成了金字塔形状因此得名 SPP) 从 feature maps 提取出同样维度的特征向量. 之后 fast rcnn 的 RoI 层就是借鉴了 SPP Net 的这种思路. </p>
 <p>一张图片放入 CNN 网络中经过多层转化后, 会生成多张(论文中是 256 个卷积核)特征图：</p>
 <p><div align="center">
 <img src="/img/spp.png" width="600px" align="center/">
 </div> <br><br>而在原图中任意一个窗口在这些特征图中都有对应的窗口, SPP 就是在这些对应的窗口中做池化操作使每张特征图都生成21维的特征向量. </p>
 <p>具体做法是, 在 conv5 层得到的特征图是 256 个, 每个都做一次 spatial pyramid pooling. 先把每个特征图分割成多个不同尺寸的网格, 网格分别为 4*4、2*2、1*1 ,然后每个网格做 max pooling, 这样 256 个特征图就形成了 16*256, 4*256, 1*256 维特征, 他们连起来就形成了一个固定长度的特征向量, 将这个向量输入到后面的全连接层. </p>
-<h3 id="4、Fast-RCNN"><a href="#4、Fast-RCNN" class="headerlink" title="4、Fast RCNN"></a>4、Fast RCNN</h3><p>RCNN、SPP Net 训练时, 提取 region proposal、CNN 特征提取、SVM 分类和 bbox 回归是互相隔离的, <a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener">Fast RCNN</a> 则有几个特点: 1) 特征都暂存在显存上不需要额外磁盘空间, 速度更快、精度更高; 2) 联合训练, 除了提取 region proposal 阶段, 原来的SVM 分类、bbox 回归都联合在 CNN 阶段同时训练, 将原来最后一层的 softmax 替换成区域分类 softmax (替代 SVM 分类) 和 bbox 微调以完成联合训练目标, 输入变为两个, 一个是原图像作为 CNN 输入, 另一个是选择搜索算法给出的可能 region proposal 直接映射到 Conv5 层上; 3) 提出了 RoI (Region of Interest) 层, 算是 SPP 的变种, 将原来的多尺度 (多个 Pooling 窗口) 映射换成单尺度映射.<br>Fast RCNN 的整体流程如下:  </p>
+<h3 id="5、Fast-RCNN"><a href="#5、Fast-RCNN" class="headerlink" title="5、Fast RCNN"></a>5、Fast RCNN</h3><p>RCNN、SPP Net 训练时, 提取 region proposal、CNN 特征提取、SVM 分类和 bbox 回归是互相隔离的, <a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener">Fast RCNN</a> 则有几个特点: 1) 特征都暂存在显存上不需要额外磁盘空间, 速度更快、精度更高; 2) 联合训练, 除了提取 region proposal 阶段, 原来的SVM 分类、bbox 回归都联合在 CNN 阶段同时训练, 将原来最后一层的 softmax 替换成区域分类 softmax (替代 SVM 分类) 和 bbox 微调以完成联合训练目标, 输入变为两个, 一个是原图像作为 CNN 输入, 另一个是选择搜索算法给出的可能 region proposal 直接映射到 Conv5 层上; 3) 提出了 RoI (Region of Interest) 层, 算是 SPP 的变种, 将原来的多尺度 (多个 Pooling 窗口) 映射换成单尺度映射.<br>Fast RCNN 的整体流程如下:  </p>
 <p>1、利用 selective search 算法在图像中从上到下提取2000个左右的候选窗口 (Region Proposal 也即是 RoI);</p>
 <p>2、将整张图片输入 CNN, 进行特征提取;</p>
 <p>3、把候选窗口映射到 CNN 的最后一层卷积 feature map 上;</p>
@@ -247,7 +284,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p><strong>相比R-CNN, 主要两处不同:</strong></p>
 <p>(1)最后一层卷积层后加了一个 RoI Pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 对一个区域窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域对应的特征图经过 SPP Pooling 最终得到 21 维的特征向量；而 RoI layer 只进行 7*7 的池化, 所以得到的是 49 维的特征向量</strong>. </p>
 <p>(2)损失函数使用了多任务损失函数 (multi-task loss), 将边框回归直接加入到 CNN 网络中训练. </p>
-<h3 id="5、Faster-RCNN"><a href="#5、Faster-RCNN" class="headerlink" title="5、Faster RCNN"></a>5、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. 其流程如下:  </p>
+<h3 id="6、Faster-RCNN"><a href="#6、Faster-RCNN" class="headerlink" title="6、Faster RCNN"></a>6、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. 其流程如下:  </p>
 <p>1、将整个图片输入 CNN, 提取图像的 feature maps, 被后续的 RPN 和全连接层所共享;</p>
 <p>2、通过 RPN 生成 region proposal, 通过 softmax 判断 anchors 属于 foreground 或 background 并用 bbox 回归修正 anchors 获取精确的 region proposal;</p>
 <p>3、RoI Pooling, 根据 feature maps 和 region proposal 提取 proposal feature maps 传给全连接层测过判断类别; </p>
@@ -265,7 +302,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 </ol>
 <p>其中, 每个 anchor 是否为真实区域取决于 IOU 的大小, 与任意一个真实区域的 IOU &gt; 0.7 则为标定为正样本, 与所有真实区域的 IOU &lt; 0.3 则标定为负样本. 使用所有的 anchors 训练过多, 实际训练中作者采用了 128 个正样本和 128 个负样本来训练. </p>
 <p>RPN 层和 fast rcnn 是共享特征图的, 只不过 RPN 层是利用 anchor 机制事先选择得到候选框. 这部分候选框映射到的特征图的区域经过 ROI pooling 得到相同大小的特征向量, 传递给后面两个分支: 全连接层分类和 bbox 回归. </p>
-<h3 id="6、Mask-RCNN"><a href="#6、Mask-RCNN" class="headerlink" title="6、Mask RCNN"></a>6、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn 在 faster rcnn 工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为 Mask RCNN = ResNet-FPN + Fast RCNN + RoIAlign + Mask分支. 而 ResNet-FPN + Fast RCNN 实际上就是 Faster RCNN, 只不过 Faster RCNN 中只有一个 featrue map(conv5 对应的 featrue map), 而 ResNet-FPN 对应的是多个 feature map (conv2、conv3、conv4、conv5 以及对 conv5 的上采样的 feature map 构成的金字塔).  </p>
+<h3 id="7、Mask-RCNN"><a href="#7、Mask-RCNN" class="headerlink" title="7、Mask RCNN"></a>7、Mask RCNN</h3><p>终于到了正题 <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">Mask RCNN</a>, 这是我们在比赛中所使用的 state-of-art 模型, Kaiming He 大神在 2018 年初提出的模型.<br>mask rcnn 在 faster rcnn 工作的基础上提出的同时可以进行目标检测和目标分割的模型, 可以认为 Mask RCNN = ResNet-FPN + Fast RCNN + RoIAlign + Mask分支. 而 ResNet-FPN + Fast RCNN 实际上就是 Faster RCNN, 只不过 Faster RCNN 中只有一个 featrue map(conv5 对应的 featrue map), 而 ResNet-FPN 对应的是多个 feature map (conv2、conv3、conv4、conv5 以及对 conv5 的上采样的 feature map 构成的金字塔).  </p>
 <h4 id="FPN"><a href="#FPN" class="headerlink" title="FPN"></a>FPN</h4><p>FPN (Feature Pyramid Networks, 特征金字塔网络) 的提出是为了解决图像的多尺度目标检测问题. 在目标检测中, 一个目标类别可能有很多种尺度, 比如在街头, 远处的行人和近处的行人尺度就相差很大. 这种多尺度问题用传统网络来做精度不够令人满意. 因为目标图像再经过深层卷积网络后, 语义信息增强但位置信息减弱, 所以最终检测效果会受到影响. 一个简单的思路是把目标图像进行多尺度缩放, 一起交给模型进行训练. 显然这种方法十分耗费计算资源和训练时间. 所以作者希望提出一种网络结构, 让图像在经过网络后既能提取出深层的语义信息, 也能保留原图的位置信息. </p>
 <p>图像在经过一些卷积层和池化层后, 一般都是通道数变多, 特征图变小. 参见 resnet, Mask RCNN 中使用的 FPN 就是 ResNet-FPN: </p>
 <p><div align="center">
@@ -288,7 +325,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p><div align="center">
 <img src="/img/maskrcnn.png" width="700px" align="center/">
 </div> <br><br>以 ResNet 为例：候选区域经过 RoIAlign 层得到 7*7*2048 的 feature map, mask 分支是通过全连接层网络来实现的, 最终得到了 14*14*80 的输出, 这里的 80 就是类别数, 也就是有 80 个 mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的 mask 输出. </p>
-<h3 id="7、yolo"><a href="#7、yolo" class="headerlink" title="7、yolo"></a>7、yolo</h3><p><a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf" target="_blank" rel="noopener">Yolo(You Only Look Once: Unified, real-time object detection)</a> 是 one-stage (rcnn 系列模型先挑选 region proposal, 然后分类回归属于 two-stage)目标检测的主流方法, 虽然精度比 rcnn 系列差但是速度比 rcnn 系列模型要快很多, 在一些注重速度的目标检测系统中经常会用到. </p>
+<h3 id="8、yolo"><a href="#8、yolo" class="headerlink" title="8、yolo"></a>8、yolo</h3><p><a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf" target="_blank" rel="noopener">Yolo(You Only Look Once: Unified, real-time object detection)</a> 是 one-stage (rcnn 系列模型先挑选 region proposal, 然后分类回归属于 two-stage)目标检测的主流方法, 虽然精度比 rcnn 系列差但是速度比 rcnn 系列模型要快很多, 在一些注重速度的目标检测系统中经常会用到. </p>
 <h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>输入图片被 resize 成 448*448 的图片, 随后被划分成 S*S 的网格 (论文中 S=7), 经过如下的 CNN 网络结构后输出了 S*S*N 的向量, 每个 N 维向量对应于一个单元格的预测信息. 其中 N=B*5+C, B 是人为设置的要预测每个单元格内需要预测的 bbox 数量, C 是目标类别数 (论文中 B=2 和 C=20), 所以 N=30.<br>每个单元格实际上预测是 bbox 的置信度 (confidence score), 这个置信度包含两个方面, 一是 bbox 内包含检测目标的可能性 <script type="math/tex">Pr(object)</script>; 二是 bbox 的准确度即 bbox 和 ground truth 边界框的 IOU 值. 因此最终置信度得分为:  </p>
 <script type="math/tex; mode=display">Pr(Object) * {IOU}_{pred}^{truth}</script><p><div align="center">
 <img src="/img/yolov1.png" width="800px" align="center/">
@@ -304,7 +341,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p><div align="center">
 <img src="/img/nms.png" width="600" align="center/">
 </div> <br></p>
-<h3 id="8、SSD"><a href="#8、SSD" class="headerlink" title="8、SSD"></a>8、<a href="https://zhuanlan.zhihu.com/p/31427288" target="_blank" rel="noopener">SSD</a></h3><p>除了 yolo, <a href="https://arxiv.org/pdf/1512.02325" target="_blank" rel="noopener">SSD(Single Shot MultiBox Detector)</a>是目标检测领域 one-stage 方法的另一主流框架, 和 yolo 的区别如下: </p>
+<h3 id="9、SSD"><a href="#9、SSD" class="headerlink" title="9、SSD"></a>9、<a href="https://zhuanlan.zhihu.com/p/31427288" target="_blank" rel="noopener">SSD</a></h3><p>除了 yolo, <a href="https://arxiv.org/pdf/1512.02325" target="_blank" rel="noopener">SSD(Single Shot MultiBox Detector)</a>是目标检测领域 one-stage 方法的另一主流框架, 和 yolo 的区别如下: </p>
 <p>1、yolo 只用最高层的特征图 (7*7*1024) 来进行预测, 这样做速度很快但在检测小物体上就不尽人意. SSD 效仿了特征金字塔的思路, <strong>在 6 种尺度的特征图上进行检测, 大尺度特征图（较靠前的特征图）可以用来检测小物体，而小尺度特征图（较靠后的特征图）用来检测大物体</strong>;</p>
 <p>2、SSD 还加入了先验框 Prior box (降低训练难度), 类似于 RPN 的 anchor box, 区别于 yolo, SSD 为每个单元格的所有先验框都输出独立的检测值 (分为两部分, 一是属于各类别的置信度, 二是先验框的坐标信息).</p>
 <h4 id="structure"><a href="#structure" class="headerlink" title="structure"></a>structure</h4><p>SSD 的网络结构如下, 和 yolo 一样, SSD 也是只使用 CNN(基于 VGG-16, 把 fc6、fc7 换成了 3*3 和 1*1 的conv6、conv7) 提取特征, 和 yolo 不同的在于 yolo 经过一个全连接层后检测目标, SDD 直接用卷积检测目标. 图中的 conv4_3、conv7、conv8_2、conv9_2、conv10_2 和 conv11_2 是 6 个不同尺度的特征图.  </p>
@@ -327,16 +364,17 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 1/\sqrt{aspect\_ratio}*min\_size</script><p>每个 feature map 对应的 min_size 和 max_size 由以下公式决定:</p>
 <script type="math/tex; mode=display">
 s_k = s_{min} + \dfrac{s_{max} - s_{min}}{m - 1}(k-1), k \in [1, m]</script><p>其中, <script type="math/tex">s_k</script> 表示先验框相对于输入图尺寸 (300*300) 的缩放度, <script type="math/tex">m</script> 指预测时 feature map 的数量, <script type="math/tex">m = 5</script> (conv4_3 不在其中, 该层单独设置 4 个 prior box), <script type="math/tex">s_{min} = 0.2, s_{max} = 0.9</script> 是人为设置的<br>例如:<br>对于 conv4_3: k = 1, min_size = s1*300, max_size = s2*300<br>对于 conv-7: k = 2, min_size = s2*300, max_size = s3*300</p>
-<h3 id="9、U-Net"><a href="#9、U-Net" class="headerlink" title="9、U-Net"></a>9、U-Net</h3><h3 id="10、Focal-Loss"><a href="#10、Focal-Loss" class="headerlink" title="10、Focal Loss"></a>10、Focal Loss</h3><p>Focal loss 是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对 loss 的贡献变小, 让难分类样本和数量少的类别对 loss 的贡献变大.  </p>
+<h3 id="10、Focal-Loss"><a href="#10、Focal-Loss" class="headerlink" title="10、Focal Loss"></a>10、Focal Loss</h3><p>Focal loss 是针对交叉熵在样本不平衡的场景下做出的改进, 简单来说就是给样本加了一个能随分类难度变化而变化的权重, 从而让易分类的样本对 loss 的贡献变小, 让难分类样本和数量少的类别对 loss 的贡献变大.  </p>
 <script type="math/tex; mode=display">CE(p,y)=CE(p_t)=-log\ p_t\\
 \text{subject to: } p_t=\left\{\begin{array}{cc} 
 p,& if\ \ y=1\\ 
 1-p,& otherwise 
 \end{array}\right.</script><p>上面的公式是交叉熵损失 (对于类别 t 的 loss), 是目标检测中常用的损失函数. 对于 two-stage 方法而言, 这个损失函数并没有什么不足因为有 RPN 进行初步的候选区域采样. 所以对于后面的网络, 正负样本比例不会有严重失衡的情况. 但<strong>对于 one-stage 方法来说, 采样得到的样本框大部分都是背景, 这种情况下负样本占了 loss 的大部分贡献, 会影响正样本的分类性能.</strong> </p>
 <p>一个直观的方法是在样本少的类别前面加上一个大于 1 的权重:  </p>
-<script type="math/tex; mode=display">CE(p_t)=-\alpha_tlog\ p_t</script><p>但这种办法只能解决样本少的类别问题, 并没有解决样本分类难易的问题. 因此有了如下的形式:  </p>
-<script type="math/tex; mode=display">FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率 <script type="math/tex">p_t</script> 高的样本, Focal loss 认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, Focal loss认为它们难以分类, 给的权重也比较高; 所以模型会侧重训练这些样本. 综合以上两种形式可得:  </p>
-<script type="math/tex; mode=display">FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script>
+<script type="math/tex; mode=display">CE(p_t)=-\alpha_tlog\ p_t</script><p>但这种办法只能解决样本少的类别问题, 并没有解决样本分类难易的问题. 因此有了如下的形式: </p>
+<script type="math/tex; mode=display">FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率 $p_t$ 高的样本, Focal loss 认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, Focal loss认为它们难以分类, 给的权重也比较高; 所以模型会侧重训练这些样本. 综合以上两种形式可得:  </p>
+<script type="math/tex; mode=display">FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><p>Focal loss 的 pytorch 简单实现:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FocalLoss</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, gamma=<span class="number">2</span>, size_average=True)</span>:</span></span><br><span class="line">        super(FocalLoss, self).__init__()</span><br><span class="line">        self.gamma = gamma</span><br><span class="line">        self.size_average = size_average</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, y_pred, y_true)</span>:</span></span><br><span class="line">        p = Sigmoid(y_pred)</span><br><span class="line">        p[y_true==<span class="number">0</span>] = <span class="number">1</span> - p[y_true==<span class="number">0</span>]</span><br><span class="line">        log_p = p.log()</span><br><span class="line">        batch_loss = -torch.pow((<span class="number">1</span>-p),self.gamma)*log_p</span><br><span class="line">        <span class="keyword">if</span> self.size_average:</span><br><span class="line">            loss = batch_loss.mean()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            loss = batch_loss.sum()</span><br><span class="line">        <span class="keyword">return</span> loss</span><br><span class="line"><span class="comment"># Usage:</span></span><br><span class="line">loss_fn = FocalLoss(gamma=<span class="number">2</span>)</span><br><span class="line">loss = loss_fn(y_pred, y_batch)</span><br><span class="line">optimizer.zero_grad()</span><br><span class="line">loss.backward()</span><br></pre></td></tr></table></figure></p>
+
       
 
       
