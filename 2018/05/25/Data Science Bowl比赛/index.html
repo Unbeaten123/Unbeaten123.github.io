@@ -24,6 +24,8 @@
 <meta property="og:image" content="http://yoursite.com/img/fcn_exp.png">
 <meta property="og:image" content="http://yoursite.com/img/bilinear.png">
 <meta property="og:image" content="http://yoursite.com/img/deconv.gif">
+<meta property="og:image" content="http://yoursite.com/img/u_net.png">
+<meta property="og:image" content="http://yoursite.com/img/u_net_cat.png">
 <meta property="og:image" content="http://yoursite.com/img/spp.png">
 <meta property="og:image" content="http://yoursite.com/img/anchor.png">
 <meta property="og:image" content="http://yoursite.com/img/resnet.png">
@@ -36,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-12T07:25:14.983Z">
+<meta property="og:updated_time" content="2019-01-12T08:18:39.022Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -228,7 +230,7 @@
 </div> <br><br>它的公式可以表示为：</p>
 <script type="math/tex; mode=display">
 IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#并集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(au, bu, area_intersection)</span>:</span></span><br><span class="line">    area_a = (au[<span class="number">2</span>] - au[<span class="number">0</span>]) * (au[<span class="number">3</span>] - au[<span class="number">1</span>])</span><br><span class="line">    area_b = (bu[<span class="number">2</span>] - bu[<span class="number">0</span>]) * (bu[<span class="number">3</span>] - bu[<span class="number">1</span>])</span><br><span class="line">    area_union = area_a + area_b - area_intersection</span><br><span class="line">    <span class="keyword">return</span> area_union</span><br><span class="line"></span><br><span class="line"><span class="comment">#交集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">intersection</span><span class="params">(ai, bi)</span>:</span></span><br><span class="line">    x = max(ai[<span class="number">0</span>], bi[<span class="number">0</span>])</span><br><span class="line">    y = max(ai[<span class="number">1</span>], bi[<span class="number">1</span>])</span><br><span class="line">    w = min(ai[<span class="number">2</span>], bi[<span class="number">2</span>]) - x</span><br><span class="line">    h = min(ai[<span class="number">3</span>], bi[<span class="number">3</span>]) - y</span><br><span class="line">    <span class="keyword">if</span> w &lt; <span class="number">0</span> <span class="keyword">or</span> h &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> w*h</span><br><span class="line"></span><br><span class="line"><span class="comment">#交并比</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iou</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="comment"># a and b should be (x1,y1,x2,y2)</span></span><br><span class="line">    <span class="keyword">if</span> a[<span class="number">0</span>] &gt;= a[<span class="number">2</span>] <span class="keyword">or</span> a[<span class="number">1</span>] &gt;= a[<span class="number">3</span>] <span class="keyword">or</span> b[<span class="number">0</span>] &gt;= b[<span class="number">2</span>] <span class="keyword">or</span> b[<span class="number">1</span>] &gt;= b[<span class="number">3</span>]:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span></span><br><span class="line">    area_i = intersection(a, b)</span><br><span class="line">    area_u = union(a, b, area_i)</span><br><span class="line">    <span class="keyword">return</span> float(area_i) / float(area_u + <span class="number">1e-6</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="2、U-Net"><a href="#2、U-Net" class="headerlink" title="2、U-Net"></a>2、U-Net</h3><p>传统 CNN 分类模型都是图像级别的分类, 而在语义分割 (semantic segmentation) 则是对图像进行像素级别的分类, 根据像素级的分类我们就可以从图像中分割出目标.</p>
+<h3 id="2、U-Net"><a href="#2、U-Net" class="headerlink" title="2、U-Net"></a>2、U-Net</h3><p>传统 CNN 分类模型都是图像级别的分类, 而在语义分割 (semantic segmentation) 则是对图像进行像素级别的分类, 根据像素级的分类我们就可以从图像中分割出目标. 在介绍 U-Net 之前, 先引入经典的 FCN 有助于对 U-Net 的理解.  </p>
 <h4 id="FCN"><a href="#FCN" class="headerlink" title="FCN"></a>FCN</h4><p>针对语义分割问题, <a href="https://arxiv.org/abs/1411.4038" target="_blank" rel="noopener">FCN (Fully Convolutional Networks)</a> 的提出成为语义分割的基本框架, 后续的很多算法都是在 FCN 的基础上改进的.</p>
 <p>对于一般的分类 CNN 网络, 如 VGG 和 Resnet, 都会在网络的最后加入一些全连接层, 经过 softmax 后就可以获得类别概率信息. 但是这个概率信息是 1 维的, 即只能标识整个图片的类别, 不能标识每个像素点的类别, 所以这种全连接方法不适用于图像分割. 而 FCN 提出可以把后面几个全连接都换成卷积, 这样就可以获得一张 2 维的 feature map (heatmap), 后接 softmax 获得每个像素点的分类信息, 从而解决了分割问题, 如下图所示. </p>
 <p><div align="center">
@@ -242,6 +244,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>对于 FCN-32s, 直接对 pool5 feature 进行 32 倍<strong>上采样</strong>获得 32x upsampled feature, 再对  32x upsampled feature 每个点做 softmax prediction 获得 32x upsampled feature prediction (即分割图) </p>
 <p>对于 FCN-16s, 首先对 pool5 feature 进行 2 倍上采样获得 2x upsampled feature, 再把 pool4 feature 和 2x upsampled feature 逐点相加, 然后对相加的 feature 进行 16 倍上采样, 并 softmax prediction, 获得 16x upsampled feature prediction. </p>
 <p>对于 FCN-8s, 首先进行 pool4+2x upsampled feature 逐点相加, 然后又进行 pool3+2x upsampled 逐点相加, 即<strong>进行更多次特征融合</strong>. 具体过程与16s类似. </p>
+<p>如何保证逐点相加的 feature map 是一样大的呢？这就要引入 crop 层进行裁剪对齐.</p>
 <p>下图是 FCN-32s、FCN-16s、FCN-8s 的实验对比, 可以看出<strong>使用多层feature融合有利于提高分割准确性</strong></p>
 <p><div align="center">
 <img src="/img/fcn_exp.png" width="500" align="center/">
@@ -254,11 +257,22 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>其计算过程如下: 给定未知函数 $f$ 在 $Q_{11} = (x_1, y_1), Q_{12} = (x_1, y_2), Q_{21} = (x_2, y_1), Q_{22} = (x_2, y_2)$ 的值, 求 $f$ 在待插值点 $P$ 的值 $P = (x, y)$.<br>首先在 x 轴方向插值得到:</p>
 <script type="math/tex; mode=display">f(R_1) \approx \dfrac{x_2-x}{x_2-x_1} f(Q_{11}) + \dfrac{x-x_1}{x_2-x_1} f(Q_{21})\ \ \ \text{Where}\ \ R_1 = (x, y_1)</script><script type="math/tex; mode=display">f(R_2) \approx \dfrac{x_2-x}{x_2-x_1} f(Q_{12}) + \dfrac{x-x_1}{x_2-x_1} f(Q_{22})\ \ \ \text{Where}\ \ R_2 = (x, y_2)</script><p>然后在 y 轴方向插值得到:</p>
 <script type="math/tex; mode=display">f(P) \approx \dfrac{y_2-y}{y_2-y_1} f(R_1) + \dfrac{y-y_1}{y_2-y_1} f(R_2)</script><p>这样即得到所求 $f(x, y)$. </p>
-<p><strong>2. Deconvolution (Transposed Convolution) 反卷积:</strong><br>反卷积就是对卷积操作的反转, 通过设置填充参数为 0, 步长 stride = 1 完成反卷积操作, 如下动图所示.  </p>
-<p><div>
+<p><strong>2. Deconvolution (Transposed Convolution) 反卷积:</strong><br>反卷积就是对卷积操作的反转, 保持卷积核大小不变, 通过设置 padding 参数为 (2, 2), 步长 stride = 1 完成反卷积操作, 如下动图所示.  </p>
+<p><div align="center">
 <img src="/img/deconv.gif" width="400" align="center/">
 </div> <br></p>
-<p>上采样的意义在于<strong>在于将小尺寸的高维度feature map恢复回去，以便做pixelwise prediction，获得每个点的分类信息</strong>.  </p>
+<p>上采样的意义在于<strong>在于将小尺寸的高维度 feature map 恢复回去, 以便做 pixelwise prediction, 获得每个点的分类信息</strong>.  </p>
+<h4 id="U-Net"><a href="#U-Net" class="headerlink" title="U-Net"></a>U-Net</h4><p>有了 FCN 的基础, 再来看 <a href="https://arxiv.org/pdf/1505.04597.pdf" target="_blank" rel="noopener">U-Net</a>. U-Net 和 FCN 一样都是很小的分割网络, 结构简单, 其结构示意图如下图所示.  </p>
+<p><div align="center">
+<img src="/img/u_net.png" width="600" align="center/">
+</div> <br></p>
+<p>U-Net 结构类似于一个大写的 U 字母: 首先进行 Conv + Pooling下采样; 然后 Deconv 反卷积进行上采样, crop 之前的低层 feature map 进行融合; 然后再次上采样. 重复这个过程, 直到获得输出 388x388x2 的 feature map, 最后经过 softmax 获得 output segment map. 总体来说与 FCN 思路非常类似.  </p>
+<p>那么 U-Net 和 FCN 的区别是什么? <strong>U-Net 采用了与 FCN 完全不同的特征融合方式: 拼接</strong>. 如下图所示, FCN 是逐点相加, U-Net 将特征按 channel 拼接, 形成更 “厚” 的特征. </p>
+<p><div align="center">
+<img src="/img/u_net_cat.png" width="700" align="center/">
+</div> <br></p>
+<p>后面的 CNN 图像语义分割也就基本上是这个套路:  </p>
+<p><strong>1. 下采样+上采样: Convlution + Deconvlution／Resize</strong><br><strong>2. 多尺度特征融合: 特征逐点相加／特征按 channel 维度拼接</strong><br><strong>3. 获得像素级别的 segement map: 对每一个像素点进行判断类别</strong></p>
 <h3 id="3、RCNN"><a href="#3、RCNN" class="headerlink" title="3、RCNN"></a>3、RCNN</h3><p>要介绍 Mask RCNN, 首先就从最开始的 <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Girshick_Rich_Feature_Hierarchies_2014_CVPR_paper.pdf" target="_blank" rel="noopener">RCNN(Region-based CNN features)</a> 开始, RCNN 将 CNN 的方法引入目标检测领域, 大大提高了检测效果, 改变了目标检测领域的主要研究思路. 其后的 Fast RCNN、Faster RCNN 以及 Mask RCNN 代表了该领域的最高水准.<br>RCNN 的思路主要分为四个步骤:<br>1、<strong>候选区域生成</strong>: 利用选择性搜索 (Selective Search) 算法从图像中提取 1k~2k 个左右可能是物体的候选区域 (region proposal); 关于选择性搜索算法, 其先将图像分割成小区域 (1k~2k), 然后按照一定的合并规则合并可能性最高的两个相邻区域直到图像只剩一个区域, 最后输出曾经存在过的区域.</p>
 <p>2、<strong>特征提取</strong>: 把这些 region proposal 缩放成 227*227 的大小并用 5 层卷积两层全连接的 CNN 提取特征;</p>
 <p>3、<strong>类别判断</strong>: 用 SVM 训练 CNN 提取出来的各类别特征, 每一类有一个 SVM 分类器;</p>
