@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/15/知识总结/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta property="og:updated_time" content="2019-01-12T03:28:19.936Z">
+<meta property="og:updated_time" content="2019-01-12T12:52:37.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -212,10 +212,16 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p><font color="#dddd00">LSTM防止梯度弥散和爆炸的原因:</font><br>传统的RNN是用覆盖的的方式计算状态: <script type="math/tex">S_t = f(S_{t-1}, x_t)</script>, 这有点类似于复合函数, 那么根据链式求导的法则, 复合函数求导：设 <script type="math/tex">f</script> 和 <script type="math/tex">g</script> 为 <script type="math/tex">x</script> 的可导函数, 则 <script type="math/tex">(f \circ g)'(x) = f'(g(x))g'(x)</script>, 他们是一种乘积的方式, 那么如果导数都是小数或者都是大于1的数的话, 就会使得总的梯度发生vanishing或explosion的情况, 当然梯度爆炸(gradient explosion)不是个严重的问题, 一般靠裁剪后的优化算法即可解决, 比如gradient clipping(如果梯度的范数大于某个给定值, 将梯度同比收缩), 但是梯度消失做不到, 这个时候就要用lstm了. 在lstm中, 我们发现, 状态 <script type="math/tex">S</script> 是通过累加的方式来计算的, <script type="math/tex">S_t = \sum\limits_{i=1}^t \Delta S_i</script>. 那这样的话, 就不是一直复合函数的形式了, 它的的导数也不是乘积的形式, 这样就不会发生梯度消失的情况了. </p>
 <p><font color="#dddd00">boosting和bagging在不同情况下的选用:</font><br>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练. 根据自己的经验, 只要模型不容易过拟合boosting的表现一般都不差于bagging</p>
 <p><font color="#dddd00">Seq2seq模型:</font><br>经典的seq2seq模型就是翻译模型, 例如google翻译团队的transformer + attention. seq2seq模型最大的特点是突破了传统RNN模型输入输出等长的限制. 而seq2seq模型实际上属于encoder-decoder结构, encoder将输入序列压缩成指定维度的隐向量, decoder根据这个隐向量生成输出序列, 生成输出序列可以仅把隐向量当做decoder的输入, 也可以把隐向量加入到生成序列的每个时刻的计算中.  </p>
-<h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
+<h3 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h3><ol>
+<li>独立分布随机变量 $X_1、X_2$ 服从均匀分布 $N(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>易知:</li>
+</ol>
+<script type="math/tex; mode=display">max(X_1, X_2) = \dfrac{X_1 + X_2 + |X_1 - X_2|}{2}</script><p>&ensp;&ensp;&ensp;&ensp;&ensp;则:</p>
+<script type="math/tex; mode=display">E(max(X_1, X_2)) = \dfrac{1}{4} + \dfrac{1}{4} + \dfrac{1}{2}E(|X_1 - X_2|)</script><p>&ensp;&ensp;&ensp;&ensp;&ensp;记 $Y = X_1 - X_2$, 则: $Y \sim U(-1, 1)$, 从而:</p>
+<script type="math/tex; mode=display">E|Y| =</script><h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
 <li><a href="https://blog.csdn.net/zhangxiao93/article/details/55101605" target="_blank" rel="noopener">旋转数组求最小值</a></li>
+<li><a href="https://www.jianshu.com/p/1851ee8fb546" target="_blank" rel="noopener">无序数组分成两部分使得方差和最小</a></li>
 </ol>
 <h3 id="益智题"><a href="#益智题" class="headerlink" title="益智题"></a>益智题</h3><ol>
 <li><a href="https://www.nowcoder.com/questionTerminal/cded93aeac5249f7a9754400dd249c1d" target="_blank" rel="noopener">站在地球上的某一点, 向南走一公里, 然后向东走一公里, 最后向北走一公里, 回到了原点.地球上有多少个满足这样条件的点?(无数个)</a></li>
