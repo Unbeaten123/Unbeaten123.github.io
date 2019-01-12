@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-12T08:18:39.022Z">
+<meta property="og:updated_time" content="2019-01-12T08:20:39.572Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -241,9 +241,9 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <img src="/img/fcn_net.png" width="600" align="center/">
 </div> <br></p>
 <p>先通过卷积和池化操作的得到不同尺寸的 pool feature. 那么: </p>
-<p>对于 FCN-32s, 直接对 pool5 feature 进行 32 倍<strong>上采样</strong>获得 32x upsampled feature, 再对  32x upsampled feature 每个点做 softmax prediction 获得 32x upsampled feature prediction (即分割图) </p>
-<p>对于 FCN-16s, 首先对 pool5 feature 进行 2 倍上采样获得 2x upsampled feature, 再把 pool4 feature 和 2x upsampled feature 逐点相加, 然后对相加的 feature 进行 16 倍上采样, 并 softmax prediction, 获得 16x upsampled feature prediction. </p>
-<p>对于 FCN-8s, 首先进行 pool4+2x upsampled feature 逐点相加, 然后又进行 pool3+2x upsampled 逐点相加, 即<strong>进行更多次特征融合</strong>. 具体过程与16s类似. </p>
+<p><strong>1. 对于 FCN-32s</strong>, 直接对 pool5 feature 进行 32 倍<strong>上采样</strong>获得 32x upsampled feature, 再对  32x upsampled feature 每个点做 softmax prediction 获得 32x upsampled feature prediction (即分割图) </p>
+<p><strong>2. 对于 FCN-16s</strong>, 首先对 pool5 feature 进行 2 倍上采样获得 2x upsampled feature, 再把 pool4 feature 和 2x upsampled feature 逐点相加, 然后对相加的 feature 进行 16 倍上采样, 并 softmax prediction, 获得 16x upsampled feature prediction. </p>
+<p><strong>3. 对于 FCN-8s</strong>, 首先进行 pool4+2x upsampled feature 逐点相加, 然后又进行 pool3+2x upsampled 逐点相加, 即<strong>进行更多次特征融合</strong>. 具体过程与16s类似. </p>
 <p>如何保证逐点相加的 feature map 是一样大的呢？这就要引入 crop 层进行裁剪对齐.</p>
 <p>下图是 FCN-32s、FCN-16s、FCN-8s 的实验对比, 可以看出<strong>使用多层feature融合有利于提高分割准确性</strong></p>
 <p><div align="center">
