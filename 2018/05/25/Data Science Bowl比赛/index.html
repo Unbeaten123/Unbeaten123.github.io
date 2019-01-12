@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-12T08:20:39.572Z">
+<meta property="og:updated_time" content="2019-01-12T08:22:40.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -267,7 +267,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <img src="/img/u_net.png" width="600" align="center/">
 </div> <br></p>
 <p>U-Net 结构类似于一个大写的 U 字母: 首先进行 Conv + Pooling下采样; 然后 Deconv 反卷积进行上采样, crop 之前的低层 feature map 进行融合; 然后再次上采样. 重复这个过程, 直到获得输出 388x388x2 的 feature map, 最后经过 softmax 获得 output segment map. 总体来说与 FCN 思路非常类似.  </p>
-<p>那么 U-Net 和 FCN 的区别是什么? <strong>U-Net 采用了与 FCN 完全不同的特征融合方式: 拼接</strong>. 如下图所示, FCN 是逐点相加, U-Net 将特征按 channel 拼接, 形成更 “厚” 的特征. </p>
+<p>那么 U-Net 和 FCN 的区别是什么? <strong>U-Net 采用了与 FCN 完全不同的特征融合方式: 拼接</strong>. 如下图所示, FCN 是逐点相加, U-Net 将特征按 channel 维度拼接, 形成更 “厚” 的特征. </p>
 <p><div align="center">
 <img src="/img/u_net_cat.png" width="700" align="center/">
 </div> <br></p>
