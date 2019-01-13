@@ -14,10 +14,12 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/15/知识总结/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta property="og:updated_time" content="2019-01-12T14:38:45.686Z">
+<meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
+<meta property="og:updated_time" content="2019-01-13T03:18:13.567Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
+<meta name="twitter:image" content="http://yoursite.com/img/repeat_conv.png">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -212,6 +214,10 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p><font color="#dddd00">LSTM防止梯度弥散和爆炸的原因:</font><br>传统的RNN是用覆盖的的方式计算状态: <script type="math/tex">S_t = f(S_{t-1}, x_t)</script>, 这有点类似于复合函数, 那么根据链式求导的法则, 复合函数求导：设 <script type="math/tex">f</script> 和 <script type="math/tex">g</script> 为 <script type="math/tex">x</script> 的可导函数, 则 <script type="math/tex">(f \circ g)'(x) = f'(g(x))g'(x)</script>, 他们是一种乘积的方式, 那么如果导数都是小数或者都是大于1的数的话, 就会使得总的梯度发生vanishing或explosion的情况, 当然梯度爆炸(gradient explosion)不是个严重的问题, 一般靠裁剪后的优化算法即可解决, 比如gradient clipping(如果梯度的范数大于某个给定值, 将梯度同比收缩), 但是梯度消失做不到, 这个时候就要用lstm了. 在lstm中, 我们发现, 状态 <script type="math/tex">S</script> 是通过累加的方式来计算的, <script type="math/tex">S_t = \sum\limits_{i=1}^t \Delta S_i</script>. 那这样的话, 就不是一直复合函数的形式了, 它的的导数也不是乘积的形式, 这样就不会发生梯度消失的情况了. </p>
 <p><font color="#dddd00">boosting和bagging在不同情况下的选用:</font><br>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练. 根据自己的经验, 只要模型不容易过拟合boosting的表现一般都不差于bagging</p>
 <p><font color="#dddd00">Seq2seq模型:</font><br>经典的seq2seq模型就是翻译模型, 例如google翻译团队的transformer + attention. seq2seq模型最大的特点是突破了传统RNN模型输入输出等长的限制. 而seq2seq模型实际上属于encoder-decoder结构, encoder将输入序列压缩成指定维度的隐向量, decoder根据这个隐向量生成输出序列, 生成输出序列可以仅把隐向量当做decoder的输入, 也可以把隐向量加入到生成序列的每个时刻的计算中.  </p>
+<p><font color="#dddd00">测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font><br>直接把测试图像输入到网络, 经过同样的网络得到的输出会是一个小的 feature map 其每个元素对应的就是经过 crop 后的输出, 如下图网络的输入是 14*14, 如果此时的测试图像是 16*16, 直接把 16*16 的图像输入到网络中, 最终得到的输出是 2*2*4, 每个元素对应于把输入 crop 成 14*14 的输出.</p>
+<p><div align="center">
+<img src="/img/repeat_conv.png" width="700px">
+</div> <br>   </p>
 <h3 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h3><ol>
 <li>独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 $\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}$ </li>
 </ol>
