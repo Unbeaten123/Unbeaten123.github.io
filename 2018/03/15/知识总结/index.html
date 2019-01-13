@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-13T11:10:17.139Z">
+<meta property="og:updated_time" content="2019-01-13T11:11:26.634Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -195,7 +195,7 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>&ensp;&ensp; 2.1、计算响应 (至 <script type="math/tex">\text{t-1}</script> 轮得到的模型的负梯度):  </p>
 <script type="math/tex; mode=display">\tilde{y_i} = -\left [ \dfrac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right ]_{F(x) = F_{t-1}(x)}, i = 1, 2,..., N</script><p>&ensp;&ensp; 2.2、学习第 $\text{t}$ 颗树 (拟合残差, 当损失函数为平方损失函数时就是拟合负梯度):  </p>
 <script type="math/tex; mode=display">w^* = \mathop{arg min}\limits_{w} \sum_{i=1}^{N} (\tilde{y_i} - h_t(x_i; w))^2</script><p>&ensp;&ensp; 2.3、line search 找步长 (找到第 $\text{t}$ 轮模型的最佳权重):  </p>
-<script type="math/tex; mode=display">\rho^* = \mathop{arg min}\limits_{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \rho h_t(x_i; w^*))</script><p>&ensp;&ensp; 2.4、令 $f_t = \rho^<em> h_t(x; w^</em>)$ </p>
+<script type="math/tex; mode=display">\rho^* = \mathop{arg min}\limits_{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \rho h_t(x_i; w^*))</script><p>&ensp;&ensp; 2.4、令 $f_t = \rho ^<em> h_t(x; w^</em>)$ </p>
 <p>&ensp;&ensp; 2.5、更新模型: $F_t = F_{t-1} + f_t$  </p>
 <p>3、 输出 $F_T$ </p>
 <p><font color="#dddd00">XGboost和GBDT的区别:</font><br>Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.<br><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
