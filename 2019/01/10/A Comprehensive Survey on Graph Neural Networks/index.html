@@ -183,6 +183,33 @@
         
       </header>
     
+        <!-- 目录内容 -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+    <div id="toc-article" class="toc-article">
+        <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+      <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#摘要"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引言"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#图神经网络简史"><span class="toc-number">2.1.</span> <span class="toc-text">图神经网络简史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图神经网络-vs-网络嵌入"><span class="toc-number">2.2.</span> <span class="toc-text">图神经网络 vs. 网络嵌入</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分类与框架"><span class="toc-number">3.</span> <span class="toc-text">分类与框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">3.1.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Convolution-Networks-GCN"><span class="toc-number">3.1.1.</span> <span class="toc-text">Graph Convolution Networks (GCN)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Attention-Networks-GAT"><span class="toc-number">3.1.2.</span> <span class="toc-text">Graph Attention Networks (GAT)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Auto-encoders-GAE"><span class="toc-number">3.1.3.</span> <span class="toc-text">Graph Auto-encoders (GAE)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Generative-Networks-GGN"><span class="toc-number">3.1.4.</span> <span class="toc-text">Graph Generative Networks (GGN)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Spatial-temporal-Networks"><span class="toc-number">3.1.5.</span> <span class="toc-text">Graph Spatial-temporal Networks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架"><span class="toc-number">3.2.</span> <span class="toc-text">框架</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#图卷积网络-Graph-Convolutional-Networks"><span class="toc-number">4.</span> <span class="toc-text">图卷积网络 (Graph Convolutional Networks)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基于谱的图卷积网络-Spectral-based-Graph-Convolutional-Networks"><span class="toc-number">4.1.</span> <span class="toc-text">基于谱的图卷积网络 (Spectral-based Graph Convolutional Networks)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于空间的图卷积网络-Spatial-based-Graph-Convolutional-Networks"><span class="toc-number">4.2.</span> <span class="toc-text">基于空间的图卷积网络 (Spatial-based Graph Convolutional Networks)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于谱和空间的-GCN-比较"><span class="toc-number">4.3.</span> <span class="toc-text">基于谱和空间的 GCN 比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他图神经网络-Beyond-Graph-Convolutional-Networks"><span class="toc-number">5.</span> <span class="toc-text">其他图神经网络(Beyond Graph Convolutional Networks)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#图注意力网络-Graph-Attention-Networks"><span class="toc-number">5.1.</span> <span class="toc-text">图注意力网络 (Graph Attention Networks)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图自动编码器-Graph-Auto-Encoders"><span class="toc-number">5.2.</span> <span class="toc-text">图自动编码器 Graph Auto-Encoders</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图生成网络-Graph-Generative-Networks"><span class="toc-number">5.3.</span> <span class="toc-text">图生成网络 (Graph Generative Networks)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图时空网络-Graph-Spatial-Temporal-Networks"><span class="toc-number">5.4.</span> <span class="toc-text">图时空网络 (Graph Spatial-Temporal Networks)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#未来研究方向"><span class="toc-number">6.</span> <span class="toc-text">未来研究方向</span></a></li></ol>
+          </div>
+    <script type="text/javascript">
+    function showToc(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:block");
+      show_toc_btn.setAttribute("style","display:none");
+      };
+    function showBtn(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:none");
+      show_toc_btn.setAttribute("style","display:block");
+      };
+    </script>
+        
+    <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
         <p>图神经网络模型综述 (2019-1-2) A Comprehensive Survey on Graph Neural Networks.<br><a id="more"></a></p>

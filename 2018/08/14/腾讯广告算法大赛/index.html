@@ -177,6 +177,33 @@
         
       </header>
     
+        <!-- 目录内容 -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+    <div id="toc-article" class="toc-article">
+        <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+      <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#比赛简介"><span class="toc-number">1.</span> <span class="toc-text">比赛简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据预处理"><span class="toc-number">2.</span> <span class="toc-text">数据预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#单、多取值离散特征进行-one-hot-稀疏编码"><span class="toc-number">2.1.</span> <span class="toc-text">单、多取值离散特征进行 one-hot 稀疏编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部分连续值特征离散化后进行-one-hot-稀疏编码"><span class="toc-number">2.2.</span> <span class="toc-text">部分连续值特征离散化后进行 one-hot 稀疏编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashtrick把数据保存为二进制数据流"><span class="toc-number">2.3.</span> <span class="toc-text">hashtrick把数据保存为二进制数据流</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特征工程"><span class="toc-number">3.</span> <span class="toc-text">特征工程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#特征交叉"><span class="toc-number">3.1.</span> <span class="toc-text">特征交叉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征转化率"><span class="toc-number">3.2.</span> <span class="toc-text">特征转化率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tfidf特征"><span class="toc-number">3.3.</span> <span class="toc-text">tfidf特征</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#模型选择"><span class="toc-number">4.</span> <span class="toc-text">模型选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LightGBM"><span class="toc-number">4.1.</span> <span class="toc-text">LightGBM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FFM"><span class="toc-number">4.2.</span> <span class="toc-text">FFM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FM-Factorization-Machine-降维版本的特征二阶组合"><span class="toc-number">4.2.1.</span> <span class="toc-text">FM(Factorization Machine): 降维版本的特征二阶组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FFM-Field-aware-Factorization-Machine-基于域的FM"><span class="toc-number">4.2.2.</span> <span class="toc-text">FFM(Field-aware Factorization Machine): 基于域的FM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DeepFM"><span class="toc-number">4.3.</span> <span class="toc-text">DeepFM</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+          </div>
+    <script type="text/javascript">
+    function showToc(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:block");
+      show_toc_btn.setAttribute("style","display:none");
+      };
+    function showBtn(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:none");
+      show_toc_btn.setAttribute("style","display:block");
+      };
+    </script>
+        
+    <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
         <p>腾讯广告算法大赛 (CTR, Click-Through Rate) 总结 </p>

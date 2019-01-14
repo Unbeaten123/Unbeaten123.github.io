@@ -186,6 +186,33 @@
         
       </header>
     
+        <!-- 目录内容 -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+    <div id="toc-article" class="toc-article">
+        <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+      <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#比赛简介"><span class="toc-number">1.</span> <span class="toc-text">比赛简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#关于四种词向量的简介"><span class="toc-number">1.0.0.1.</span> <span class="toc-text">关于四种词向量的简介:</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#整体流程"><span class="toc-number">2.</span> <span class="toc-text">整体流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据清洗"><span class="toc-number">2.0.1.</span> <span class="toc-text">数据清洗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列-向量化"><span class="toc-number">2.0.2.</span> <span class="toc-text">序列/向量化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#填充序列保持长度一致"><span class="toc-number">2.0.3.</span> <span class="toc-text">填充序列保持长度一致</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#传统机器学习模型"><span class="toc-number">2.0.4.</span> <span class="toc-text">传统机器学习模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#深度模型"><span class="toc-number">2.0.5.</span> <span class="toc-text">深度模型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#踩过的坑"><span class="toc-number">3.</span> <span class="toc-text">踩过的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#深度模型的可重复性"><span class="toc-number">3.0.1.</span> <span class="toc-text">深度模型的可重复性</span></a></li></ol></li></ol></li></ol>
+          </div>
+    <script type="text/javascript">
+    function showToc(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:block");
+      show_toc_btn.setAttribute("style","display:none");
+      };
+    function showBtn(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:none");
+      show_toc_btn.setAttribute("style","display:block");
+      };
+    </script>
+        
+    <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
         <p>Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结 </p>
