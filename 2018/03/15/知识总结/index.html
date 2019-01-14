@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-14T13:32:48.947Z">
+<meta property="og:updated_time" content="2019-01-14T13:51:21.817Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -210,6 +210,7 @@
 <p><font color="#dddd00">Sigmoid和ReLU激活函数的优劣:</font><br> 使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入<script type="math/tex">x</script>总是为正的话, 对于式 <script type="math/tex">f = wx+b</script>, 关于<script type="math/tex">w</script>的梯度总是非负即正(损失函数对<script type="math/tex">w</script>的导数总是和损失函数对<script type="math/tex">f</script>的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元”Dead”现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.</p>
 <p><font color="#dddd00">梯度消失问题和损失函数有关吗?</font><br> 基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. </p>
 <p><font color="#dddd00">为什么 SVM 算法在求解过程中, 需要将原始问题转化为对偶问题?</font><br><br>1、通过引入拉格朗日乘子法将原问题中的不等式约束转换成等式约束;<br>2、方便核函数的引入;<br>3、降低了计算复杂度, 由求解特征向量 $\vec w$ 变成求解比例系数 $a$, 在原始问题下求解复杂度和特征维度有关, 现在降低为样本的数量;<br>4、求解更高效, 因为只需要求比例系数 $a$, 而比例系数 $a$ 只有支持向量才为非 0, 其他样本为 0. </p>
+<p><font color="#dddd00">SVM 和 LR 的异同:</font><br><br><a href="https://www.cnblogs.com/zhizhan/p/5038747.html" target="_blank" rel="noopener">Reference here</a></p>
 <p><font color="#dddd00">使用TensorFlow训练神经网络模型的基本流程:</font><br> <a href="https://blog.csdn.net/paopaovae/article/details/81143367" target="_blank" rel="noopener">训练神经网络可分为以下三个步骤</a><br>        1 定义神经网络的结构和前向传播的输出结果<br>        2 定义损失函数以及选择后向传播的算法<br>        3 生成会话 并且在训练数据上反复执行反向传播优化算法.<br>无论神经网络结构如何变化, 这三个步骤基本不变.</p>
 <p><font color="#dddd00">dropout 如何防止过拟合:</font><br>1、取平均的作用: 每次 dropout 都会随机的失活一定比例的神经元, 这样就好像是在训练不同的网络.<br>2、减少神经元之间复杂的共适应关系: 随机失活会让一些神经元不一定同时出现在一个 dropout 后的网络中, 因此抵消了他们的相互依懒性, 迫使神经网络学习更加鲁棒的模型.  </p>
 <p><font color="#dddd00">GBDT的过程:</font><br>GBDT 是加法模型, 定义为:</p>
@@ -644,21 +645,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
