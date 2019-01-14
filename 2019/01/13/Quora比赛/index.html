@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Quora Insincere Questions Classification | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only">
+  <meta name="description" content="Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结   比赛简介- [关于四种词向量的简介:](#%E5%85%B3%E4%BA%8E%E5%9B%9B%E7%A7%8D%E8%AF%8D%E5%90%91%E9%87%8F%E7%9A%84%E7%AE%80%E4%BB%8B)  整体流程 数据清洗 序列/向量化 填充序列保持长">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Quora Insincere Questions Classification">
 <meta property="og:url" content="http://yoursite.com/2019/01/13/Quora比赛/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only">
+<meta property="og:description" content="Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结   比赛简介- [关于四种词向量的简介:](#%E5%85%B3%E4%BA%8E%E5%9B%9B%E7%A7%8D%E8%AF%8D%E5%90%91%E9%87%8F%E7%9A%84%E7%AE%80%E4%BB%8B)  整体流程 数据清洗 序列/向量化 填充序列保持长">
 <meta property="og:image" content="http://yoursite.com/img/model.png">
 <meta property="og:image" content="http://yoursite.com/img/capsule.png">
 <meta property="og:image" content="http://yoursite.com/img/routing.png">
@@ -26,10 +26,10 @@
 <meta property="og:image" content="http://yoursite.com/img/FGE.png">
 <meta property="og:image" content="http://yoursite.com/img/SWA.png">
 <meta property="og:image" content="http://yoursite.com/img/FocalLoss.png">
-<meta property="og:updated_time" content="2019-01-10T08:31:08.599Z">
+<meta property="og:updated_time" content="2019-01-14T02:20:35.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Quora Insincere Questions Classification">
-<meta name="twitter:description" content="Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结  比赛简介这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only">
+<meta name="twitter:description" content="Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结   比赛简介- [关于四种词向量的简介:](#%E5%85%B3%E4%BA%8E%E5%9B%9B%E7%A7%8D%E8%AF%8D%E5%90%91%E9%87%8F%E7%9A%84%E7%AE%80%E4%BB%8B)  整体流程 数据清洗 序列/向量化 填充序列保持长">
 <meta name="twitter:image" content="http://yoursite.com/img/model.png">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
@@ -189,6 +189,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Kaggle 的 NLP 比赛 Quora Insincere Questions Classification 总结 </p>
+<ul>
+<li><a href="#%E6%AF%94%E8%B5%9B%E7%AE%80%E4%BB%8B">比赛简介</a><pre><code>- [关于四种词向量的简介:](#%E5%85%B3%E4%BA%8E%E5%9B%9B%E7%A7%8D%E8%AF%8D%E5%90%91%E9%87%8F%E7%9A%84%E7%AE%80%E4%BB%8B)
+</code></pre></li>
+<li><a href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B">整体流程</a><ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97">数据清洗</a></li>
+<li><a href="#%E5%BA%8F%E5%88%97%E5%90%91%E9%87%8F%E5%8C%96">序列/向量化</a></li>
+<li><a href="#%E5%A1%AB%E5%85%85%E5%BA%8F%E5%88%97%E4%BF%9D%E6%8C%81%E9%95%BF%E5%BA%A6%E4%B8%80%E8%87%B4">填充序列保持长度一致</a></li>
+<li><a href="#%E4%BC%A0%E7%BB%9F%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B">传统机器学习模型</a></li>
+<li><a href="#%E6%B7%B1%E5%BA%A6%E6%A8%A1%E5%9E%8B">深度模型</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91">踩过的坑</a><ul>
+<li><a href="#%E6%B7%B1%E5%BA%A6%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E9%87%8D%E5%A4%8D%E6%80%A7">深度模型的可重复性</a></li>
+</ul>
+</li>
+</ul>
 <h1 id="比赛简介"><a href="#比赛简介" class="headerlink" title="比赛简介"></a>比赛简介</h1><p>这是一个二分类的问题, 目标是给定的Quora中的问题文本序列, 判断该问题是否为一个真诚的问题(insincere classification)训练集样本数1306122条Quora问题文本序列, 第一阶段测试集样本数56370条. 这是一个kernel-only的比赛, 即所有的提交结果必须通过kaggle提供的kernel环境执行生成(如果使用Telsa K80显卡则限kernel运行时间2h, 不使用显卡则为6h, 内存16G), 此外不允许连接互联网及使用任何外部数据, Kaggle官方提供了4个Embedding文件, 包括GloVe、Paragram、WikiNews(Fasttext)和GoogleNews(Word2Vec)四种预训练词向量<br><a id="more"></a></p>
 <h4 id="关于四种词向量的简介"><a href="#关于四种词向量的简介" class="headerlink" title="关于四种词向量的简介:"></a>关于四种词向量的简介:</h4><ol>
 <li>Word2vec: word2vec严格来说是一个工具, 大部分情况下我们提到word2vec都是指其Skip-Gram结构所生成的词向量模型来指代word2vec, Skip-Gram结构利用中间词生成上下文单词的向量表示, 而另一个结构CBOW则是根据上下文单词向量表示学习中间词的向量表示. word2vec的两个训练trick: 1)<strong>层次softmax</strong>, 层次softmax替代传统softmax加速计算, 相比传统softmax, 层次softmax实际上就是根据预料中单词的词频来构建一个霍夫曼树, 通过根节点到叶节点的路径来求出概率, 把N分类问题转换成logN次二分类问题; 2)<strong>负采样</strong>, 负采样是在softmax计算时不使用所有的单词, 而是采样指定数量的负样本单词.</li>
