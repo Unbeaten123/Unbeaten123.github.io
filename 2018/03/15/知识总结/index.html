@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-15T05:34:18.621Z">
+<meta property="og:updated_time" content="2019-01-15T05:36:12.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -253,15 +253,9 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p><div align="center">
 <img src="/img/repeat_conv.png" width="700px">
 </div> <br>   </p>
-<h3 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h3><ol>
-<li>独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 </li>
-</ol>
-<script type="math/tex; mode=display">\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}</script><ol>
-<li>有 4 个人分 52 张扑克牌, 一个人拿到指定两张牌的概率?</li>
-</ol>
-<script type="math/tex; mode=display">\dfrac{C_4^1 \times C_{50}^{11}}{C_{52}^{13}}</script><ol>
-<li>一副扑克牌分成 3 份, 一个人同时拿到大小王的概率?</li>
-</ol>
+<h3 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h3><p>1、独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 </p>
+<script type="math/tex; mode=display">\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}</script><p>2、有 4 个人分 52 张扑克牌, 一个人拿到指定两张牌的概率?</p>
+<script type="math/tex; mode=display">\dfrac{C_4^1 \times C_{50}^{11}}{C_{52}^{13}}</script><p>3、一副扑克牌分成 3 份, 一个人同时拿到大小王的概率?</p>
 <script type="math/tex; mode=display">\dfrac {C_3^1 \times C_{52}^{16} \times C_{36}^{18} \times C_{18}^{18}} {C_{54}^{18} \times C_{36}^{18} \times C_{18}^{18}}</script><h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
