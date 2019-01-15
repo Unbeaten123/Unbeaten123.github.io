@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-14T13:51:21.817Z">
+<meta property="og:updated_time" content="2019-01-15T05:29:40.984Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -254,9 +254,12 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <img src="/img/repeat_conv.png" width="700px">
 </div> <br>   </p>
 <h3 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h3><ol>
-<li>独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 $\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}$ </li>
+<li>独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 </li>
 </ol>
-<h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
+<script type="math/tex; mode=display">\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}</script><ol>
+<li>有 4 个人分 52 张扑克牌, 一个人拿到指定两张牌的概率?</li>
+</ol>
+<script type="math/tex; mode=display">\dfrac{C_4^1 \times C_{50}^{11}}{C_{52}^{13}}</script><h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
 <li><a href="https://blog.csdn.net/zhangxiao93/article/details/55101605" target="_blank" rel="noopener">旋转数组求最小值</a></li>
@@ -645,5 +648,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
