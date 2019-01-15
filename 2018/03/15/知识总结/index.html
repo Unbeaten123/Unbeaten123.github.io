@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-15T05:36:12.127Z">
+<meta property="og:updated_time" content="2019-01-15T11:07:31.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -206,28 +206,69 @@
       
         <p>记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题</p>
 <a id="more"></a>
-<h2 id="算法岗"><a href="#算法岗" class="headerlink" title="算法岗"></a>算法岗</h2><h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><p><font color="#dddd00">反向传播原理简介:</font><br> 反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.</p>
-<p><font color="#dddd00">Sigmoid和ReLU激活函数的优劣:</font><br> 使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入<script type="math/tex">x</script>总是为正的话, 对于式 <script type="math/tex">f = wx+b</script>, 关于<script type="math/tex">w</script>的梯度总是非负即正(损失函数对<script type="math/tex">w</script>的导数总是和损失函数对<script type="math/tex">f</script>的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元”Dead”现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.</p>
-<p><font color="#dddd00">梯度消失问题和损失函数有关吗?</font><br> 基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. </p>
-<p><font color="#dddd00">为什么 SVM 算法在求解过程中, 需要将原始问题转化为对偶问题?</font><br><br>1、通过引入拉格朗日乘子法将原问题中的不等式约束转换成等式约束;<br>2、方便核函数的引入;<br>3、降低了计算复杂度, 由求解特征向量 $\vec w$ 变成求解比例系数 $a$, 在原始问题下求解复杂度和特征维度有关, 现在降低为样本的数量;<br>4、求解更高效, 因为只需要求比例系数 $a$, 而比例系数 $a$ 只有支持向量才为非 0, 其他样本为 0. </p>
-<p><font color="#dddd00">SVM 和 LR 的异同:</font><br><br><a href="https://www.cnblogs.com/zhizhan/p/5038747.html" target="_blank" rel="noopener">Reference here</a></p>
-<p><font color="#dddd00">使用TensorFlow训练神经网络模型的基本流程:</font><br> <a href="https://blog.csdn.net/paopaovae/article/details/81143367" target="_blank" rel="noopener">训练神经网络可分为以下三个步骤</a><br>        1 定义神经网络的结构和前向传播的输出结果<br>        2 定义损失函数以及选择后向传播的算法<br>        3 生成会话 并且在训练数据上反复执行反向传播优化算法.<br>无论神经网络结构如何变化, 这三个步骤基本不变.</p>
-<p><font color="#dddd00">dropout 如何防止过拟合:</font><br>1、取平均的作用: 每次 dropout 都会随机的失活一定比例的神经元, 这样就好像是在训练不同的网络.<br>2、减少神经元之间复杂的共适应关系: 随机失活会让一些神经元不一定同时出现在一个 dropout 后的网络中, 因此抵消了他们的相互依懒性, 迫使神经网络学习更加鲁棒的模型.  </p>
-<p><font color="#dddd00">GBDT的过程:</font><br>GBDT 是加法模型, 定义为:</p>
-<script type="math/tex; mode=display">
-F(x; w) = \sum_{t = 0}^{T} {\alpha_t h_t (x; w_t)} = \sum_{t = 0}^{T} {f_t(x; w_t)}</script><p>其中, $x$ 是输入样本, $h$ 是分类回归树, $w$ 是分类回归树参数, $\alpha$ 是每棵树权重.<br>每一轮通过最小化损失函数求解最优模型:</p>
-<script type="math/tex; mode=display">
-F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>输入: $(x_i, y_i), T, L$ 分别为训练数据、迭代轮数和损失函数 (平方损失函数)  </p>
-<p>1、初始化 $f_0$  </p>
-<p>2、$\text{for t = 1 to T do}$  </p>
-<p>&ensp;&ensp; 2.1、计算响应 (至 <script type="math/tex">\text{t-1}</script> 轮得到的模型的负梯度):  </p>
-<script type="math/tex; mode=display">\tilde{y_i} = -\left [ \dfrac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right ]_{F(x) = F_{t-1}(x)}, i = 1, 2,..., N</script><p>&ensp;&ensp; 2.2、学习第 $\text{t}$ 颗树 (拟合残差, 当损失函数为平方损失函数时就是拟合负梯度):  </p>
-<script type="math/tex; mode=display">w^* = \mathop{arg min}\limits_{w} \sum_{i=1}^{N} (\tilde{y_i} - h_t(x_i; w))^2</script><p>&ensp;&ensp; 2.3、line search 找步长 (找到第 $\text{t}$ 轮模型的最佳权重):  </p>
-<script type="math/tex; mode=display">\rho^* = \mathop{arg min}\limits_{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \rho h_t(x_i; w^*))</script><p>&ensp;&ensp; 2.4、令 <script type="math/tex">f_t = \rho ^* h_t(x; w^*)</script> </p>
-<p>&ensp;&ensp; 2.5、更新模型: $F_t = F_{t-1} + f_t$  </p>
-<p>3、 输出 $F_T$ </p>
-<p><font color="#dddd00">XGboost和GBDT的区别:</font><br>Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.<br><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
-<p><font color="#dddd00">XGboost和RF的区别:</font> <a href="https://www.cnblogs.com/notwice/p/8546436.html" target="_blank" rel="noopener">reference here</a></p>
+<h2 id="算法岗"><a href="#算法岗" class="headerlink" title="算法岗"></a>算法岗</h2><h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><font color="#dddd00">反向传播原理简介:</font><br> 反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.
+
+<font color="#dddd00">Sigmoid和ReLU激活函数的优劣:</font><br> 使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入$$x$$总是为正的话, 对于式 $$f = wx+b$$, 关于$$w$$的梯度总是非负即正(损失函数对$$w$$的导数总是和损失函数对$$f$$的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元"Dead"现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.
+
+<font color="#dddd00">梯度消失问题和损失函数有关吗?</font><br> 基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. 
+
+<font color="#dddd00">为什么 SVM 算法在求解过程中, 需要将原始问题转化为对偶问题?</font><br>
+1、通过引入拉格朗日乘子法将原问题中的不等式约束转换成等式约束;  
+2、方便核函数的引入;  
+3、降低了计算复杂度, 由求解特征向量 $\vec w$ 变成求解比例系数 $a$, 在原始问题下求解复杂度和特征维度有关, 现在降低为样本的数量;  
+4、求解更高效, 因为只需要求比例系数 $a$, 而比例系数 $a$ 只有支持向量才为非 0, 其他样本为 0. 
+
+<font color="#dddd00">SVM 和 LR 的异同:</font><br>
+[Reference here](https://www.cnblogs.com/zhizhan/p/5038747.html)
+
+<font color="#dddd00">使用TensorFlow训练神经网络模型的基本流程:</font><br> [训练神经网络可分为以下三个步骤](https://blog.csdn.net/paopaovae/article/details/81143367)
+        1 定义神经网络的结构和前向传播的输出结果
+        2 定义损失函数以及选择后向传播的算法
+        3 生成会话 并且在训练数据上反复执行反向传播优化算法.
+无论神经网络结构如何变化, 这三个步骤基本不变.
+
+<font color="#dddd00">dropout 如何防止过拟合:</font>
+1、取平均的作用: 每次 dropout 都会随机的失活一定比例的神经元, 这样就好像是在训练不同的网络.  
+2、减少神经元之间复杂的共适应关系: 随机失活会让一些神经元不一定同时出现在一个 dropout 后的网络中, 因此抵消了他们的相互依懒性, 迫使神经网络学习更加鲁棒的模型.  
+
+<font color="#dddd00">GBDT的过程:</font>
+GBDT 是加法模型, 定义为:
+$$
+F(x; w) = \sum_{t = 0}^{T} {\alpha_t h_t (x; w_t)} = \sum_{t = 0}^{T} {f_t(x; w_t)}
+$$
+其中, $x$ 是输入样本, $h$ 是分类回归树, $w$ 是分类回归树参数, $\alpha$ 是每棵树权重.  
+每一轮通过最小化损失函数求解最优模型:
+$$
+F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))
+$$
+输入: $(x_i, y_i), T, L$ 分别为训练数据、迭代轮数和损失函数 (平方损失函数)  
+
+1、初始化 $f_0$  
+
+2、$\text{for t = 1 to T do}$  
+
+&ensp;&ensp; 2.1、计算响应 (至 $$\text{t-1}$$ 轮得到的模型的负梯度):  
+$$\tilde{y_i} = -\left [ \dfrac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right ]_{F(x) = F_{t-1}(x)}, i = 1, 2,..., N$$
+&ensp;&ensp; 2.2、学习第 $\text{t}$ 颗树 (拟合残差, 当损失函数为平方损失函数时就是拟合负梯度):  
+$$w^* = \mathop{arg min}\limits_{w} \sum_{i=1}^{N} (\tilde{y_i} - h_t(x_i; w))^2$$
+&ensp;&ensp; 2.3、line search 找步长 (找到第 $\text{t}$ 轮模型的最佳权重):  
+$$\rho^* = \mathop{arg min}\limits_{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \rho h_t(x_i; w^*))$$
+&ensp;&ensp; 2.4、令 $$f_t = \rho ^* h_t(x; w^*)$$ 
+
+&ensp;&ensp; 2.5、更新模型: $F_t = F_{t-1} + f_t$  
+
+3、 输出 $F_T$ 
+
+<font color="#dddd00">XGboost和GBDT的区别:</font> 
+Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.
+[reference here](https://blog.csdn.net/chengfulukou/article/details/76906710)
+
+<font color="#dddd00">XGboost和RF的区别:</font> 
+[reference here](https://www.cnblogs.com/notwice/p/8546436.html)
+
+<font color="#dddd00">XGBoost 和 RF 的特征重要性是如何得到的？</font>
+
+<p>Xgboost 中某个特征的重要性, 等于它被选中为树节点分裂特征的次数的和.<br>RF 可以通过两种方式, 一是按基尼指数降低程度决定特征重要性; 二是改变测试数据的某列特征判断改变后的误差变化  </p>
 <p><font color="#dddd00">ROC、AUC等概念的理解:</font> <a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a><br>一句话说明AUC的本质和计算规则：给定一个正例, 一个负例, 预测为正的概率值比预测为负的概率值还要大的可能性.</p>
 <p><font color="#dddd00">K-means、KNN、层次聚类和密度聚类(DBSCAN):</font><br>这个链接直接对比了Kmeans和KNN<br><a href="https://www.cnblogs.com/190260995xixi/p/5945652.html" target="_blank" rel="noopener">K-means &amp; KNN</a><br>层次聚类的复杂度很高, 但是一次聚类完成就可以得到一个聚类树结果, 选择不同的聚类个数下的聚类结果直接根据树来得到即可且层次聚类是贪心的思想得到的是局部最优需要随机化, kmans的主要优势是效率<br><a href="https://www.cnblogs.com/nku-wangfeng/p/7642745.html" target="_blank" rel="noopener">K-means &amp; 层次聚类</a><br>DBSCAN是基于密度的聚类, 对于密度稀疏的数据表现较差, 但是可以运用到凸和非凸数据集上(甜甜圈数据集), 其计算复杂度较高但是结果往往要比kmeans好, DBSCAN对异常点也不敏感, 聚类结果可复现, 但同时需要调参达到最佳性能<br><a href="https://www.cnblogs.com/pinard/p/6208966.html" target="_blank" rel="noopener">DBSCAN原理</a><br><a href="https://www.cnblogs.com/hdu-2010/p/4621258.html" target="_blank" rel="noopener">K-means &amp; DBSCAN</a></p>
 <p><font color="#dddd00">EM 算法的收敛性和 K-Means 的收敛性:</font><br><a href="https://zhuanlan.zhihu.com/p/36331115" target="_blank" rel="noopener">reference here</a><br>因为 K-means 的更新过程就是 EM 过程, 所以 EM 收敛就表示 K-means 收敛.  </p>
@@ -645,21 +686,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
