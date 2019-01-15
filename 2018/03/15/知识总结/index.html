@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-15T11:07:31.088Z">
+<meta property="og:updated_time" content="2019-01-15T11:26:27.664Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -206,31 +206,27 @@
       
         <p>记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题</p>
 <a id="more"></a>
-<h2 id="算法岗"><a href="#算法岗" class="headerlink" title="算法岗"></a>算法岗</h2><h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><font color="#dddd00">反向传播原理简介:</font><br> 反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.
+<h2 id="算法岗"><a href="#算法岗" class="headerlink" title="算法岗"></a>算法岗</h2><h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><font color="#dddd00">反向传播原理简介:</font>
 
-<font color="#dddd00">Sigmoid和ReLU激活函数的优劣:</font><br> 使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入$$x$$总是为正的话, 对于式 $$f = wx+b$$, 关于$$w$$的梯度总是非负即正(损失函数对$$w$$的导数总是和损失函数对$$f$$的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元"Dead"现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.
+<p>反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.</p>
+<font color="#dddd00">Sigmoid和ReLU激活函数的优劣:</font>
 
-<font color="#dddd00">梯度消失问题和损失函数有关吗?</font><br> 基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. 
+<p>使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入 $x$ 总是为正的话, 对于式 $f = wx+b$, 关于 $w$ 的梯度总是非负即正(损失函数对 $w$ 的导数总是和损失函数对 $f$ 的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元”Dead”现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.</p>
+<font color="#dddd00">梯度消失问题和损失函数有关吗?</font>
 
-<font color="#dddd00">为什么 SVM 算法在求解过程中, 需要将原始问题转化为对偶问题?</font><br>
-1、通过引入拉格朗日乘子法将原问题中的不等式约束转换成等式约束;  
-2、方便核函数的引入;  
-3、降低了计算复杂度, 由求解特征向量 $\vec w$ 变成求解比例系数 $a$, 在原始问题下求解复杂度和特征维度有关, 现在降低为样本的数量;  
-4、求解更高效, 因为只需要求比例系数 $a$, 而比例系数 $a$ 只有支持向量才为非 0, 其他样本为 0. 
+<p> 基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不实用batch normalization的以及如果选用sigmoid激活函数则很有可能造成梯度消失现象. </p>
+<font color="#dddd00">为什么 SVM 算法在求解过程中, 需要将原始问题转化为对偶问题?</font>
 
-<font color="#dddd00">SVM 和 LR 的异同:</font><br>
-[Reference here](https://www.cnblogs.com/zhizhan/p/5038747.html)
+<p>1、通过引入拉格朗日乘子法将原问题中的不等式约束转换成等式约束;<br>2、方便核函数的引入;<br>3、降低了计算复杂度, 由求解特征向量 $\vec w$ 变成求解比例系数 $a$, 在原始问题下求解复杂度和特征维度有关, 现在降低为样本的数量;<br>4、求解更高效, 因为只需要求比例系数 $a$, 而比例系数 $a$ 只有支持向量才为非 0, 其他样本为 0. </p>
+<font color="#dddd00">SVM 和 LR 的异同:</font>
 
-<font color="#dddd00">使用TensorFlow训练神经网络模型的基本流程:</font><br> [训练神经网络可分为以下三个步骤](https://blog.csdn.net/paopaovae/article/details/81143367)
-        1 定义神经网络的结构和前向传播的输出结果
-        2 定义损失函数以及选择后向传播的算法
-        3 生成会话 并且在训练数据上反复执行反向传播优化算法.
-无论神经网络结构如何变化, 这三个步骤基本不变.
+<p><a href="https://www.cnblogs.com/zhizhan/p/5038747.html" target="_blank" rel="noopener">Reference here</a></p>
+<font color="#dddd00">使用TensorFlow训练神经网络模型的基本流程:</font>
 
+<p><a href="https://blog.csdn.net/paopaovae/article/details/81143367" target="_blank" rel="noopener">训练神经网络可分为以下三个步骤</a><br>        1 定义神经网络的结构和前向传播的输出结果<br>        2 定义损失函数以及选择后向传播的算法<br>        3 生成会话 并且在训练数据上反复执行反向传播优化算法.<br>无论神经网络结构如何变化, 这三个步骤基本不变.</p>
 <font color="#dddd00">dropout 如何防止过拟合:</font>
-1、取平均的作用: 每次 dropout 都会随机的失活一定比例的神经元, 这样就好像是在训练不同的网络.  
-2、减少神经元之间复杂的共适应关系: 随机失活会让一些神经元不一定同时出现在一个 dropout 后的网络中, 因此抵消了他们的相互依懒性, 迫使神经网络学习更加鲁棒的模型.  
 
+<p>1、取平均的作用: 每次 dropout 都会随机的失活一定比例的神经元, 这样就好像是在训练不同的网络.<br>2、减少神经元之间复杂的共适应关系: 随机失活会让一些神经元不一定同时出现在一个 dropout 后的网络中, 因此抵消了他们的相互依懒性, 迫使神经网络学习更加鲁棒的模型.  </p>
 <font color="#dddd00">GBDT的过程:</font>
 GBDT 是加法模型, 定义为:
 $$
@@ -260,37 +256,70 @@ $$\rho^* = \mathop{arg min}\limits_{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \
 3、 输出 $F_T$ 
 
 <font color="#dddd00">XGboost和GBDT的区别:</font> 
-Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.
-[reference here](https://blog.csdn.net/chengfulukou/article/details/76906710)
 
+<p>Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.<br><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
 <font color="#dddd00">XGboost和RF的区别:</font> 
-[reference here](https://www.cnblogs.com/notwice/p/8546436.html)
 
+<p><a href="https://www.cnblogs.com/notwice/p/8546436.html" target="_blank" rel="noopener">reference here</a></p>
 <font color="#dddd00">XGBoost 和 RF 的特征重要性是如何得到的？</font>
 
 <p>Xgboost 中某个特征的重要性, 等于它被选中为树节点分裂特征的次数的和.<br>RF 可以通过两种方式, 一是按基尼指数降低程度决定特征重要性; 二是改变测试数据的某列特征判断改变后的误差变化  </p>
-<p><font color="#dddd00">ROC、AUC等概念的理解:</font> <a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a><br>一句话说明AUC的本质和计算规则：给定一个正例, 一个负例, 预测为正的概率值比预测为负的概率值还要大的可能性.</p>
-<p><font color="#dddd00">K-means、KNN、层次聚类和密度聚类(DBSCAN):</font><br>这个链接直接对比了Kmeans和KNN<br><a href="https://www.cnblogs.com/190260995xixi/p/5945652.html" target="_blank" rel="noopener">K-means &amp; KNN</a><br>层次聚类的复杂度很高, 但是一次聚类完成就可以得到一个聚类树结果, 选择不同的聚类个数下的聚类结果直接根据树来得到即可且层次聚类是贪心的思想得到的是局部最优需要随机化, kmans的主要优势是效率<br><a href="https://www.cnblogs.com/nku-wangfeng/p/7642745.html" target="_blank" rel="noopener">K-means &amp; 层次聚类</a><br>DBSCAN是基于密度的聚类, 对于密度稀疏的数据表现较差, 但是可以运用到凸和非凸数据集上(甜甜圈数据集), 其计算复杂度较高但是结果往往要比kmeans好, DBSCAN对异常点也不敏感, 聚类结果可复现, 但同时需要调参达到最佳性能<br><a href="https://www.cnblogs.com/pinard/p/6208966.html" target="_blank" rel="noopener">DBSCAN原理</a><br><a href="https://www.cnblogs.com/hdu-2010/p/4621258.html" target="_blank" rel="noopener">K-means &amp; DBSCAN</a></p>
-<p><font color="#dddd00">EM 算法的收敛性和 K-Means 的收敛性:</font><br><a href="https://zhuanlan.zhihu.com/p/36331115" target="_blank" rel="noopener">reference here</a><br>因为 K-means 的更新过程就是 EM 过程, 所以 EM 收敛就表示 K-means 收敛.  </p>
-<p><font color="#dddd00">梯度优化的几种方法:</font><br>按照大类来分包括: 一阶优化和二阶优化, 二阶优化由于用到了二阶导数计算代价较大往往不会广泛使用(代表算法有牛顿法), 只看一阶优化算法主要就是梯度下降包括SGD、BGD、mini-batch GD(MBGD有时也称为SGD)、Momentum、AdaGrad、Adam等等.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
-<p><font color="#dddd00">数据偏斜的处理:</font><br>在有数据有偏的情况下, 评价标准也需要更换比如ROC, 如果需要特别关注样本较少的类别, 那么precision-recall曲线则是一个很好的选择; 将数据聚类对大类别数据进行欠采样, 对小类别数据进行相似生成或过采样, 调整分类器的阈值: 少类别样本/(少类别样本+多类别样本), 欠采样或是过采样都会导致数据分布被改变因此使用集成学习的方法来调整分类阈值是一个很好的选择</p>
-<p><font color="#dddd00">GBDT+LR的原理:</font><br>利用GBDT来做embedding特征, 预先选定GBDT的树和叶子的数量就可以设置好用于LR分类的特征维度(<script type="math/tex">N_{trees} * N_{leaves}</script>), 通过one-hot编码即可作为LR的输入特征来使用</p>
-<p><font color="#dddd00">GBDT+LR中, 如果GBDT有有1万颗树, 每个树有100个叶子节点, 那么输入到LR的特征会是一个高维稀疏的向量, 那么应该如何处理, 使用PCA降维的话会造成损失, 如果不想有损失的话应该怎么办:</font><br>??????????????????????????????? </p>
-<p><font color="#dddd00">GBDT在回归和多分类当中有什么不同, 在预测的时候的流程是怎样的:</font><br>在回归和多分类任务中的主要区别在于损失函数不同造成的算法初始化不同以及叶节点取值和表示含义的不同, 回归任务常用均方损失函数、绝对值损失函数和Huber损失函数(前面两者的折中), 而多分类则采用多类逻辑损失函数(二分类是对数损失函数), 对于回归类问题, 定义好损失函数之后, GBDT算法的预测值表示与真实值的偏差, 而多分类中的预测值则表示预测值为真实值的概率. 此外对于多分类, GBDT采用一对多策略, 训练过程中的主要区别是多分类中多了一层内部for循环(k个类别都各自拟合完一棵树之后再拟合下一棵树, 一共拟合M轮, 最终有M*K颗树), 最后使用softmax来计算最终的类别概率<a href="https://blog.csdn.net/qq_22238533/article/details/79199605" target="_blank" rel="noopener">详细的介绍</a></p>
-<p><font color="#dddd00">逻辑回归如何防止过拟合:</font><br>减少特征的数量; 正则化, 加入模型复杂度的惩罚项</p>
-<p><font color="#dddd00">L1、L2正则化的区别是什么:</font><br>L1正则化是参数的绝对值之和(Lasso回归), L2正则化是参数的平方和后再开根值(岭回归). 它们都可以防止过拟合, 区别在于L1正则化倾向于稀疏(部分特征的权值会为0)而L2正则化则是使每个权值都很小接近于0但不会为0, L1的稀疏特性使得L1正则可以用于特征选择. L1范数符合拉普拉斯分布在一些地方是不可导的, 用有约束的优化来解释就是: 在图像中的特点就是有很多棱角(棱角处包含很多0, 高维情况下尤为明显), 这些棱角有更大概率和误差项等值线相交从而出现很多0, 而L2范数符合高斯分布完全可导不会那么多棱角.</p>
-<p><font color="#dddd00">L1正则不可导该如何解决:</font><br><a href="https://blog.csdn.net/luoleicn/article/details/52676378" target="_blank" rel="noopener">Proximal Algorithms或者ADMM来解决</a></p>
-<p><font color="#dddd00">坐标轴下降法的原理是什么:</font><br>坐标下降法属于一种非梯度优化的方法, 它在每步迭代中沿一个坐标的方向进行线性搜索(线性搜索是不需要求导数的), 通过循环使用不同的坐标来达到目标函数的局部极小值, 简单来说就是固定一个变量把其他变量当做常量看待</p>
-<p><font color="#dddd00">LSTM和GRU的区别:</font><br><a href="https://zhuanlan.zhihu.com/p/30465140" target="_blank" rel="noopener">LSTM</a><br><a href="https://zhuanlan.zhihu.com/p/28297161" target="_blank" rel="noopener">LSTM&amp;GRU</a><br><a href="https://zhuanlan.zhihu.com/p/40119926" target="_blank" rel="noopener">双向LSTM</a></p>
+<font color="#dddd00">ROC、AUC等概念的理解:</font> [reference here](https://blog.csdn.net/shenxiaoming77/article/details/72627882)
+一句话说明AUC的本质和计算规则：给定一个正例, 一个负例, 预测为正的概率值比预测为负的概率值还要大的可能性.
+
+<font color="#dddd00">K-means、KNN、层次聚类和密度聚类(DBSCAN):</font>
+
+<p>这个链接直接对比了Kmeans和KNN<br><a href="https://www.cnblogs.com/190260995xixi/p/5945652.html" target="_blank" rel="noopener">K-means &amp; KNN</a><br>层次聚类的复杂度很高, 但是一次聚类完成就可以得到一个聚类树结果, 选择不同的聚类个数下的聚类结果直接根据树来得到即可且层次聚类是贪心的思想得到的是局部最优需要随机化, kmans的主要优势是效率<br><a href="https://www.cnblogs.com/nku-wangfeng/p/7642745.html" target="_blank" rel="noopener">K-means &amp; 层次聚类</a><br>DBSCAN是基于密度的聚类, 对于密度稀疏的数据表现较差, 但是可以运用到凸和非凸数据集上(甜甜圈数据集), 其计算复杂度较高但是结果往往要比kmeans好, DBSCAN对异常点也不敏感, 聚类结果可复现, 但同时需要调参达到最佳性能<br><a href="https://www.cnblogs.com/pinard/p/6208966.html" target="_blank" rel="noopener">DBSCAN原理</a><br><a href="https://www.cnblogs.com/hdu-2010/p/4621258.html" target="_blank" rel="noopener">K-means &amp; DBSCAN</a></p>
+<font color="#dddd00">EM 算法的收敛性和 K-Means 的收敛性:</font>
+
+<p><a href="https://zhuanlan.zhihu.com/p/36331115" target="_blank" rel="noopener">reference here</a><br>因为 K-means 的更新过程就是 EM 过程, 所以 EM 收敛就表示 K-means 收敛.  </p>
+<font color="#dddd00">梯度优化的几种方法:</font>
+
+<p>按照大类来分包括: 一阶优化和二阶优化, 二阶优化由于用到了二阶导数计算代价较大往往不会广泛使用(代表算法有牛顿法), 只看一阶优化算法主要就是梯度下降包括SGD、BGD、mini-batch GD(MBGD有时也称为SGD)、Momentum、AdaGrad、Adam等等.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
+<font color="#dddd00">数据偏斜的处理:</font>
+
+<p>在有数据有偏的情况下, 评价标准也需要更换比如ROC, 如果需要特别关注样本较少的类别, 那么precision-recall曲线则是一个很好的选择; 将数据聚类对大类别数据进行欠采样, 对小类别数据进行相似生成或过采样, 调整分类器的阈值: 少类别样本/(少类别样本+多类别样本), 欠采样或是过采样都会导致数据分布被改变因此使用集成学习的方法来调整分类阈值是一个很好的选择</p>
+<font color="#dddd00">GBDT+LR的原理:</font>
+
+<p>利用GBDT来做embedding特征, 预先选定GBDT的树和叶子的数量就可以设置好用于LR分类的特征维度(<script type="math/tex">N_{trees} * N_{leaves}</script>), 通过one-hot编码即可作为LR的输入特征来使用</p>
+<font color="#dddd00">GBDT+LR中, 如果GBDT有有1万颗树, 每个树有100个叶子节点, 那么输入到LR的特征会是一个高维稀疏的向量, 那么应该如何处理, 使用PCA降维的话会造成损失, 如果不想有损失的话应该怎么办:</font>
+
+<p>??????????????????????????????? </p>
+<font color="#dddd00">GBDT在回归和多分类当中有什么不同, 在预测的时候的流程是怎样的:</font>
+
+<p>在回归和多分类任务中的主要区别在于损失函数不同造成的算法初始化不同以及叶节点取值和表示含义的不同, 回归任务常用均方损失函数、绝对值损失函数和Huber损失函数(前面两者的折中), 而多分类则采用多类逻辑损失函数(二分类是对数损失函数), 对于回归类问题, 定义好损失函数之后, GBDT算法的预测值表示与真实值的偏差, 而多分类中的预测值则表示预测值为真实值的概率. 此外对于多分类, GBDT采用一对多策略, 训练过程中的主要区别是多分类中多了一层内部for循环(k个类别都各自拟合完一棵树之后再拟合下一棵树, 一共拟合M轮, 最终有M*K颗树), 最后使用softmax来计算最终的类别概率<a href="https://blog.csdn.net/qq_22238533/article/details/79199605" target="_blank" rel="noopener">详细的介绍</a></p>
+<font color="#dddd00">逻辑回归如何防止过拟合:</font>
+
+<p>减少特征的数量; 正则化, 加入模型复杂度的惩罚项</p>
+<font color="#dddd00">L1、L2正则化的区别是什么:</font>
+
+<p>L1正则化是参数的绝对值之和(Lasso回归), L2正则化是参数的平方和后再开根值(岭回归). 它们都可以防止过拟合, 区别在于L1正则化倾向于稀疏(部分特征的权值会为0)而L2正则化则是使每个权值都很小接近于0但不会为0, L1的稀疏特性使得L1正则可以用于特征选择. L1范数符合拉普拉斯分布在一些地方是不可导的, 用有约束的优化来解释就是: 在图像中的特点就是有很多棱角(棱角处包含很多0, 高维情况下尤为明显), 这些棱角有更大概率和误差项等值线相交从而出现很多0, 而L2范数符合高斯分布完全可导不会那么多棱角.</p>
+<font color="#dddd00">L1正则不可导该如何解决:</font>
+
+<p><a href="https://blog.csdn.net/luoleicn/article/details/52676378" target="_blank" rel="noopener">Proximal Algorithms或者ADMM来解决</a></p>
+<font color="#dddd00">坐标轴下降法的原理是什么:</font>
+
+<p>坐标下降法属于一种非梯度优化的方法, 它在每步迭代中沿一个坐标的方向进行线性搜索(线性搜索是不需要求导数的), 通过循环使用不同的坐标来达到目标函数的局部极小值, 简单来说就是固定一个变量把其他变量当做常量看待</p>
+<font color="#dddd00">LSTM和GRU的区别:</font>
+
+<p><a href="https://zhuanlan.zhihu.com/p/30465140" target="_blank" rel="noopener">LSTM</a><br><a href="https://zhuanlan.zhihu.com/p/28297161" target="_blank" rel="noopener">LSTM&amp;GRU</a><br><a href="https://zhuanlan.zhihu.com/p/40119926" target="_blank" rel="noopener">双向LSTM</a></p>
 <ol>
 <li>GRU和LSTM的性能在很多任务上不分伯仲.</li>
 <li>GRU参数更少因此更容易收敛, 但是数据集很大的情况下, LSTM表达性能更好.</li>
 <li>从结构上来说, GRU只有两个门(update和reset), LSTM有三个门(forget, input, output), GRU直接将hidden state传给下一个单元, 而LSTM则用memory cell把hidden state包装起来.</li>
 </ol>
-<p><font color="#dddd00">LSTM防止梯度弥散和爆炸的原因:</font><br>传统的RNN是用覆盖的的方式计算状态: <script type="math/tex">S_t = f(S_{t-1}, x_t)</script>, 这有点类似于复合函数, 那么根据链式求导的法则, 复合函数求导：设 <script type="math/tex">f</script> 和 <script type="math/tex">g</script> 为 <script type="math/tex">x</script> 的可导函数, 则 <script type="math/tex">(f \circ g)'(x) = f'(g(x))g'(x)</script>, 他们是一种乘积的方式, 那么如果导数都是小数或者都是大于1的数的话, 就会使得总的梯度发生vanishing或explosion的情况, 当然梯度爆炸(gradient explosion)不是个严重的问题, 一般靠裁剪后的优化算法即可解决, 比如gradient clipping(如果梯度的范数大于某个给定值, 将梯度同比收缩), 但是梯度消失做不到, 这个时候就要用lstm了. 在lstm中, 我们发现, 状态 <script type="math/tex">S</script> 是通过累加的方式来计算的, <script type="math/tex">S_t = \sum\limits_{i=1}^t \Delta S_i</script>. 那这样的话, 就不是一直复合函数的形式了, 它的的导数也不是乘积的形式, 这样就不会发生梯度消失的情况了. </p>
-<p><font color="#dddd00">boosting和bagging在不同情况下的选用:</font><br>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练. 根据自己的经验, 只要模型不容易过拟合boosting的表现一般都不差于bagging</p>
-<p><font color="#dddd00">Seq2seq模型:</font><br>经典的seq2seq模型就是翻译模型, 例如google翻译团队的transformer + attention. seq2seq模型最大的特点是突破了传统RNN模型输入输出等长的限制. 而seq2seq模型实际上属于encoder-decoder结构, encoder将输入序列压缩成指定维度的隐向量, decoder根据这个隐向量生成输出序列, 生成输出序列可以仅把隐向量当做decoder的输入, 也可以把隐向量加入到生成序列的每个时刻的计算中.  </p>
-<p><font color="#dddd00">测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font><br>直接把测试图像输入到网络, 经过同样的网络得到的输出会是一个小的 feature map 其每个元素对应的就是经过 crop 后的输出, 如下图网络的输入是 14*14, 如果此时的测试图像是 16*16, 直接把 16*16 的图像输入到网络中, 最终得到的输出是 2*2*4, 每个元素对应于把输入 crop 成 14*14 的输出.</p>
+<font color="#dddd00">LSTM防止梯度弥散和爆炸的原因:</font>
+
+<p>传统的RNN是用覆盖的的方式计算状态: <script type="math/tex">S_t = f(S_{t-1}, x_t)</script>, 这有点类似于复合函数, 那么根据链式求导的法则, 复合函数求导：设 <script type="math/tex">f</script> 和 <script type="math/tex">g</script> 为 <script type="math/tex">x</script> 的可导函数, 则 <script type="math/tex">(f \circ g)'(x) = f'(g(x))g'(x)</script>, 他们是一种乘积的方式, 那么如果导数都是小数或者都是大于1的数的话, 就会使得总的梯度发生vanishing或explosion的情况, 当然梯度爆炸(gradient explosion)不是个严重的问题, 一般靠裁剪后的优化算法即可解决, 比如gradient clipping(如果梯度的范数大于某个给定值, 将梯度同比收缩), 但是梯度消失做不到, 这个时候就要用lstm了. 在lstm中, 我们发现, 状态 <script type="math/tex">S</script> 是通过累加的方式来计算的, <script type="math/tex">S_t = \sum\limits_{i=1}^t \Delta S_i</script>. 那这样的话, 就不是一直复合函数的形式了, 它的的导数也不是乘积的形式, 这样就不会发生梯度消失的情况了. </p>
+<font color="#dddd00">boosting和bagging在不同情况下的选用:</font>
+
+<p>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练. 此外 boosting 算法对异常值较敏感, 且容易过拟合;</p>
+<font color="#dddd00">Seq2seq模型:</font>
+
+<p>经典的seq2seq模型就是翻译模型, 例如google翻译团队的transformer + attention. seq2seq模型最大的特点是突破了传统RNN模型输入输出等长的限制. 而seq2seq模型实际上属于encoder-decoder结构, encoder将输入序列压缩成指定维度的隐向量, decoder根据这个隐向量生成输出序列, 生成输出序列可以仅把隐向量当做decoder的输入, 也可以把隐向量加入到生成序列的每个时刻的计算中.  </p>
+<font color="#dddd00">测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font>  
+
+<p>直接把测试图像输入到网络, 经过同样的网络得到的输出会是一个小的 feature map 其每个元素对应的就是经过 crop 后的输出, 如下图网络的输入是 14*14, 如果此时的测试图像是 16*16, 直接把 16*16 的图像输入到网络中, 最终得到的输出是 2*2*4, 每个元素对应于把输入 crop 成 14*14 的输出.</p>
 <p><div align="center">
 <img src="/img/repeat_conv.png" width="700px">
 </div> <br>   </p>
@@ -686,5 +715,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
