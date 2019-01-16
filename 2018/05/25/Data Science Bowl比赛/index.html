@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-14T02:34:14.374Z">
+<meta property="og:updated_time" content="2019-01-16T11:26:35.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -237,8 +237,11 @@
 <p>在 Pytorch 中, 卷积网络的输入为 $(C_{in}, C_{out}, (\text{kernel_size e.g. (3, 3)}), stride=1, padding=0)$, 要求输入格式为 $(\text{batch_size}, C_{in}, H, W)$, 那么输出的图片 size 满足:</p>
 <script type="math/tex; mode=display">H_o = \dfrac{H_i + 2*padding[0] - (kernel\_size[0]-1) - 1}{stride} + 1</script><script type="math/tex; mode=display">W_o = \dfrac{W_i + 2*padding[1] - (kernel\_size[1]-1) - 1}{stride} + 1</script><p>一个卷积核的工作过程: 假设输入图像 size 为 $(H, W) = 256\times256$, 输入通道数为 $C_{in} = 72$,即输入张量为 $(1, 72, 256, 256)$; 我们选择输出通道 $C_{out} = 36$, 采用 3*3 大小的卷积核, 步长 stride 选择为 1, padding 参数为不填充即 (0, 0), 则输出为 $(1, 36, 254, 254)$</p>
 <h4 id="通道-channel"><a href="#通道-channel" class="headerlink" title="通道 (channel)"></a>通道 (channel)</h4><p>通道数可以理解为图片的第 3 维度, 它决定了对于同一个大小的卷积核, 我们需要做多少次参数不同的矩阵乘法来提取特征, 即选定了输出通道数, 就有多少组卷积核参数. 仍以上图为例, 输入维度是 4*4*3 表示其尺寸为 4*4, 通道数为 3, 经过 1*1 的卷积核后尺寸保持不变, 根据选择的输出通道数决定如何得到输出, 如输出通道数选择 2 则是降维, 为 4 则是升维.  </p>
-<h4 id="AlexNet-和-VGG"><a href="#AlexNet-和-VGG" class="headerlink" title="AlexNet 和 VGG"></a>AlexNet 和 VGG</h4><p><strong><a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="noopener">AlexNet</a></strong> 采用 5 个卷积层和 3 个全连接层, 使用 ReLU 激活函数解决梯度消失问题, 并且在每个全连接层后都接上了 dropout 以减少过拟合.<br><strong><a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="noopener">VGG</a></strong> VGG16(13 卷积层 + 3 全连接层) 相比 AlexNet 最大改进是采用连续的几个 3*3 卷积核替代 AlexNet 中的较大卷积核 (11*11, 5*5). 采用堆叠的小卷积核的原因是多层非线性层可以增加网络的深度学习更复杂的模式, 并且代价更小 (参数更少).  </p>
+<h4 id="AlexNet-和-VGG"><a href="#AlexNet-和-VGG" class="headerlink" title="AlexNet 和 VGG"></a>AlexNet 和 VGG</h4><p><strong><a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="noopener">AlexNet</a>:</strong> 采用 5 个卷积层和 3 个全连接层, 使用 ReLU 激活函数解决梯度消失问题, 并且在每个全连接层后都接上了 dropout 以减少过拟合. 此外, AlexNet 的一个创新是 LRN (Local Response Normalization） 局部响应归一化, LRN模拟神经生物学上一个叫做侧抑制（lateral inhibitio）的功能, 侧抑制指的是被激活的神经元会抑制相邻的神经元. LRN 局部响应归一化借鉴侧抑制的思想实现局部抑制, 使得响应比较大的值相对更大, 提高了模型的泛化能力. LRN只对数据相邻区域做归一化处理, 不改变数据的大小和维度.</p>
+<p><strong><a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="noopener">VGG</a>:</strong> VGG16(13 卷积层 + 3 全连接层) 相比 AlexNet 最大改进是采用连续的几个 3*3 卷积核替代 AlexNet 中的较大卷积核 (11*11, 5*5) 并且去掉了 LRN (作者发现 LRN 的作用不明显). 采用堆叠的小卷积核的原因是多层非线性层可以增加网络的深度学习更复杂的模式, 并且代价更小 (参数更少). VGG 网络,结构非常一致 从头到尾都是使用 3*3 的卷积核以及 2*2 的 max pooling. VGG 的缺点在于参数空间巨大, 内存占用较高速度较慢, 参数多的主要原因在于 VGG 使用了 3 个全连接层.  </p>
+<p><strong>ALexNet 和 VGG 的输入尺寸都是 224*224</strong></p>
 <h4 id="GoogleNet-Inception"><a href="#GoogleNet-Inception" class="headerlink" title="GoogleNet/Inception"></a>GoogleNet/Inception</h4><p>VGG 在内存和时间上的计算要求很高. 由于卷积层的通道数过大, VGG 并不高效. 在卷积操作中, 输出特征图上某一个位置, 其是与所有的输入特征图是相连的, 这是一种密集连接结构. <a href="https://arxiv.org/pdf/1409.4842v1.pdf" target="_blank" rel="noopener">GoogLeNet</a> 基于这样的理念: 在深度网路中大部分的激活值是不必要的 (为 0), 或者由于相关性是冗余的. 因此, 最高效的深度网路架构应该是激活值之间是稀疏连接的.<br>因此 GoogleNet 提出了 Inception 模块, 这个模块使用密集结构来近似一个稀疏的 CNN 如下图所示. GoogleNet 使用不同大小的卷积核获取不同大小的感受野, 同时采用了 1*1 的卷积核 (瓶颈层) 降维来降低计算量. 另外一个特殊设计之处在于最后的卷积层后使用了全局均值池化替代了全连接层, 进一步减少了参数量.  </p>
+<p><strong>GoogleNet 的输入尺寸是 299*299</strong></p>
 <p><div align="center">
 <img src="/img/Inception.png" width="600px">
 </div> <br></p>
@@ -248,6 +251,7 @@
 </div> <br><br>深度网络的训练问题称为退化问题, 残差单元可以解决退化问题的背后逻辑在于此: 想象一个网络 A, 其训练误差为 x. 现在通过在 A 上面堆积更多的层来构建网络 B, 这些新增的层什么也不做, 仅仅复制前面 A 的输出. 这些新增的层称为 C. 这意味着网络 B 应该和 A 的训练误差一样. 那么, 如果训练网络 B 其训练误差应该不会差于 A. 但是实际上却是更差, 唯一的原因是让增加的层 C 学习恒等映射并不容易. 为了解决这个退化问题, 残差模块在输入和输出之间建立了一个直接连接, 这样新增的层 C 仅仅需要在原来的输入层基础上学习新的特征, 即学习残差, 会比较容易.  </p>
 <p>假设网络的输出为 $H$, 残差定义为 $H - x$, 那么 ResNet 其实就是在学习这个残差: $F = H - x$ 即图中的 $F(x)$, 通过将残差最小化来学习模型. </p>
 <p>ResNet 也最后使用了全局均值池化层. 利用残差模块, 可以训练 <strong>152</strong> 层的残差网络. 其准确度比 VGG 和 GoogLeNet 要高, 计算效率也比 VGG 高. ResNet 主要使用 3*3 卷积，这点与 VGG 类似. 在 VGG 基础上, 短路连接插入形成残差网络. 如下图所示, 虚线部分表示维度不匹配需要采用 1*1 卷积核来解决:  </p>
+<p><strong>ResNet 的输入尺寸为 224*224</strong></p>
 <p><div align="center">
 <img src="/img/restnetWithRes.png" width="450px">
 </div> <br> </p>
@@ -796,5 +800,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
