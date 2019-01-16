@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-16T12:36:56.740Z">
+<meta property="og:updated_time" content="2019-01-16T13:04:15.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -320,7 +320,9 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>一张图片放入 CNN 网络中经过多层转化后, 会生成多张(论文中是 256 个卷积核)特征图：</p>
 <p><div align="center">
 <img src="/img/spp.png" width="600px" align="center/">
-</div> <br><br>而在原图中任意一个窗口在这些特征图中都有对应的窗口, SPP 就是在这些对应的窗口中做池化操作使每张特征图都生成21维的特征向量. </p>
+</div> <br></p>
+<p>而在原图中任意一个窗口在这些特征图中都有对应的窗口, 假设图片中的某个位置坐标为 $(x, y)$, 则其在特征图上的位置为 $(x’, y’) = (\lfloor x/S \rfloor + 1, \lfloor y/S \rfloor + 1)$</p>
+<p>SPP 就是在这些对应的窗口中做池化操作使每张特征图都生成 21 维的特征向量用于 SVM 分类以及 bbox 回归. </p>
 <p>具体做法是, 在 conv5 层得到的特征图是 256 个, 每个都做一次 spatial pyramid pooling. 先把每个特征图分割成多个不同尺寸的网格, 网格分别为 4*4、2*2、1*1 ,然后每个网格做 max pooling, 这样 256 个特征图就形成了 16*256, 4*256, 1*256 维特征, 他们连起来就形成了一个固定长度的特征向量, 将这个向量输入到后面的全连接层. </p>
 <h3 id="5、Fast-RCNN"><a href="#5、Fast-RCNN" class="headerlink" title="5、Fast RCNN"></a>5、Fast RCNN</h3><p>RCNN、SPP Net 训练时, 提取 region proposal、CNN 特征提取、SVM 分类和 bbox 回归是互相隔离的, <a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener">Fast RCNN</a> 则有几个特点: 1) 特征都暂存在显存上不需要额外磁盘空间, 速度更快、精度更高; 2) 联合训练, 除了提取 region proposal 阶段, 原来的SVM 分类、bbox 回归都联合在 CNN 阶段同时训练, 将原来最后一层的 softmax 替换成区域分类 softmax (替代 SVM 分类) 和 bbox 微调以完成联合训练目标, 输入变为两个, 一个是原图像作为 CNN 输入, 另一个是选择搜索算法给出的可能 region proposal 直接映射到 Conv5 层上; 3) 提出了 RoI (Region of Interest) 层, 算是 SPP 的变种, 将原来的多尺度 (多个 Pooling 窗口) 映射换成单尺度映射.<br>Fast RCNN 的整体流程如下:  </p>
 <p>1、利用 selective search 算法在图像中从上到下提取2000个左右的候选窗口 (Region Proposal 也即是 RoI);</p>
