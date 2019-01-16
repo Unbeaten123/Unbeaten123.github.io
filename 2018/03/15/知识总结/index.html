@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-16T04:21:43.324Z">
+<meta property="og:updated_time" content="2019-01-16T04:23:07.883Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -184,7 +184,7 @@
     <div id="toc-article" class="toc-article">
         <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
       <strong class="toc-title">文章目录</strong>
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#机器学习基础知识"><span class="toc-number">1.</span> <span class="toc-text">机器学习基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习基础知识"><span class="toc-number">2.</span> <span class="toc-text">深度学习基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐算法相关基础知识"><span class="toc-number">3.</span> <span class="toc-text">推荐算法相关基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CV-相关基础知识"><span class="toc-number">3.1.</span> <span class="toc-text">CV 相关基础知识</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NLP-相关基础知识"><span class="toc-number">4.</span> <span class="toc-text">NLP 相关基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概率题"><span class="toc-number">5.</span> <span class="toc-text">概率题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法题"><span class="toc-number">6.</span> <span class="toc-text">算法题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#益智题"><span class="toc-number">7.</span> <span class="toc-text">益智题</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#机器学习基础知识"><span class="toc-number">1.</span> <span class="toc-text">机器学习基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习基础知识"><span class="toc-number">2.</span> <span class="toc-text">深度学习基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐算法相关基础知识"><span class="toc-number">3.</span> <span class="toc-text">推荐算法相关基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CV-相关基础知识"><span class="toc-number">4.</span> <span class="toc-text">CV 相关基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NLP-相关基础知识"><span class="toc-number">5.</span> <span class="toc-text">NLP 相关基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概率题"><span class="toc-number">6.</span> <span class="toc-text">概率题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法题"><span class="toc-number">7.</span> <span class="toc-text">算法题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#益智题"><span class="toc-number">8.</span> <span class="toc-text">益智题</span></a></li></ol>
           </div>
     <script type="text/javascript">
     function showToc(){
@@ -309,7 +309,7 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <h2 id="推荐算法相关基础知识"><a href="#推荐算法相关基础知识" class="headerlink" title="推荐算法相关基础知识"></a>推荐算法相关基础知识</h2><font face="微软雅黑" size="4" color="#dddd00">一、NDCG 指标的含义?</font>  
 
 <p>NDCG (Normalized Discounted Cumulative Gain), 归一化贴现累计收益, 常用于衡量排序质量, 简单来说就是返回的模型排序结果相关性得分 (DCG) 相对于最佳排序结果相关性得分 (IDCG) 的比值, 这个值越大越好.</p>
-<h3 id="CV-相关基础知识"><a href="#CV-相关基础知识" class="headerlink" title="CV 相关基础知识"></a>CV 相关基础知识</h3><font face="微软雅黑" size="4" color="#dddd00">一、测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font>  
+<h2 id="CV-相关基础知识"><a href="#CV-相关基础知识" class="headerlink" title="CV 相关基础知识"></a>CV 相关基础知识</h2><font face="微软雅黑" size="4" color="#dddd00">一、测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font>  
 
 <p>直接把测试图像输入到网络, 经过同样的网络得到的输出会是一个小的 feature map 其每个元素对应的就是经过 crop 后的输出, 如下图网络的输入是 14*14, 如果此时的测试图像是 16*16, 直接把 16*16 的图像输入到网络中, 最终得到的输出是 2*2*4, 每个元素对应于把输入 crop 成 14*14 的输出.</p>
 <p><div align="center">
@@ -724,5 +724,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
