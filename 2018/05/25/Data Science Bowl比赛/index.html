@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-16T14:28:20.420Z">
+<meta property="og:updated_time" content="2019-01-16T16:08:44.824Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -333,7 +333,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p><strong>相比R-CNN, 主要两处不同:</strong></p>
 <p>(1)最后一层卷积层后加了一个 RoI Pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 对一个区域窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域对应的特征图经过 SPP Pooling 最终得到 21 维的特征向量; 而 RoI layer 只进行 7*7 的池化, 所以得到的是 49 维的特征向量</strong>. 这个特征向量随后通过 SVD 分解得到两个输出向量一个是 Softmax 分类得分, 另一个是 bbox 回归. </p>
 <p>(2)损失函数使用了多任务损失函数 (multi-task loss), 将边框回归直接加入到 CNN 网络中训练. </p>
-<h3 id="6、Faster-RCNN"><a href="#6、Faster-RCNN" class="headerlink" title="6、Faster RCNN"></a>6、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. 其流程如下:  </p>
+<h3 id="6、Faster-RCNN"><a href="#6、Faster-RCNN" class="headerlink" title="6、Faster RCNN"></a>6、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. Faster RCNN 所有的卷积操作都有 padding 操作, 因此所有卷积操作都不会改变图的尺寸, 只有 max pooling 会把 featrue map 尺寸变为 1/2. <strong>Faster RCNN 的输入图片尺寸需要缩放到 800*600</strong>, 其流程如下:  </p>
 <p>1、将整个图片输入 CNN, 提取图像的 feature maps, 被后续的 RPN 和全连接层所共享;</p>
 <p>2、通过 RPN 生成 region proposal, 通过 softmax 判断 anchors 属于 foreground 或 background 并用 bbox 回归修正 anchors 获取精确的 region proposal;</p>
 <p>3、RoI Pooling, 根据 feature maps 和 region proposal 提取 proposal feature maps 传给全连接层测过判断类别; </p>
@@ -361,7 +361,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p><div align="center">
 <img src="/img/fpn1.jpg" width="700px" align="center/">
 </div> <br></p>
-<p>接下来是 FPN 的第二阶段：自顶向下——深层的特征图和浅层特征图通过横向连接融合. 如下图所示, <strong>深(顶)层的特征图通过最近邻上采样变换成原来的2倍, 下一层的特征图进行 1*1 卷积降低通道数保持和上层一致, 通过横向连接两层融合, 逐层往下走. 这个过程使图像的深层语义信息得以保留, 并且引入了底层的位置信息. 到了底部后, 再进行一次 3*3 的卷积, 去除上采样的混叠现象.</strong> 产生的特征金字塔经过 RPN 后金字塔的每层都会产生 RoI, 作者根据: <script type="math/tex">k = \lfloor k_0 + log_2(\sqrt{wh}/224) \rfloor</script> 来选择使用哪一层生成的 RoI 作为最终的候选区域, <script type="math/tex">k_0 = 4</script> 是尺度为 224*224 的 RoI 对应的层为第四层 feature map, 如果 RoI 的尺度为 112*112 则 <script type="math/tex">k = k_0 - 1 = 3</script> 意味着在第三层的 feature map 中取, 这个公式的含义是对于大尺度的 RoI 应该在低分辨率 feature map 中取有利于大目标的识别, 小尺度的 RoI 应该在高分辨率的 feature map 中取有利于小目标的检测. 这个设定十分合理, 因为小的目标经过多层卷积后基本无法辨别, 所以需要在高分辨率的层中取出.  </p>
+<p>接下来是 FPN 的第二阶段：自顶向下——深层的特征图和浅层特征图通过横向连接融合. 如下图所示, <strong>深(顶)层的特征图通过最近邻上采样 (不是反卷积, 减少了参数) 变换成原来的2倍, 下一层的特征图进行 1*1 卷积降低通道数保持和上层一致, 通过横向连接两层融合, 逐层往下走. 这个过程使图像的深层语义信息得以保留, 并且引入了底层的位置信息. 到了底部后, 再进行一次 3*3 的卷积, 去除上采样的混叠现象.</strong> 产生的特征金字塔经过 RPN 后金字塔的每层都会产生 RoI, 作者根据: <script type="math/tex">k = \lfloor k_0 + log_2(\sqrt{wh}/224) \rfloor</script> 来选择使用哪一层生成的 RoI 作为最终的候选区域, <script type="math/tex">k_0 = 4</script> 是尺度为 224*224 的 RoI 对应的层为第四层 feature map, 如果 RoI 的尺度为 112*112 则 <script type="math/tex">k = k_0 - 1 = 3</script> 意味着在第三层的 feature map 中取, 这个公式的含义是对于大尺度的 RoI 应该在低分辨率 feature map 中取有利于大目标的识别, 小尺度的 RoI 应该在高分辨率的 feature map 中取有利于小目标的检测. 这个设定十分合理, 因为小的目标经过多层卷积后基本无法辨别, 所以需要在高分辨率的层中取出.  </p>
 <p><div align="center">
 <img src="/img/fpn2.jpg" width="700px" align="center/">
 </div> <br></p>
@@ -373,7 +373,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <h4 id="mask-rcnn-structure"><a href="#mask-rcnn-structure" class="headerlink" title="mask rcnn structure"></a>mask rcnn structure</h4><p>mask rcnn 和 faster rcnn 除了 RoIAlign 的区别外, 另一个区别就是加了一个 mask 的分支, 如下图：</p>
 <p><div align="center">
 <img src="/img/maskrcnn.png" width="700px" align="center/">
-</div> <br><br>以 ResNet 为例：候选区域经过 RoIAlign 层得到 7*7*2048 的 feature map, mask 分支是通过全连接层网络来实现的, 最终得到了 14*14*80 的输出, 这里的 80 就是类别数, 也就是有 80 个 mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的 mask 输出. </p>
+</div> <br><br>以 ResNet 为例：候选区域经过 RoIAlign 层得到 7*7*2048 的 feature map, mask 分支是通过 FCN 网络来实现的, 最终得到了 14*14*80 的输出, 这里的 80 就是类别数, 也就是有 80 个 mask, 但只有一个是对应于目标类别的. 所以需要等另一个分支预测得到区域类别后选择对应的 mask 输出. </p>
 <h3 id="8、yolo"><a href="#8、yolo" class="headerlink" title="8、yolo"></a>8、yolo</h3><p><a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf" target="_blank" rel="noopener">Yolo(You Only Look Once: Unified, real-time object detection)</a> 是 one-stage (rcnn 系列模型先挑选 region proposal, 然后分类回归属于 two-stage)目标检测的主流方法, 虽然精度比 rcnn 系列差但是速度比 rcnn 系列模型要快很多, 在一些注重速度的目标检测系统中经常会用到. </p>
 <h4 id="yolo-v1"><a href="#yolo-v1" class="headerlink" title="yolo v1"></a><a href="https://blog.csdn.net/hrsstudy/article/details/70305791" target="_blank" rel="noopener">yolo v1</a></h4><p>输入图片被 resize 成 448*448 的图片, 随后被划分成 S*S 的网格 (论文中 S=7), 经过如下的 CNN 网络结构后输出了 S*S*N 的向量, 每个 N 维向量对应于一个单元格的预测信息. 其中 N=B*5+C, B 是人为设置的要预测每个单元格内需要预测的 bbox 数量, C 是目标类别数 (论文中 B=2 和 C=20), 所以 N=30.<br>每个单元格实际上预测是 bbox 的置信度 (confidence score), 这个置信度包含两个方面, 一是 bbox 内包含检测目标的可能性 <script type="math/tex">Pr(object)</script>; 二是 bbox 的准确度即 bbox 和 ground truth 边界框的 IOU 值. 因此最终置信度得分为:  </p>
 <script type="math/tex; mode=display">Pr(Object) * {IOU}_{pred}^{truth}</script><p><div align="center">
