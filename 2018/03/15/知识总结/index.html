@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-16T05:39:55.404Z">
+<meta property="og:updated_time" content="2019-01-16T07:46:04.793Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -318,6 +318,15 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">二、one-stage 算法和 two-stage 算法相比为什么精度相对较差速度相对较快?</font>  
 
 <p>one-stage 模型由于类别不平衡问题 (对大量的 Background bbox 进行分类效果自然较差) 使得精度较低, 而 two-stage 模型有着 RPN 层或是启发式的 selective 算法可以进行初步的 bbox 筛选 (ROI Align), 再经过后续的 bbox 回归使得精度自然有着提升, 但是速度也受到拖累.  </p>
+<font face="Microsoft YaHei" size="4" color="#dddd00">三、图像特征提取方式?</font> 
+
+<p>传统图像特征包括 <strong>Hog, SIFT, LBP 和 Haar</strong>  </p>
+<ol>
+<li>HOG (Histogram of Oriented Gradient, 方向梯度直方图) 描述的则是图像在局部范围内对应的形状边缘梯度信息</li>
+<li>SIFT (Scale-Invariant Feature Taransform, 尺度不变特征变换) 描述的是图像尺度不变特征变换, 在每个特征点周围的领域内, 在选定的尺度上测量图像的局部梯度, 计算块内梯度直方图, 生成具有独特性的向量;</li>
+<li>LBP (Local Binary Pattern, 局部二值模式) 描述的是图像在局部范围内对应的纹理信息, 原始的 LBP 算子定义在像素 3*3 的邻域内, 以邻域中心像素为阈值, 相邻的 8 个像素的灰度值与邻域中心的像素值进行比较, 若周围像素大于中心像素值, 则该像素点的位置被标记为 1, 否则为0;</li>
+<li>Haar 描述的是图像在局部范围内像素值明暗变换信息, 反映了图像的灰度变化情况.</li>
+</ol>
 <h2 id="NLP-相关基础知识"><a href="#NLP-相关基础知识" class="headerlink" title="NLP 相关基础知识"></a>NLP 相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、LSTM和GRU的区别:</font>
 
 <p><a href="https://zhuanlan.zhihu.com/p/30465140" target="_blank" rel="noopener">LSTM</a><br><a href="https://zhuanlan.zhihu.com/p/28297161" target="_blank" rel="noopener">LSTM&amp;GRU</a><br><a href="https://zhuanlan.zhihu.com/p/40119926" target="_blank" rel="noopener">双向LSTM</a></p>
