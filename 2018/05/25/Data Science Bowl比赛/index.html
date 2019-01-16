@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-16T11:26:35.848Z">
+<meta property="og:updated_time" content="2019-01-16T12:10:47.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -265,7 +265,7 @@
 IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#并集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(au, bu, area_intersection)</span>:</span></span><br><span class="line">    area_a = (au[<span class="number">2</span>] - au[<span class="number">0</span>]) * (au[<span class="number">3</span>] - au[<span class="number">1</span>])</span><br><span class="line">    area_b = (bu[<span class="number">2</span>] - bu[<span class="number">0</span>]) * (bu[<span class="number">3</span>] - bu[<span class="number">1</span>])</span><br><span class="line">    area_union = area_a + area_b - area_intersection</span><br><span class="line">    <span class="keyword">return</span> area_union</span><br><span class="line"></span><br><span class="line"><span class="comment">#交集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">intersection</span><span class="params">(ai, bi)</span>:</span></span><br><span class="line">    x = max(ai[<span class="number">0</span>], bi[<span class="number">0</span>])</span><br><span class="line">    y = max(ai[<span class="number">1</span>], bi[<span class="number">1</span>])</span><br><span class="line">    w = min(ai[<span class="number">2</span>], bi[<span class="number">2</span>]) - x</span><br><span class="line">    h = min(ai[<span class="number">3</span>], bi[<span class="number">3</span>]) - y</span><br><span class="line">    <span class="keyword">if</span> w &lt; <span class="number">0</span> <span class="keyword">or</span> h &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> w*h</span><br><span class="line"></span><br><span class="line"><span class="comment">#交并比</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iou</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="comment"># a and b should be (x1,y1,x2,y2)</span></span><br><span class="line">    <span class="keyword">if</span> a[<span class="number">0</span>] &gt;= a[<span class="number">2</span>] <span class="keyword">or</span> a[<span class="number">1</span>] &gt;= a[<span class="number">3</span>] <span class="keyword">or</span> b[<span class="number">0</span>] &gt;= b[<span class="number">2</span>] <span class="keyword">or</span> b[<span class="number">1</span>] &gt;= b[<span class="number">3</span>]:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span></span><br><span class="line">    area_i = intersection(a, b)</span><br><span class="line">    area_u = union(a, b, area_i)</span><br><span class="line">    <span class="keyword">return</span> float(area_i) / float(area_u + <span class="number">1e-6</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="2、U-Net"><a href="#2、U-Net" class="headerlink" title="2、U-Net"></a>2、U-Net</h3><p>传统 CNN 分类模型都是图像级别的分类, 而在语义分割 (semantic segmentation) 则是对图像进行像素级别的分类, 根据像素级的分类我们就可以从图像中分割出目标. 在介绍 U-Net 之前, 先引入经典的 FCN 有助于对 U-Net 的理解.  </p>
 <h4 id="FCN"><a href="#FCN" class="headerlink" title="FCN"></a>FCN</h4><p>针对语义分割问题, <a href="https://arxiv.org/abs/1411.4038" target="_blank" rel="noopener">FCN (Fully Convolutional Networks)</a> 的提出成为语义分割的基本框架, 后续的很多算法都是在 FCN 的基础上改进的.</p>
-<p>对于一般的分类 CNN 网络, 如 VGG 和 Resnet, 都会在网络的最后加入一些全连接层, 经过 softmax 后就可以获得类别概率信息. 但是这个概率信息是 1 维的, 即只能标识整个图片的类别, 不能标识每个像素点的类别, 所以这种全连接方法不适用于图像分割. 而 FCN 提出可以把后面几个全连接都换成卷积, 这样就可以获得一张 2 维的 feature map (heatmap), 后接 softmax 获得每个像素点的分类信息, 从而解决了分割问题, 如下图所示. </p>
+<p>对于一般的分类 CNN 网络, 如 VGG 和 Resnet, 都会在网络的最后加入一些全连接层, 经过 softmax 后就可以获得类别概率信息. 但是这个概率信息是 1 维的, 即只能标识整个图片的类别, 不能标识每个像素点的类别, 所以这种全连接方法不适用于图像分割. 而 FCN 提出可以把后面几个全连接都换成卷积, 这样就可以获得一张 2 维的 feature map (heatmap), 获得每个像素点的分类信息并对每个 pixel 计算 softmax loss, 如下图所示. </p>
 <p><div align="center">
 <img src="/img/FCN.png" width="600" align="center/">
 </div> <br></p>
@@ -800,21 +800,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
