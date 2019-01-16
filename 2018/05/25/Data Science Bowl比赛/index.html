@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-16T13:04:51.162Z">
+<meta property="og:updated_time" content="2019-01-16T14:28:20.420Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -331,7 +331,7 @@ IOU=\dfrac{A\cap B}{A\cup B}</script><figure class="highlight python"><table><tr
 <p>4、通过 RoI pooling 层为每个候选窗口生成固定尺寸 (7*7) 的 RoI 特征向量;</p>
 <p>5、利用 Softmax Loss (区域分类损失) 和 Smooth L1 Loss (边框回归损失) 对分类概率和边框回归联合训练. </p>
 <p><strong>相比R-CNN, 主要两处不同:</strong></p>
-<p>(1)最后一层卷积层后加了一个 RoI Pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 对一个区域窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域对应的特征图经过 SPP Pooling 最终得到 21 维的特征向量; 而 RoI layer 只进行 7*7 的池化, 所以得到的是 49 维的特征向量</strong>. </p>
+<p>(1)最后一层卷积层后加了一个 RoI Pooling layer, <strong>RoI 是 SPP Net 的简化版本, SPP Net 对一个区域窗口进行 4*4, 2*2, 1*1 的 pooling, 也就是说一个区域对应的特征图经过 SPP Pooling 最终得到 21 维的特征向量; 而 RoI layer 只进行 7*7 的池化, 所以得到的是 49 维的特征向量</strong>. 这个特征向量随后通过 SVD 分解得到两个输出向量一个是 Softmax 分类得分, 另一个是 bbox 回归. </p>
 <p>(2)损失函数使用了多任务损失函数 (multi-task loss), 将边框回归直接加入到 CNN 网络中训练. </p>
 <h3 id="6、Faster-RCNN"><a href="#6、Faster-RCNN" class="headerlink" title="6、Faster RCNN"></a>6、Faster RCNN</h3><p><a href="http://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf" target="_blank" rel="noopener">Faster RCNN</a> 可以简单概括成: faster rcnn = fast rcnn + rpn 层, faster rcnn 将 fast rcnn 中 RoI 的提取单独写成了一个 RPN (Region Proposal Network) 层. 其流程如下:  </p>
 <p>1、将整个图片输入 CNN, 提取图像的 feature maps, 被后续的 RPN 和全连接层所共享;</p>
