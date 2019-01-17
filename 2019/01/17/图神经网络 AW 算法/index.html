@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Watch Your Step--Learning Node Embeddings via Graph Attention. | Zhizhou Yu&#39;s Blog</title>
+  <title>Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
+  <meta name="description" content="Watch Your Step: Learning Node Embeddings via Graph Attention   Sami Abu-El-Haija, University of Southern California   Bryan Perozzi, Rami Al-Rfou, Alex Alemi, Google AI    摘要图嵌入方法旨在连续向量空间中表示图的节点，并保留不">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Watch Your Step--Learning Node Embeddings via Graph Attention.">
-<meta property="og:url" content="http://yoursite.com/2019/01/10/图神经网络 AW 算法/index.html">
+<meta property="og:title" content="Zhizhou Yu&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2019/01/17/图神经网络 AW 算法/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
-<meta property="og:updated_time" content="2019-01-17T14:07:00.044Z">
+<meta property="og:description" content="Watch Your Step: Learning Node Embeddings via Graph Attention   Sami Abu-El-Haija, University of Southern California   Bryan Perozzi, Rami Al-Rfou, Alex Alemi, Google AI    摘要图嵌入方法旨在连续向量空间中表示图的节点，并保留不">
+<meta property="og:updated_time" content="2019-01-17T14:17:19.162Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Watch Your Step--Learning Node Embeddings via Graph Attention.">
-<meta name="twitter:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
+<meta name="twitter:title" content="Zhizhou Yu&#39;s Blog">
+<meta name="twitter:description" content="Watch Your Step: Learning Node Embeddings via Graph Attention   Sami Abu-El-Haija, University of Southern California   Bryan Perozzi, Rami Al-Rfou, Alex Alemi, Google AI    摘要图嵌入方法旨在连续向量空间中表示图的节点，并保留不">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -158,52 +158,12 @@
             <article id="post-图神经网络 AW 算法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Watch Your Step--Learning Node Embeddings via Graph Attention.
-    </h1>
-  
-
-        
-        <a href="/2019/01/10/图神经网络 AW 算法/" class="archive-article-date">
-  	<time datetime="2019-01-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
-</a>
-        
-      </header>
-    
     <!-- 目录内容 -->
-    
-      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
-            <span class="btn-bg"></span>
-            <span class="btn-text">文章导航</span>
-            </p>
-    <div id="toc-article" class="toc-article">
-        <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
-      <strong class="toc-title">文章目录</strong>
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#摘要"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引言"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法"><span class="toc-number">3.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Expectation-on-the-co-occurance-matrix"><span class="toc-number">3.1.</span> <span class="toc-text">Expectation on the co-occurance matrix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Learning-the-Context-Distribution"><span class="toc-number">3.2.</span> <span class="toc-text">Learning the Context Distribution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Graph-Attention-Models"><span class="toc-number">3.3.</span> <span class="toc-text">Graph Attention Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Training-Objective"><span class="toc-number">3.4.</span> <span class="toc-text">Training Objective</span></a></li></ol></li></ol>
-          </div>
-    <script type="text/javascript">
-    function showToc(){
-      var toc_article = document.getElementById("toc-article");
-      var show_toc_btn = document.getElementById("show-toc-btn");
-      toc_article.setAttribute("style","display:block");
-      show_toc_btn.setAttribute("style","display:none");
-      };
-    function showBtn(){
-      var toc_article = document.getElementById("toc-article");
-      var show_toc_btn = document.getElementById("show-toc-btn");
-      toc_article.setAttribute("style","display:none");
-      show_toc_btn.setAttribute("style","display:block");
-      };
-    </script>
     
     <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <p>NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.<br><a id="more"></a></p>
-<center><font face="Times New Roman" size="5"><strong>Watch Your Step: Learning Node Embeddings via Graph Attention</strong></font></center>  
+        <center><font face="Times New Roman" size="5"><strong>Watch Your Step: Learning Node Embeddings via Graph Attention</strong></font></center>  
 <center><font face="Times New Roman" size="4">Sami Abu-El-Haija, <strong>University of Southern California</strong></font></center>  
 <center><font face="Times New Roman" size="4">Bryan Perozzi, Rami Al-Rfou, Alex Alemi, <strong>Google AI</strong></font></center>  
 
@@ -216,11 +176,15 @@
 <p>1、我们提出了一个可扩展的图注意模型族，它可以学习任意（例如非单调的) 上下文分布; </p>
 <p>2、我们表明，通过手动调整找到的最佳参数 baseline 方法的上下文分布超参数与我们自动发现的注意参数一致; </p>
 <p>3、我们评估了许多由现实世界数据集组成的具有挑战性的链接预测任务，包括社交，协作和生物网络。 实验表明，我们在 baselines 上有了很大改进，将链路预测误差降低了20％-40％。</p>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="Expectation-on-the-co-occurance-matrix"><a href="#Expectation-on-the-co-occurance-matrix" class="headerlink" title="Expectation on the co-occurance matrix"></a>Expectation on the co-occurance matrix</h2><p>我们设定图嵌入的重构函数为:</p>
-<script type="math/tex; mode=display">g(Y) = g([L\ |\ R]) = L \times R^T</script><p>图邻接矩阵的变换函数如下, 该公式描述的是通过随机游走获取的共现矩阵的期望:</p>
-<script type="math/tex; mode=display">f(A) = \mathbb{E}[D]</script><p>最终我们使用的目标函数是对 Negative Log Graph Likelihood (NLGL) 损失函数的的扩展如下, $\textbf{1}[.]$ 表示将满足 $[.]$ 内条件的地方置 1, $\circ$ 是 Hadamard Product, 矩阵的 $L_1$ 范数就是矩阵的元素和:</p>
-<script type="math/tex; mode=display">\min \limits_Y = ||-D \circ log(\sigma(g(Y))) - \textbf{1}[A = 0] \circ log(1 - \sigma(g(Y)))||</script><p>上述公式主要就是考虑到了 NLGL 是对图相似性的一个损失函数, 我们引入了 $\textbf{1}[A = 0]$ 这部分就是为了考虑不相连节点的惩罚, 并且通过这个乘积将注意力引入随机游走采样过程.  </p>
-<h2 id="Learning-the-Context-Distribution"><a href="#Learning-the-Context-Distribution" class="headerlink" title="Learning the Context Distribution"></a>Learning the Context Distribution</h2><h2 id="Graph-Attention-Models"><a href="#Graph-Attention-Models" class="headerlink" title="Graph Attention Models"></a>Graph Attention Models</h2><h2 id="Training-Objective"><a href="#Training-Objective" class="headerlink" title="Training Objective"></a>Training Objective</h2>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>其主要指导思想是修改网络嵌入的目标函数</p>
+<p>我们设定图嵌入的重构函数为:</p>
+<script type="math/tex; mode=display">
+g(Y) = g([L\ |\ R]) = L \times R^T</script><p>图邻接矩阵的变换函数如下, 该公式描述的是通过随机游走获取的共现矩阵的期望:</p>
+<script type="math/tex; mode=display">
+f(A) = \mathbb{E}[D]</script><p>最终我们使用的目标函数是对 Negative Log Graph Likelihood (NLGL) 损失函数的的扩展如下, $\textbf{1}[.]$ 表示将满足 $[.]$ 内条件的地方置 1, $\circ$ 是 Hadamard Product, 矩阵的 $L_1$ 范数就是矩阵的元素和:</p>
+<script type="math/tex; mode=display">
+\min \limits_Y = ||-D \circ log(\sigma(g(Y))) - \textbf{1}[A = 0] \circ log(1 - \sigma(g(Y)))||</script><p>上述公式主要就是考虑到了 NLGL 是对图相似性的一个损失函数, 我们引入了 $\textbf{1}[A = 0]$ 这部分就是为了考虑不相连节点的惩罚, 并且通过这个乘积将注意力引入随机游走采样过程.  </p>
+
       
 
       
@@ -299,7 +263,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/10/图神经网络 AW 算法/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/17/图神经网络 AW 算法/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -313,18 +277,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/01/13/Quora比赛/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Quora Insincere Questions Classification
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/01/03/A Comprehensive Survey on Graph Neural Networks/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">A Comprehensive Survey on Graph Neural Networks</div>
+    <a href="/2019/01/13/Quora比赛/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Quora Insincere Questions Classification</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -599,5 +554,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
