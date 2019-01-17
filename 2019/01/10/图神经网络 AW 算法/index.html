@@ -6,17 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2018/3 | Zhizhou Yu&#39;s Blog</title>
+  <title>Watch Your Step--Learning Node Embeddings via Graph Attention. | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Standing on the shoulders of giants">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2018/03/index.html">
+  <meta name="description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Watch Your Step--Learning Node Embeddings via Graph Attention.">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/图神经网络 AW 算法/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Standing on the shoulders of giants">
+<meta property="og:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
+<meta property="og:updated_time" content="2019-01-17T10:49:57.121Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Zhizhou Yu&#39;s Blog">
-<meta name="twitter:description" content="Standing on the shoulders of giants">
+<meta name="twitter:title" content="Watch Your Step--Learning Node Embeddings via Graph Attention.">
+<meta name="twitter:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -154,49 +155,197 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-图神经网络 AW 算法" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/15/知识总结/" class="archive-article-date">
-  	<time datetime="2018-03-15T11:46:34.048Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/15/知识总结/">机器学习算法面经总结</a>
+    <h1 class="article-title" itemprop="name">
+      Watch Your Step--Learning Node Embeddings via Graph Attention.
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+        
+        <a href="/2019/01/10/图神经网络 AW 算法/" class="archive-article-date">
+  	<time datetime="2019-01-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
+</a>
+        
+      </header>
+    
+    <!-- 目录内容 -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+    <div id="toc-article" class="toc-article">
+        <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+      <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#摘要"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li></ol>
+          </div>
+    <script type="text/javascript">
+    function showToc(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:block");
+      show_toc_btn.setAttribute("style","display:none");
+      };
+    function showBtn(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:none");
+      show_toc_btn.setAttribute("style","display:block");
+      };
+    </script>
+    
+    <!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.<br><a id="more"></a></p>
+<center><font face="Times New Roman" size="5"><strong>Watch Your Step: Learning Node Embeddings via Graph Attention</strong></font></center>  
+<center><font face="Times New Roman" size="4">Sami Abu-El-Haija, <strong>University of Southern California</strong></font></center>  
+<center><font face="Times New Roman" size="4">Bryan Perozzi, Rami Al-Rfou, Alex Alemi, <strong>Google AI</strong></font></center>  
 
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>图形嵌入方法表示连续向量空间中的节点，从图形中保留不同类型的关系信息。这些方法有许多超参数（例如随机游走的长度），必须为每个图形手动调整。在本文中，我们将先前固定的超参数替换为我们通过反向传播自动学习的可训练的超参数。特别地，我们提出了一种关于转移矩阵的幂级数的新颖注意模型，其引导随机游走以优化上游目标。与先前的注意力模型方法不同，我们提出的方法仅在数据本身上（例如在随机游走上）使用注意力参数，并且模型不用于推理。我们在链接预测任务上进行实验，因为我们的目标是生成最能保留图形结构的嵌入，推广到看不见的信息。我们在一整套真实世界图形数据集（包括社交，协作和生物网络）上改进了最先进的结果，我们观察到我们的图形注意模型可以将误差降低多达20％-40％。我们表明，我们自动学习的注意力参数可能在每个图表中显着变化，并且如果我们手动调整现有方法，则对应于超参数的最佳选择。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>干啥呢! 别客气了<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/10/图神经网络 AW 算法/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/01/13/Quora比赛/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Quora Insincere Questions Classification
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2019/01/03/A Comprehensive Survey on Graph Neural Networks/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">A Comprehensive Survey on Graph Neural Networks</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -228,8 +377,8 @@
 	var yiliaConfig = {
 		mathjax: [object Object],
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
