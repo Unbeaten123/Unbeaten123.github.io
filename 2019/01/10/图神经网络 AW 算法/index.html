@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/01/10/图神经网络 AW 算法/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
-<meta property="og:updated_time" content="2019-01-17T14:01:19.804Z">
+<meta property="og:updated_time" content="2019-01-17T14:07:00.044Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Watch Your Step--Learning Node Embeddings via Graph Attention.">
 <meta name="twitter:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
@@ -218,8 +218,8 @@
 <p>3、我们评估了许多由现实世界数据集组成的具有挑战性的链接预测任务，包括社交，协作和生物网络。 实验表明，我们在 baselines 上有了很大改进，将链路预测误差降低了20％-40％。</p>
 <h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="Expectation-on-the-co-occurance-matrix"><a href="#Expectation-on-the-co-occurance-matrix" class="headerlink" title="Expectation on the co-occurance matrix"></a>Expectation on the co-occurance matrix</h2><p>我们设定图嵌入的重构函数为:</p>
 <script type="math/tex; mode=display">g(Y) = g([L\ |\ R]) = L \times R^T</script><p>图邻接矩阵的变换函数如下, 该公式描述的是通过随机游走获取的共现矩阵的期望:</p>
-<script type="math/tex; mode=display">f(A) = \mathbb{E}[D]</script><p>最终我们使用的目标函数是对 Negative Log Graph Likelihood (NLGL) 损失函数的的扩展如下, $\bold 1[.]$ 表示将满足 $[.]$ 内条件的地方置 1, $\circ$ 是 Hadamard Product, 矩阵的 $L_1$ 范数就是矩阵的元素和:</p>
-<script type="math/tex; mode=display">\min \limits_Y = ||-D \circ log(\sigma(g(Y))) - \bold 1[A = 0] \circ log(1 - \sigma(g(Y)))||</script><p>上述公式主要就是考虑到了 NLGL 是对图相似性的一个损失函数, 我们引入了 $\bold 1[A = 0]$ 这部分就是为了考虑不相连节点的惩罚, 并且通过这个乘积将注意力引入随机游走采样过程.  </p>
+<script type="math/tex; mode=display">f(A) = \mathbb{E}[D]</script><p>最终我们使用的目标函数是对 Negative Log Graph Likelihood (NLGL) 损失函数的的扩展如下, $\textbf{1}[.]$ 表示将满足 $[.]$ 内条件的地方置 1, $\circ$ 是 Hadamard Product, 矩阵的 $L_1$ 范数就是矩阵的元素和:</p>
+<script type="math/tex; mode=display">\min \limits_Y = ||-D \circ log(\sigma(g(Y))) - \textbf{1}[A = 0] \circ log(1 - \sigma(g(Y)))||</script><p>上述公式主要就是考虑到了 NLGL 是对图相似性的一个损失函数, 我们引入了 $\textbf{1}[A = 0]$ 这部分就是为了考虑不相连节点的惩罚, 并且通过这个乘积将注意力引入随机游走采样过程.  </p>
 <h2 id="Learning-the-Context-Distribution"><a href="#Learning-the-Context-Distribution" class="headerlink" title="Learning the Context Distribution"></a>Learning the Context Distribution</h2><h2 id="Graph-Attention-Models"><a href="#Graph-Attention-Models" class="headerlink" title="Graph Attention Models"></a>Graph Attention Models</h2><h2 id="Training-Objective"><a href="#Training-Objective" class="headerlink" title="Training Objective"></a>Training Objective</h2>
       
 
