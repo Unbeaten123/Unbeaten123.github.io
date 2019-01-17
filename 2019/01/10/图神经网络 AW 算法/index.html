@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/01/10/图神经网络 AW 算法/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
-<meta property="og:updated_time" content="2019-01-17T10:49:57.121Z">
+<meta property="og:updated_time" content="2019-01-17T14:01:19.804Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Watch Your Step--Learning Node Embeddings via Graph Attention.">
 <meta name="twitter:description" content="NIPS 2018 图神经网络模型 Watch Your Step: Learning Node Embeddings via Graph Attention.">
@@ -182,7 +182,7 @@
     <div id="toc-article" class="toc-article">
         <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
       <strong class="toc-title">文章目录</strong>
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#摘要"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#摘要"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引言"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法"><span class="toc-number">3.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Expectation-on-the-co-occurance-matrix"><span class="toc-number">3.1.</span> <span class="toc-text">Expectation on the co-occurance matrix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Learning-the-Context-Distribution"><span class="toc-number">3.2.</span> <span class="toc-text">Learning the Context Distribution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Graph-Attention-Models"><span class="toc-number">3.3.</span> <span class="toc-text">Graph Attention Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Training-Objective"><span class="toc-number">3.4.</span> <span class="toc-text">Training Objective</span></a></li></ol></li></ol>
           </div>
     <script type="text/javascript">
     function showToc(){
@@ -207,8 +207,20 @@
 <center><font face="Times New Roman" size="4">Sami Abu-El-Haija, <strong>University of Southern California</strong></font></center>  
 <center><font face="Times New Roman" size="4">Bryan Perozzi, Rami Al-Rfou, Alex Alemi, <strong>Google AI</strong></font></center>  
 
-<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>图形嵌入方法表示连续向量空间中的节点，从图形中保留不同类型的关系信息。这些方法有许多超参数（例如随机游走的长度），必须为每个图形手动调整。在本文中，我们将先前固定的超参数替换为我们通过反向传播自动学习的可训练的超参数。特别地，我们提出了一种关于转移矩阵的幂级数的新颖注意模型，其引导随机游走以优化上游目标。与先前的注意力模型方法不同，我们提出的方法仅在数据本身上（例如在随机游走上）使用注意力参数，并且模型不用于推理。我们在链接预测任务上进行实验，因为我们的目标是生成最能保留图形结构的嵌入，推广到看不见的信息。我们在一整套真实世界图形数据集（包括社交，协作和生物网络）上改进了最先进的结果，我们观察到我们的图形注意模型可以将误差降低多达20％-40％。我们表明，我们自动学习的注意力参数可能在每个图表中显着变化，并且如果我们手动调整现有方法，则对应于超参数的最佳选择。</p>
-
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>图嵌入方法旨在连续向量空间中表示图的节点，并保留不同类型的关系信息 (边信息)。这些方法有许多超参数（例如随机游走的长度），由于输入图规模不同必须为每个图手动调整这些参数。在本文中，我们将人为固定的超参数替换为我们通过反向传播自动学习的可训练的超参数。特别地，我们提出了一种新颖的基于随机游走转移矩阵的注意力模型，其引导随机游走以优化上游目标 (upstream objective)。与先前的注意力模型方法不同，我们提出的方法仅在数据本身上（例如在随机游走上）使用注意力参数，并且模型不用于推理。我们在 Link Prediction 任务上进行实验，因为我们的目标是生成最能保留图结构的嵌入，泛化出一些不可观测的信息 (unseen information)。我们在一整套真实世界图数据集（包括社交，协作和生物网络）上改进了 state-of-art 结果，我们观察到我们的图注意模型可以将误差降低多达 20％-40％, 实验表明，我们自动学习的注意力参数可能在不同图中发生显着变化，并且对应于手动选择的最佳超参数。</p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>无监督图嵌入方法试图编码图结构以获取图表示。 这些嵌入在许多任务上表现出色，包括节点分类[29,15]，知识库补全 (knowledge-base completion)[24]，半监督学习[37]和链路预测[2]。 一般来说，正如 Perozzi 等人[29]所介绍的那样，这些方法分两个步骤进行：首先，它们通过随机游走从图中采样成对关系 (pair-wise relationships) 并统计节点共现率。 其次，他们训练嵌入模型，例如 使用 word2vec [25]的 Skipgram 来编码成对节点相似性获取节点表示。</p>
+<p>虽然这些方法已经在许多任务中证明了有效的结果，但是它们的性能根据其超参数的设置而发生显着变化。例如，[29]观察到图表示学习的质量取决于随机游走的长度（C）。在实践中，DeepWalk [29]及其许多扩展[例如15]使用 word2vec 实现[25]。<br>因此，[21]揭示了超参数 C，在 word2vec [25]中被称为训练窗口长度，实际上不仅仅只控制了固定长度的随机游走。相反，它参数化一个函数，我们称之为上下文分布 Q，它控制在特定距离内进行游走时采样节点对的概率。隐含地，C 和 Q 的选择在每个节点的邻域上创建一个权重质量 (weight mass)。通常，邻近节点的权重较高，但质量函数的特定形式由上述超参数确定。在这项工作中，我们的目标是用可训练的参数替换这些超参数，以便可以为不同的图自动学习这些超参数。为此，我们将图嵌入构建为端到端学习，使用关于图邻接矩阵的闭合期望 (closed-form expectation) 来联合其中随机游走采样和共现率计算两个步骤，随后是表示学习。</p>
+<p>我们的灵感来自于自然语言处理（NLP）等领域中注意力模型的成功应用[例如4,38]，图像识别[26]，检测视频中的罕见事件[31]。据我们所知，我们提出的方法与注意力模型的标准应用有显着差异。我们使用注意力参数来指导我们的学习算法专注于优化上游目标的数据部分，而不是使用注意力参数来指导模型用于预测。</p>
+<p>我们展示了上下文分布 Q 与转移矩阵 D 幂级数系数之间的数学等价性。这允许我们通过学习幂级数上的注意力模型来学习上下文分布。注意力参数“引导”随机游走，允许它更多地关注最适合图的短期或长期依赖性，同时优化上游目标。据我们所知，这项工作是图嵌入的第一个注意方法应用。</p>
+<p>具体而言，我们的贡献如下：</p>
+<p>1、我们提出了一个可扩展的图注意模型族，它可以学习任意（例如非单调的) 上下文分布; </p>
+<p>2、我们表明，通过手动调整找到的最佳参数 baseline 方法的上下文分布超参数与我们自动发现的注意参数一致; </p>
+<p>3、我们评估了许多由现实世界数据集组成的具有挑战性的链接预测任务，包括社交，协作和生物网络。 实验表明，我们在 baselines 上有了很大改进，将链路预测误差降低了20％-40％。</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="Expectation-on-the-co-occurance-matrix"><a href="#Expectation-on-the-co-occurance-matrix" class="headerlink" title="Expectation on the co-occurance matrix"></a>Expectation on the co-occurance matrix</h2><p>我们设定图嵌入的重构函数为:</p>
+<script type="math/tex; mode=display">g(Y) = g([L\ |\ R]) = L \times R^T</script><p>图邻接矩阵的变换函数如下, 该公式描述的是通过随机游走获取的共现矩阵的期望:</p>
+<script type="math/tex; mode=display">f(A) = \mathbb{E}[D]</script><p>最终我们使用的目标函数是对 Negative Log Graph Likelihood (NLGL) 损失函数的的扩展如下, $\bold 1[.]$ 表示将满足 $[.]$ 内条件的地方置 1, $\circ$ 是 Hadamard Product, 矩阵的 $L_1$ 范数就是矩阵的元素和:</p>
+<script type="math/tex; mode=display">\min \limits_Y = ||-D \circ log(\sigma(g(Y))) - \bold 1[A = 0] \circ log(1 - \sigma(g(Y)))||</script><p>上述公式主要就是考虑到了 NLGL 是对图相似性的一个损失函数, 我们引入了 $\bold 1[A = 0]$ 这部分就是为了考虑不相连节点的惩罚, 并且通过这个乘积将注意力引入随机游走采样过程.  </p>
+<h2 id="Learning-the-Context-Distribution"><a href="#Learning-the-Context-Distribution" class="headerlink" title="Learning the Context Distribution"></a>Learning the Context Distribution</h2><h2 id="Graph-Attention-Models"><a href="#Graph-Attention-Models" class="headerlink" title="Graph Attention Models"></a>Graph Attention Models</h2><h2 id="Training-Objective"><a href="#Training-Objective" class="headerlink" title="Training Objective"></a>Training Objective</h2>
       
 
       
@@ -587,21 +599,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
