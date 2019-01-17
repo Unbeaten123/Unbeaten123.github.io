@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Zhizhou Yu&#39;s Blog</title>
+  <title>Learning Node Embeddings via Graph Attention | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Watch Your Step: Learning Node Embeddings via Graph Attention   Sami Abu-El-Haija, University of Southern California   Bryan Perozzi, Rami Al-Rfou, Alex Alemi, Google AI    摘要图嵌入方法旨在连续向量空间中表示图的节点，并保留不">
+  <meta name="description" content="NIPS 2018 Watch Your Step: Learning Node Embeddings via Graph Attention 神经图网络模型简要介绍">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/2019/01/17/图神经网络 AW 算法/index.html">
+<meta property="og:title" content="Learning Node Embeddings via Graph Attention">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/图神经网络 AW 算法/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="Watch Your Step: Learning Node Embeddings via Graph Attention   Sami Abu-El-Haija, University of Southern California   Bryan Perozzi, Rami Al-Rfou, Alex Alemi, Google AI    摘要图嵌入方法旨在连续向量空间中表示图的节点，并保留不">
-<meta property="og:updated_time" content="2019-01-17T14:17:19.162Z">
+<meta property="og:description" content="NIPS 2018 Watch Your Step: Learning Node Embeddings via Graph Attention 神经图网络模型简要介绍">
+<meta property="og:updated_time" content="2019-01-17T14:19:14.733Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Zhizhou Yu&#39;s Blog">
-<meta name="twitter:description" content="Watch Your Step: Learning Node Embeddings via Graph Attention   Sami Abu-El-Haija, University of Southern California   Bryan Perozzi, Rami Al-Rfou, Alex Alemi, Google AI    摘要图嵌入方法旨在连续向量空间中表示图的节点，并保留不">
+<meta name="twitter:title" content="Learning Node Embeddings via Graph Attention">
+<meta name="twitter:description" content="NIPS 2018 Watch Your Step: Learning Node Embeddings via Graph Attention 神经图网络模型简要介绍">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -158,12 +158,52 @@
             <article id="post-图神经网络 AW 算法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Learning Node Embeddings via Graph Attention
+    </h1>
+  
+
+        
+        <a href="/2019/01/10/图神经网络 AW 算法/" class="archive-article-date">
+  	<time datetime="2019-01-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
+</a>
+        
+      </header>
+    
     <!-- 目录内容 -->
+    
+      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+    <div id="toc-article" class="toc-article">
+        <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+      <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#摘要"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引言"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法"><span class="toc-number">3.</span> <span class="toc-text">方法</span></a></li></ol>
+          </div>
+    <script type="text/javascript">
+    function showToc(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:block");
+      show_toc_btn.setAttribute("style","display:none");
+      };
+    function showBtn(){
+      var toc_article = document.getElementById("toc-article");
+      var show_toc_btn = document.getElementById("show-toc-btn");
+      toc_article.setAttribute("style","display:none");
+      show_toc_btn.setAttribute("style","display:block");
+      };
+    </script>
     
     <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <center><font face="Times New Roman" size="5"><strong>Watch Your Step: Learning Node Embeddings via Graph Attention</strong></font></center>  
+        <p>NIPS 2018 Watch Your Step: Learning Node Embeddings via Graph Attention 神经图网络模型简要介绍<br><a id="more"></a></p>
+<center><font face="Times New Roman" size="5"><strong>Watch Your Step: Learning Node Embeddings via Graph Attention</strong></font></center>  
 <center><font face="Times New Roman" size="4">Sami Abu-El-Haija, <strong>University of Southern California</strong></font></center>  
 <center><font face="Times New Roman" size="4">Bryan Perozzi, Rami Al-Rfou, Alex Alemi, <strong>Google AI</strong></font></center>  
 
@@ -263,7 +303,7 @@ f(A) = \mathbb{E}[D]</script><p>最终我们使用的目标函数是对 Negative
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/17/图神经网络 AW 算法/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/10/图神经网络 AW 算法/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -277,9 +317,18 @@ f(A) = \mathbb{E}[D]</script><p>最终我们使用的目标函数是对 Negative
   
 <nav id="article-nav">
   
+    <a href="/2019/01/13/Quora比赛/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Quora Insincere Questions Classification
+        
+      </div>
+    </a>
   
-    <a href="/2019/01/13/Quora比赛/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Quora Insincere Questions Classification</div>
+  
+    <a href="/2019/01/03/A Comprehensive Survey on Graph Neural Networks/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">A Comprehensive Survey on Graph Neural Networks</div>
       <i class="icon-circle-right"></i>
     </a>
   
