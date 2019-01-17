@@ -11,7 +11,7 @@
   <meta name="description" content="图神经网络模型综述 (2019-1-2) A Comprehensive Survey on Graph Neural Networks.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="A Comprehensive Survey on Graph Neural Networks">
-<meta property="og:url" content="http://yoursite.com/2019/01/10/A Comprehensive Survey on Graph Neural Networks/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/01/03/A Comprehensive Survey on Graph Neural Networks/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="图神经网络模型综述 (2019-1-2) A Comprehensive Survey on Graph Neural Networks.">
 <meta property="og:image" content="http://yoursite.com/img/gcn_survey/1.png">
@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/img/gcn_survey/7.png">
 <meta property="og:image" content="http://yoursite.com/img/gcn_survey/表1.png">
 <meta property="og:image" content="http://yoursite.com/img/gcn_survey/表2.png">
-<meta property="og:updated_time" content="2019-01-14T02:36:05.441Z">
+<meta property="og:updated_time" content="2019-01-17T10:48:48.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A Comprehensive Survey on Graph Neural Networks">
 <meta name="twitter:description" content="图神经网络模型综述 (2019-1-2) A Comprehensive Survey on Graph Neural Networks.">
@@ -177,8 +177,8 @@
   
 
         
-        <a href="/2019/01/10/A Comprehensive Survey on Graph Neural Networks/" class="archive-article-date">
-  	<time datetime="2019-01-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
+        <a href="/2019/01/03/A Comprehensive Survey on Graph Neural Networks/" class="archive-article-date">
+  	<time datetime="2019-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-03</time>
 </a>
         
       </header>
@@ -213,10 +213,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>图神经网络模型综述 (2019-1-2) A Comprehensive Survey on Graph Neural Networks.<br><a id="more"></a></p>
-<center><font face="Times New Roman" size="5">A Comprehensive Survey on Graph Neural Networks</font></center>  
-<center><font face="Times New Roman" size="4">Zonghan Wu, Shirui Pan, Member, IEEE</font></center>  
-<center><font face="Times New Roman" size="4">Chengqi Zhang, Senior Member, IEEE</font></center>  
-<center><font face="Times New Roman" size="4">Philip S. Yu, Fellow, IEEE</font></center>  
+<center><font face="Times New Roman" size="5"><strong>A Comprehensive Survey on Graph Neural Networks</strong></font></center>  
+<center><font face="Times New Roman" size="4">Zonghan Wu, Shirui Pan, <strong>Member, IEEE</strong></font></center>  
+<center><font face="Times New Roman" size="4">Chengqi Zhang, <strong>Senior Member, IEEE</strong></font></center>  
+<center><font face="Times New Roman" size="4">Philip S. Yu, <strong>Fellow, IEEE</strong></font></center>  
 
 <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>近年来, 深度学习彻底改变了许多机器学习任务, 从图像分类和视频处理到语音识别和自然语言理解. 这些任务中的数据通常表示在欧几里德空间中. 然而, 越来越多的应用程序从非欧几里德域生成数据, 并表示为具有复杂关系和相互依赖性的图结构. 图数据的复杂性给现有的机器学习算法带来了重大挑战. 最近, 出现了许多关于扩展图形数据的深度学习方法的研究. 在本次调查中, 我们提供了数据挖掘和机器学习领域中图神经网络 (GNN) 的全面概述. 我们提出了一种新的分类法, 将最先进的图神经网络划分为不同的类别. 着眼于图卷积网络, 我们回顾了最近开发的替代架构; 这些学习范例包括图注意网络 (graph attention networks), 图自动编码器 (graph autoencoders), 图生成网络 (graph generative networks) 和图时空网络 (graph spatial-temporal networks). 我们进一步讨论了图神经网络在各个领域的应用, 并总结了现有算法在不同学习任务中的开源代码和基准. 最后, 我们在这个快速发展的领域提出潜在的研究方向. </p>
 <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>尽管深度学习已经在欧几里得数据中取得了很大的成功, 但从非欧几里得域生成的数据已经取得更广泛的应用, 它们需要有效分析. 例如, 在电子商务领域, 一个基于图的学习系统能够利用用户和产品之间的交互以实现高度精准的推荐. 在化学领域, 分子被建模为图, 新药研发需要测定其生物活性. 在论文引用网络中, 论文之间通过引用关系互相连接, 需要将它们分成不同的类别.<br>图数据的复杂性对现有机器学习算法提出了重大挑战, 因为图数据是不规则的. 每张图大小不同、节点无序, 一张图中的每个节点都有不同数目的邻近节点, 使得一些在图像中容易计算的重要运算 (如卷积) 不能再直接应用于图. 此外, 现有机器学习算法的核心假设是实例彼此独立. 然而, 图数据中的每个实例都与周围的其它实例相关, 含有一些复杂的连接信息, 用于捕获数据之间的依赖关系, 包括引用、朋友关系和相互作用.<br>最近, 越来越多的研究开始将深度学习方法应用到图数据领域. 受到深度学习领域进展的驱动, 研究人员在设计图神经网络的架构时借鉴了卷积网络、循环网络和深度自编码器的思想. 为了应对图数据的复杂性, 重要运算的泛化和定义在过去几年中迅速发展. 例如, 图 1 展示了受标准 2D 卷积启发得到的图卷积. </p>
@@ -380,7 +380,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/10/A Comprehensive Survey on Graph Neural Networks/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/03/A Comprehensive Survey on Graph Neural Networks/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -680,21 +680,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
