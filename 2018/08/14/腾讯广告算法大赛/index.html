@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://yoursite.com/img/level-wise.png">
 <meta property="og:image" content="http://yoursite.com/img/leaf-wise.png">
 <meta property="og:image" content="http://yoursite.com/img/CTR.png">
-<meta property="og:updated_time" content="2019-01-18T06:31:15.516Z">
+<meta property="og:updated_time" content="2019-01-18T07:00:12.741Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018腾讯广告算法大赛">
 <meta name="twitter:description" content="腾讯广告算法大赛 (CTR, Click-Through Rate) 总结  比赛简介这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据 (4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.">
@@ -246,6 +246,7 @@
 <p><strong>1、FFM 在使用的时候要注意对连续特征做归一化或是离散化;</strong></p>
 <p><strong>2、神经网络模型难以直接处理高维稀疏数据, 因此可以把 FM/FFM 模型当做是神经网络模型的 Embedding 向量, 同时可以引入 Attention 机制来进一步提升神经网络模型, 不过很可惜我们在做比赛的时候对神经网络模型不够了解, 没用想到使用 Attention.</strong></p>
 <p><strong>3、FM/FFM 模型和梯度提升树模型都可以进行特征组合, 但后者在数据高度稀疏时就很难有效的学习到复杂的组合特征, 所以应该使用 FM/FFM 的隐向量来作为神经网络的 Embedding 嵌入向量效果会好的多.</strong></p>
+<p><strong>4、梯度提升树模型 (Xgboost/LightGBM) 可以更好地处理缺失特征和跨区间特征以及转化率特征, 并且对异常点不敏感 (决策树模型的特点), 可以更好地处理特征相关性, 与 RF 相比往往可以学习更加复杂的决策边界, 效果相对较好. 但是 RF 的优势则是不易过拟合和并行化; 而梯度提升树模型和神经网络模型相比的优势在于中小数据集上, 当网络结构合适时且数据量较大往往是神经网络的模型更好.</strong></p>
 
       
 
