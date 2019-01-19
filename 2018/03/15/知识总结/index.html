@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-19T02:59:57.972Z">
+<meta property="og:updated_time" content="2019-01-19T06:36:22.414Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -341,11 +341,15 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">三、Seq2seq模型:</font>
 
 <p>经典的seq2seq模型就是翻译模型, 例如google翻译团队的transformer + attention. seq2seq模型最大的特点是突破了传统RNN模型输入输出等长的限制. 而seq2seq模型实际上属于encoder-decoder结构, encoder将输入序列压缩成指定维度的隐向量, decoder根据这个隐向量生成输出序列, 生成输出序列可以仅把隐向量当做decoder的输入, 也可以把隐向量加入到生成序列的每个时刻的计算中.  </p>
-<h2 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h2><p>1、独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 </p>
+<h2 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h2><p>1、独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$，求 $max(X_1, X_2)$ 的期望？<br>&ensp;&ensp;设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 </p>
 <script type="math/tex; mode=display">\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}</script><p>2、有 4 个人分 52 张扑克牌, 一个人拿到指定两张牌的概率?</p>
 <script type="math/tex; mode=display">\dfrac{C_4^1 \times C_{50}^{11}}{C_{52}^{13}}</script><p>3、一副扑克牌分成 3 份, 一个人同时拿到大小王的概率?</p>
 <script type="math/tex; mode=display">\dfrac {C_3^1 \times C_{52}^{16} \times C_{36}^{18} \times C_{18}^{18}} {C_{54}^{18} \times C_{36}^{18} \times C_{18}^{18}}</script><p>4、质地不均匀的硬币, 产生 1/2 的概率? 1/3 和 1/4 呢?</p>
-<p>设抛一次向上的概率为 $p$, 则连续抛两次得到 “正反” 和 “反正” 的概率相等: $p(1-p) = (1-p)p$, 只要连抛两次的结果相同就继续连抛两次</p>
+<p>&ensp;&ensp;设抛一次向上的概率为 $p$, 则连续抛两次得到 “正反” 和 “反正” 的概率相等: $p(1-p) = (1-p)p$, 只要连抛两次的结果相同就继续连抛两次</p>
+<p>5、一个路口, 一个小时有车通过的概率是 0.9, 那么 20 分钟内通过车的概率是多少?</p>
+<p>&ensp;&ensp;设 20 分钟内没有车通过的概率为 $p$, 则</p>
+<script type="math/tex; mode=display">
+1 - (p)^3 = 1-0.9</script><p>&ensp;&ensp;答案为 $1-p$</p>
 <h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
@@ -736,5 +740,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
