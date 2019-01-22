@@ -17,7 +17,8 @@
 <meta property="og:image" content="http://yoursite.com/img/level-wise.png">
 <meta property="og:image" content="http://yoursite.com/img/leaf-wise.png">
 <meta property="og:image" content="http://yoursite.com/img/CTR.png">
-<meta property="og:updated_time" content="2019-01-20T06:06:07.751Z">
+<meta property="og:image" content="http://yoursite.com/img/DeepFM.png">
+<meta property="og:updated_time" content="2019-01-22T06:59:08.466Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018腾讯广告算法大赛">
 <meta name="twitter:description" content="腾讯广告算法大赛 (CTR, Click-Through Rate) 总结  比赛简介这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据 (4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.">
@@ -233,14 +234,19 @@
 <img src="/img/CTR.png" width="500" height="500"> 
 </div> <br></li>
 </ol>
-<p>一开始 CTR 中的深度模型主要采用 Embedding + MLP 结构, 即对 one-hot 编码后的特征进行 embedding 降维后拼接成一层隐藏层, 随后堆叠全连接层通过一个 sigmoid 得到最后的预测结果. 这种方法对低阶特征挖掘不够学习较为困难.<br>在前面我们提到 FM 模型实际上是通过参数矩阵 <script type="math/tex">W</script> 对特征向量进行 embeddding 然后再通过内积组合特征, 这启发了后人在 DNN 中应用 FM. 下面介绍几个经典的 DNN 模型.  </p>
-<ol>
-<li><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1601.02376.pdf" target="_blank" rel="noopener">Weinan Zhang</a>在2016年提出 <strong>FNN(Factorization Machine supported Neural Network)</strong>, FNN 将 FM 与 MLP 结合, 采用 FM 预训练得到的隐含层及其权重作为神经网络第一层的初始值, 然后堆叠全连接层. 可以看出 FNN 和 Embedding + MLP 结构差距主要在 Embedding 方面, FNN 采用 FM 的预训练权重矩阵作为输入初始值.  </li>
-<li><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1611.00144v1.pdf" target="_blank" rel="noopener">Huifeng Guo</a>在 2016年提出了 <strong>PNN(Product-based Neural Networks)</strong>, 与 FNN 直接使用 FM 预训练结果不同, PNN 将 FM 预训练得到的嵌入向量两两进行向量积, 得到的结果作为 MLP 的输入. 向量积分为内积和外积操作, 如用内积则将内积后的标量拼接为一个向量作为输入, 如用外积则将得到的矩阵求和作为输入.    </li>
-<li><a href="https://dl.acm.org/ft_gateway.cfm?id=2959190&amp;type=pdf" target="_blank" rel="noopener">Google</a>在2016年提出 <strong>Wide &amp; Deep</strong> 深度模型, 前面的深度模型大多和 FM 有着很强的联系, 而 Wide &amp; Deep 模型则是从 Embedding + MLP 出发, 它奠定了后面 CTR 深度模型(如 DCN、DeepFM)的框架. Wide &amp; Deep 模型将深度模型和线性模型联合训练, 二者结果求和作为预测结果, 其 Deep 部分就是多层 MLP, Wide 部分则是 LR, 可以手动设计特征.  </li>
-<li><a href="https://arxiv.org/abs/1708.05123v1" target="_blank" rel="noopener">Ruoxi Wang</a>在2017年提出了 <strong>DCN(Deep &amp; Cross Network)</strong>, 我们知道 FM 是通过向量内积来实现二阶特征组合, MLP 则是在 Embedding 之后通过一层层的矩阵乘法来组合高阶特征, DCN 的想法就是直接将 FM 过程在高阶特征组合上推广, 其 Deep 部分就是多层 MLP(矩阵操作), Cross 部分则是对 FM 推广(向量操作).  </li>
-<li><a href="https://arxiv.org/pdf/1703.04247" target="_blank" rel="noopener">Huifeng Guo</a>在2017年提出了 <strong>DeepFM</strong>, 基于 Wide &amp; Deep 框架, 其 Wide 部分是 FM, 借助 FM 的显式特征交叉帮助 DNN 模型获取更好的表示, 其 Deep 部分的 Embedding 层和 Wide 部分的 FM 共享参数.  </li>
-</ol>
+<p>一开始 CTR 中的深度模型主要采用 Embedding + MLP 结构, 即对 one-hot 编码后的特征进行 embedding 降维后拼接成一层隐藏层, 随后堆叠全连接层通过一个 sigmoid 得到最后的预测结果. 这种方法对低阶特征挖掘不够学习较为困难.<br>在前面我们提到 FM 模型实际上是通过参数矩阵 <script type="math/tex">W</script> 对特征向量进行 embeddding 然后再通过内积组合特征, 这启发了后人在 DNN 中应用 FM. 下面介绍几个经典的 DNN 模型.</p>
+<p>1、<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1601.02376.pdf" target="_blank" rel="noopener">Weinan Zhang</a>在2016年提出 <strong>FNN(Factorization Machine supported Neural Network)</strong>, FNN 将 FM 与 MLP 结合, 采用 FM 预训练得到的隐含层及其权重作为神经网络第一层的初始值, 然后堆叠全连接层. 可以看出 FNN 和 Embedding + MLP 结构差距主要在 Embedding 方面, FNN 采用 FM 的预训练权重矩阵作为输入初始值. </p>
+<p><strong>缺陷:</strong> embedding 参数被 FM 影响; pre-training 阶段效率低; FNN 只捕获 high-order 特征组合 (low-order 特征对 CTR 很重要). </p>
+<p>2、<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1611.00144v1.pdf" target="_blank" rel="noopener">Huifeng Guo</a>在 2016年提出了 <strong>PNN(Product-based Neural Networks)</strong>, 与 FNN 直接使用 FM 预训练结果不同, PNN 将 FM 预训练得到的嵌入向量两两进行向量积, 得到的结果作为 MLP 的输入. 向量积分为内积和外积操作, 如用内积则将内积后的标量拼接为一个向量作为输入, 如用外积则将得到的矩阵求和作为输入.</p>
+<p><strong>缺陷:</strong> outer product 丢失太多信息, 不太可靠; inner product 更可信, 但 product 层输出全连接到第一隐含层的所有神经元, 计算复杂度还是太高 (DeepFM 直接把 Wide 部分连接到最后输出层的一个神经元); 且 PNN 和 FNN 一样忽视了 low-order 特征组合.</p>
+<p>3、<a href="https://dl.acm.org/ft_gateway.cfm?id=2959190&amp;type=pdf" target="_blank" rel="noopener">Google</a>在2016年提出 <strong>Wide &amp; Deep</strong> 深度模型, 前面的深度模型大多和 FM 有着很强的联系, 而 Wide &amp; Deep 模型则是从 Embedding + MLP 出发, 它奠定了后面 CTR 深度模型(如 DCN、DeepFM)的框架. Wide &amp; Deep 模型将深度模型和线性模型联合训练, 二者结果求和作为预测结果, 其 Deep 部分就是多层 MLP, Wide 部分则是 LR, 可以手动设计特征.  </p>
+<p><strong>缺陷:</strong> 对于 Wide 部分需要人工特征工程</p>
+<p>4、<a href="https://arxiv.org/abs/1708.05123v1" target="_blank" rel="noopener">Ruoxi Wang</a>在2017年提出了 <strong>DCN(Deep &amp; Cross Network)</strong>, 我们知道 FM 是通过向量内积来实现二阶特征组合, MLP 则是在 Embedding 之后通过一层层的矩阵乘法来组合高阶特征, DCN 的想法就是直接将 FM 过程在高阶特征组合上推广, 其 Deep 部分就是多层 MLP(矩阵操作), Cross 部分的每一层都会对特征不断进行交叉(向量操作), Cross 部分实际上是对 FM 的推广.  </p>
+<p><strong>缺陷:</strong> Cross 部分的性能和交叉层的深度有关</p>
+<p>5、<a href="https://arxiv.org/pdf/1703.04247" target="_blank" rel="noopener">Huifeng Guo</a>在2017年提出了 <strong>DeepFM</strong>, DeepFM 的工作主要是基于 Wide &amp; Deep 模型, 我们知道 W&amp;D 模型输入向量维度很大, 且其 Wide 部分的输入包含了人工提取的特征, 因此复杂度较高且需要耗费人工精力. 而 DeepFM 的 Wide 和 Deep 部分共享相同的输入, 可以提高训练效率并且无需人为设计复杂的特征工程. DeepFM 使用 FM 来建模低阶特征, 用 DNN 结构来建模高阶特征. </p>
+<p><div align="center">
+<img src="/img/DeepFM.png" width="500"> 
+</div> <br></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本次比赛主要还是吃了不懂深度模型的亏, 传统的特征挖掘也不够精细, 另外对 LightGBM 也不算很熟, 复赛阶段由于数据量猛增导致 LightGBM 模型内存超出, 现在想想应该切片训练好歹也是有个结果的. 至于神经网络模型则是不够了解, 没有很好地发挥深度模型在大数量下的优势. </p>
 <p>给出一些模型使用的建议:</p>
 <p><strong>1、FFM 在使用的时候要注意对连续特征做归一化或是离散化;</strong></p>
@@ -626,5 +632,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
