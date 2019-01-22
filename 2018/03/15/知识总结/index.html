@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-22T10:51:33.190Z">
+<meta property="og:updated_time" content="2019-01-22T10:55:13.502Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -311,7 +311,7 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 </ol>
 <font face="Microsoft YaHei" size="4" color="#dddd00">七、深度学习防止过拟合的方法:</font>
 
-<p>1、<strong>Dropout</strong>: 具体介绍上面已经介绍;</p>
+<p>1、<strong>Dropout</strong>: 具体解释上面已经介绍;</p>
 <p>2、<strong>Batch Normalization</strong>: 具体解释上面已经介绍;</p>
 <p>3、<strong>数据增强</strong>: 提供更多的数据自然会减少过拟合;</p>
 <p>4、<strong>参数共享</strong>: 可以减少参数个数并降低过拟合;</p>
@@ -751,5 +751,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
