@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-20T06:21:13.648Z">
+<meta property="og:updated_time" content="2019-01-22T09:01:33.304Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -211,7 +211,10 @@
 <p>1、通过引入拉格朗日乘子法将原问题中的不等式约束转换成等式约束;<br>2、方便核函数的引入;<br>3、降低了计算复杂度, 由求解特征向量 $\vec w$ 变成求解比例系数 $a$, 在原始问题下求解复杂度和特征维度有关, 现在降低为样本的数量;<br>4、求解更高效, 因为只需要求比例系数 $a$, 而比例系数 $a$ 只有支持向量才为非 0, 其他样本为 0. </p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">二、SVM 和 LR 的异同:</font>
 
-<p><a href="https://www.cnblogs.com/zhizhan/p/5038747.html" target="_blank" rel="noopener">Reference here</a></p>
+<p>1、LR 和 SVM 的学习的目标不同, LR 假设数据属于伯努利分布下最大化所有样本的条件概率似然函数, 而 SVM 则是 “最大化最小间隔” (最大化超平面到不同类别样本的最小距离), 表现在损失函数不同, LR 使用的是交叉熵损失函数, SVM 使用的是 hinge loss;</p>
+<p>2、LR 对数据的异常值和不平衡问题较为敏感, SVM 由于主要由支持向量决定, 所以对异常值不敏感, 但是 SVM 使用基于距离的度量, 所以需要对样本做归一化;</p>
+<p>3、在解决非线性分类问题时, SVM 使用核函数划分超平面, 而 LR 一般不这么做, 原因在于 SVM 只有少部分支持向量参与核函数计算, 而 LR 要考虑所有的样本;</p>
+<p>4、SVM 的损失函数内自带正则项, 而 LR 没有.</p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">三、GBDT的过程:</font>
 
 <p>GBDT 是加法模型, 定义为:</p>
