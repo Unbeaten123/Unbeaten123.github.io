@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://yoursite.com/img/leaf-wise.png">
 <meta property="og:image" content="http://yoursite.com/img/CTR.png">
 <meta property="og:image" content="http://yoursite.com/img/DeepFM.png">
-<meta property="og:updated_time" content="2019-01-22T06:59:08.466Z">
+<meta property="og:updated_time" content="2019-01-22T07:17:47.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018腾讯广告算法大赛">
 <meta name="twitter:description" content="腾讯广告算法大赛 (CTR, Click-Through Rate) 总结  比赛简介这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据 (4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.">
@@ -244,8 +244,9 @@
 <p>4、<a href="https://arxiv.org/abs/1708.05123v1" target="_blank" rel="noopener">Ruoxi Wang</a>在2017年提出了 <strong>DCN(Deep &amp; Cross Network)</strong>, 我们知道 FM 是通过向量内积来实现二阶特征组合, MLP 则是在 Embedding 之后通过一层层的矩阵乘法来组合高阶特征, DCN 的想法就是直接将 FM 过程在高阶特征组合上推广, 其 Deep 部分就是多层 MLP(矩阵操作), Cross 部分的每一层都会对特征不断进行交叉(向量操作), Cross 部分实际上是对 FM 的推广.  </p>
 <p><strong>缺陷:</strong> Cross 部分的性能和交叉层的深度有关</p>
 <p>5、<a href="https://arxiv.org/pdf/1703.04247" target="_blank" rel="noopener">Huifeng Guo</a>在2017年提出了 <strong>DeepFM</strong>, DeepFM 的工作主要是基于 Wide &amp; Deep 模型, 我们知道 W&amp;D 模型输入向量维度很大, 且其 Wide 部分的输入包含了人工提取的特征, 因此复杂度较高且需要耗费人工精力. 而 DeepFM 的 Wide 和 Deep 部分共享相同的输入, 可以提高训练效率并且无需人为设计复杂的特征工程. DeepFM 使用 FM 来建模低阶特征, 用 DNN 结构来建模高阶特征. </p>
+<p>如下图所示, DeepFM 包含两个部分 FM Component 和 Deep Component. FM Component 就是 FM 模型捕捉低阶特征, 其输出直接连接到最后的输出神经元; Deep Component 就是前馈神经网络捕捉高阶特征, 可以用 ResNet 实现, 考虑到 CTR 问题中的输入向量是高度稀疏的, 因此需要做一个 Embedding 处理获取神经网络的稠密低维输入否则难以收敛, Embedding 部分无论输入的 field 维度是多少都会得到同样的 k 维嵌入向量, FM 中的隐含向量 V 现在作为嵌入神经网络的权重, 经过学习来压缩输入 field 向量为 embedding 向量.</p>
 <p><div align="center">
-<img src="/img/DeepFM.png" width="500"> 
+<img src="/img/DeepFM.png" width="600"> 
 </div> <br></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本次比赛主要还是吃了不懂深度模型的亏, 传统的特征挖掘也不够精细, 另外对 LightGBM 也不算很熟, 复赛阶段由于数据量猛增导致 LightGBM 模型内存超出, 现在想想应该切片训练好歹也是有个结果的. 至于神经网络模型则是不够了解, 没有很好地发挥深度模型在大数量下的优势. </p>
 <p>给出一些模型使用的建议:</p>
