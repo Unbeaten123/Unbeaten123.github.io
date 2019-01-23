@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-22T10:55:13.502Z">
+<meta property="og:updated_time" content="2019-01-23T13:05:30.361Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -250,7 +250,8 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p><a href="https://zhuanlan.zhihu.com/p/36331115" target="_blank" rel="noopener">reference here</a><br>因为 K-means 的更新过程就是 EM 过程, 所以 EM 收敛就表示 K-means 收敛.  </p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">十、梯度优化的几种方法:</font>
 
-<p>按照大类来分包括: 一阶优化和二阶优化, 二阶优化由于用到了二阶导数计算代价较大往往不会广泛使用(代表算法有牛顿法), 只看一阶优化算法主要就是梯度下降包括SGD、BGD、mini-batch GD(MBGD有时也称为SGD)、Momentum、AdaGrad、Adam等等.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
+<p>按照大类来分包括: 一阶优化和二阶优化, 二阶优化由于用到了二阶导数计算代价较大往往不会广泛使用(代表算法有牛顿法), 只看一阶优化算法主要就是梯度下降包括SGD、BGD、mini-batch GD(MBGD有时也称为SGD)、Momentum、AdaGrad、Adam等等. </p>
+<p>Adam 优化器对梯度的一阶矩估计 (First Moment Estimation, 即梯度的均值) 和二阶矩估计 (SecondMoment Estimation, 即梯度的未中心化的方差) 进行综合考虑, 计算出更新步长.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">十一、数据偏斜的处理:</font>
 
 <p>在有数据有偏的情况下, 评价标准也需要更换比如ROC, 如果需要特别关注样本较少的类别, 那么precision-recall曲线则是一个很好的选择; 将数据聚类对大类别数据进行欠采样, 对小类别数据进行相似生成或过采样, 调整分类器的阈值: 少类别样本/(少类别样本+多类别样本), 欠采样或是过采样都会导致数据分布被改变因此使用集成学习的方法来调整分类阈值是一个很好的选择</p>
@@ -751,21 +752,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
