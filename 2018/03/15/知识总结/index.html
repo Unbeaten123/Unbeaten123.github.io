@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-24T08:21:49.707Z">
+<meta property="og:updated_time" content="2019-01-24T12:35:26.300Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -318,7 +318,13 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>4、<strong>参数共享</strong>: 可以减少参数个数并降低过拟合;</p>
 <p>5、<strong>early stop</strong>: 在验证集上超过一定轮数的性能降低就终止训练;</p>
 <p>6、<strong>引入 $L_1$, $L_2$ 正则</strong>: 对神经网络的参数引入正则可以减少过拟合.  </p>
-<h2 id="推荐算法相关基础知识"><a href="#推荐算法相关基础知识" class="headerlink" title="推荐算法相关基础知识"></a>推荐算法相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、NDCG 指标的含义?</font>  
+<font face="Microsoft YaHei" size="4" color="#dddd00">八、CNN、LSTM 的参数个数计算:</font>
+
+<p><strong>CNN</strong> 参数个数: </p>
+<script type="math/tex; mode=display">
+kernel\_size \times input\_channel \times output\_channel</script><p><strong>LSTM</strong> 有四个单元: $f_t, i_t, \tilde{C_t}, o_t$, 每部分都会拼接上一时刻的隐状态向量 $h_{t-1}$ 以及输入向量 $x_t$ 然后输出一个隐状态向量维度的权值, 因此 LSTM 的一个 cell 内参数个数 (RNN 则去掉 4 即可):</p>
+<script type="math/tex; mode=display">
+4 \times \left( (hidden\_size + input\_size) \times hidden\_size + hidden\_size(bias) \right)</script><h2 id="推荐算法相关基础知识"><a href="#推荐算法相关基础知识" class="headerlink" title="推荐算法相关基础知识"></a>推荐算法相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、NDCG 指标的含义?</font>  
 
 <p>NDCG (Normalized Discounted Cumulative Gain), 归一化贴现累计收益, 常用于衡量排序质量, 简单来说就是返回的模型排序结果相关性得分 (DCG) 相对于最佳排序结果相关性得分 (IDCG) 的比值, 这个值越大越好.</p>
 <h2 id="CV-相关基础知识"><a href="#CV-相关基础知识" class="headerlink" title="CV 相关基础知识"></a>CV 相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font>  
