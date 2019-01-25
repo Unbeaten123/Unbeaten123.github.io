@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://yoursite.com/img/nms.png">
 <meta property="og:image" content="http://yoursite.com/img/ssd0.png">
 <meta property="og:image" content="http://yoursite.com/img/priorbox.jpg">
-<meta property="og:updated_time" content="2019-01-24T12:51:01.025Z">
+<meta property="og:updated_time" content="2019-01-25T08:40:31.792Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Data Science Bowl">
 <meta name="twitter:description" content="Kaggle 的 Object Detection 比赛 Data Science Bowl 总结 比赛简介Kaggle的一个目标检测类比赛, 我们也是第一次参加 CV 方向的比赛, 这篇博客主要总结一下和比赛相关的基础知识. 比赛给定一些细胞核的图片, 目标是检测图片中的细胞核的位置, 采用 IOU 作为评价指标, 我们尝试过 U-net 但是没能调到一个较优解, 最终使用的是 Kaiming">
@@ -424,6 +424,8 @@ p,& if\ \ y=1\\
 <script type="math/tex; mode=display">FL(p_t)=-(1-p_t)^{\gamma}log\ p_t</script><p>对于预测概率 $p_t$ 高的样本, Focal loss 认为它是容易分类的样本, 因此给的权重就比较低. 而对于预测概率比较低的样本, Focal loss认为它们难以分类, 给的权重也比较高; 所以模型会侧重训练这些样本. 综合以上两种形式可得:  </p>
 <script type="math/tex; mode=display">FL(p_t)=-\alpha_t(1-p_t)^{\gamma}log\ p_t</script><p>Focal loss 的 pytorch 简单实现:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FocalLoss</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, gamma=<span class="number">2</span>, size_average=True)</span>:</span></span><br><span class="line">        super(FocalLoss, self).__init__()</span><br><span class="line">        self.gamma = gamma</span><br><span class="line">        self.size_average = size_average</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, y_pred, y_true)</span>:</span></span><br><span class="line">        p = Sigmoid(y_pred)</span><br><span class="line">        p[y_true==<span class="number">0</span>] = <span class="number">1</span> - p[y_true==<span class="number">0</span>]</span><br><span class="line">        log_p = p.log()</span><br><span class="line">        batch_loss = -torch.pow((<span class="number">1</span>-p),self.gamma)*log_p</span><br><span class="line">        <span class="keyword">if</span> self.size_average:</span><br><span class="line">            loss = batch_loss.mean()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            loss = batch_loss.sum()</span><br><span class="line">        <span class="keyword">return</span> loss</span><br><span class="line"><span class="comment"># Usage:</span></span><br><span class="line">loss_fn = FocalLoss(gamma=<span class="number">2</span>)</span><br><span class="line">loss = loss_fn(y_pred, y_batch)</span><br><span class="line">optimizer.zero_grad()</span><br><span class="line">loss.backward()</span><br></pre></td></tr></table></figure></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="为什么选用-Mask-RCNN-这种-two-stage-模型而不采用-one-stage-模型"><a href="#为什么选用-Mask-RCNN-这种-two-stage-模型而不采用-one-stage-模型" class="headerlink" title="为什么选用 Mask RCNN 这种 two-stage 模型而不采用 one-stage 模型?"></a>为什么选用 Mask RCNN 这种 two-stage 模型而不采用 one-stage 模型?</h2><p><strong>旷视科技的俞刚博士提到:</strong> one-stage 和 two-stage 检测器之间的本质区别在于检出率 (recall) 与定位 (localization) 之间的权衡 (tradeoff). Recall 是指如果一张图像上有 100 个物体, 检测到 99 个, 那么 recall 为 99%; Localization 则是指边界框框住物体的空间上的精度. 一般来讲, one-stage 检测器的 recall 较高, 但是 localization 会有所折衷; 相反, two-stage 检测器的定位能力则较强, 但是 recall 较低, 主要原因是第二个 stage 可以 refine 框的精度, 但是也会误杀一些正样本. 但是大家普遍会觉得 one-stage 检测器往往更快, 比如 YOLO、SSD; two-stage 检测器往往更准, 比如 Faster R-CNN、FPN, 但这个事情事实上并不成立.</p>
+<p>第一, one-stage 算法从网络结构上看只是一个多分类的 rpn 网络, 相当于 faster rcnn 的第一阶段. 其预测结果是从 feature map 中 anchor 对应的特征中预测得到的, 而 two-stage 会对上述结果再进行 roi pooling 之后进一步精细化, 因此更为精准. 比如, 一个 anchor 有可能只覆盖了一个目标的 50%, 但却作为完全的正样本, 因此其预测肯定是有误差的. </p>
+<p>第二, one-stage 算法对小目标检测效果较差, 如果所有的 anchor 都没有覆盖到这个目标, 那么这个目标就会漏检. 如果一个比较大的 anchor 覆盖了这个目标, 那么较大的感受野会弱化目标的真实特征, 得分也不会高. two-stage 算法中的 roi pooling 会对目标做 resize, 小目标的特征被放大, 其特征轮廓也更为清晰, 因此检测也更为准确. </p>
 <p>基于上述描述, 考虑到我们的比赛是对 bbox 的坐标进行编码后计算 bbox 准确度, 因此我们更关注 bbox 的定位准确, 所以采用了 two-stage 模型.  </p>
 
       
@@ -804,21 +806,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
