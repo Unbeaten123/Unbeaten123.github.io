@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://yoursite.com/img/leaf-wise.png">
 <meta property="og:image" content="http://yoursite.com/img/CTR.png">
 <meta property="og:image" content="http://yoursite.com/img/DeepFM.png">
-<meta property="og:updated_time" content="2019-01-26T14:05:31.433Z">
+<meta property="og:updated_time" content="2019-01-26T14:09:53.363Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018腾讯广告算法大赛">
 <meta name="twitter:description" content="腾讯广告算法大赛 (CTR, Click-Through Rate) 总结  比赛简介这个比赛是腾讯举办的一个推荐类型的比赛, 训练数据是种子人群及其中用户的脱敏特征, 每个用户的标签是是否属于该种子人群. 因此该问题是一个二分类问题, 采用 AUC 作为评价指标. 初赛阶段的数据量是1000万条数据 (4 GB), 复赛阶段是初赛阶段的5倍, 我们在初赛中的排名是 58/1600 (Top 3.">
@@ -218,8 +218,9 @@
 <h2 id="特征交叉"><a href="#特征交叉" class="headerlink" title="特征交叉"></a>特征交叉</h2><p>特征交叉是指把明显具有关联度的特征进行组合以期获取一个更为好的新特征, 我们主要做了双、三特征交叉.<br>比如 age 这一特征和 consumptionAbility(消费能力) 具有明显关联, 一般认为年轻人较中老年人的消费力更强; 而 前两者和 education 学历特征又具有明显的关联, 可以分别做双特征组合, 也可以把这三者组合作为一个新特征. 此外还有用户特征和广告特征之间的交叉.  </p>
 <h2 id="特征转化率"><a href="#特征转化率" class="headerlink" title="特征转化率"></a>特征转化率</h2><p>特征转化率是指统计满足某种属性的样本中正样本所占的比例, 例如, 我们可以统计 age=10 的正样本的比例, 但是注意直接这样统计之后作为新特征毫无疑问会暴露标签信息, 学习器会发现所有正样本的比例都符合一定规律. 因此, 我们需要用 k 折交叉来做这个特征. 具体地, 讲述数据分为5折, 前四折数据中统计 age=10 的正样本比例, 对于第5折数据我们使用前四折数据中的统计结果作为特征, 5次轮流对每折数据标记新特征. </p>
 <h2 id="tf-idf特征"><a href="#tf-idf特征" class="headerlink" title="tf-idf特征"></a>tf-idf特征</h2><p>对于 interest、topic 等多值特征, 我们考虑使用 tf-idf 来对这种特征做处理. tfidf(term frequency inverse document frequency)的主要思想是: 如果某个词或短语在一篇文章中出现的频率 tf 高, 并且在其他文章中很少出现, 则认为此词或者短语具有很好的类别区分能力, 适合用来分类. 在这里, 词或短语就是每个 interest 中出现的不同特征值, 文章就是不同样本对应的 interest、topic 多值特征.  </p>
-<h2 id="特征筛选"><a href="#特征筛选" class="headerlink" title="特征筛选"></a>特征筛选</h2><p>经过特征工程处理后的特征维度是爆炸的, 为了加速训练同时防止过拟合, 我们对特征进行了压缩和筛选. 对于 tf-idf 特征我们使用 SVD 进行降维分解, 对于最后所有的特征我们则是用 LightGBM 模型的特征重要性以及计算特征之间的 Pearson 相关系数来筛选不重要和冗余特征.  </p>
-<h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p>回顾 CTR 领域的模型, 大致发展方向是 LR <script type="math/tex">\rightarrow</script> GBDT等树模型 <script type="math/tex">\rightarrow</script> FM/FFM <script type="math/tex">\rightarrow</script> DeepFM等深度模型.<br>LR 由于太简单, 我们主要尝试了后三个发展阶段的模型, 基于 Baseline 改进的 LightGBM、FFM 和 DeepFM. 最终的情况是 LightGBM 模型效果最好, FFM 模型其次, DeepFM 模型则效果一般对得分没什么贡献. 依靠前两个模型的融合得到了初赛58名的成绩.  </p>
+<h2 id="特征筛选"><a href="#特征筛选" class="headerlink" title="特征筛选"></a>特征筛选</h2><p>经过特征工程处理后的特征维度是爆炸的, 为了加速训练同时防止过拟合, 我们对特征进行了压缩和筛选. 对于 tf-idf 特征我们使用 SVD 进行降维分解, 对于最后所有的特征我们则是用 LightGBM 模型的特征重要性以及计算特征之间的 Pearson 相关系数来筛选不重要和冗余特征. Pearson 相关系数的定义是两个变量的协方差和标准差的商:</p>
+<script type="math/tex; mode=display">
+\Large{\rho}_{X,Y} =\ \dfrac{cov(X, Y)}{\sigma_X \sigma_Y} =\ \dfrac{E[(X - \mu_X)(Y - \mu_Y)]}{\sigma_X \sigma_Y}</script><h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p>回顾 CTR 领域的模型, 大致发展方向是 LR <script type="math/tex">\rightarrow</script> GBDT等树模型 <script type="math/tex">\rightarrow</script> FM/FFM <script type="math/tex">\rightarrow</script> DeepFM等深度模型.<br>LR 由于太简单, 我们主要尝试了后三个发展阶段的模型, 基于 Baseline 改进的 LightGBM、FFM 和 DeepFM. 最终的情况是 LightGBM 模型效果最好, FFM 模型其次, DeepFM 模型则效果一般对得分没什么贡献. 依靠前两个模型的融合得到了初赛58名的成绩.  </p>
 <h2 id="LightGBM"><a href="#LightGBM" class="headerlink" title="LightGBM"></a>LightGBM</h2><p>LightGBM 模型是 Microsoft 提出的一个 state-of-art 提升树模型, 针对之前的 Xgboost 做出了改善包括速度和内存优化, LightGBM 采用 leaf-wise 分裂方法来分裂树, 而 Xgboost 则是 level-wise, 当叶子节点相同时前者可以减少更多的 loss 但是容易过拟合, 因此需要 max_depth 参数来限制树的深度.<br><strong>Xgboost 的决策树增长方式:</strong>  </p>
 <p><div align="center">
 <img src="/img/level-wise.png" width="800">
