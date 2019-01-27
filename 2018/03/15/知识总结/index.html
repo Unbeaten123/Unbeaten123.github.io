@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-27T05:54:56.196Z">
+<meta property="og:updated_time" content="2019-01-27T06:03:10.378Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -352,7 +352,7 @@ kernel\_size \times input\_channel \times output\_channel</script><p><strong>LST
    &= \dfrac{0 \cdot \sum_k e^{z_k} - e^{z_j} \cdot e^{z_i}}{(\sum_k e^{z_k})^2} \\
    &= -e^{z_j}\dfrac{1}{(\sum_k e^{z_k})^2}e^{z_i} \\
    &= -a_i a_j
-   \end{split}</script><p>最终 $\dfrac{\partial Loss}{\partial z_i} = a_i - y_i$ </p>
+   \end{split}</script><p>合并两种情况最终 $\dfrac{\partial Loss}{\partial z_i} = a_i - y_i$ </p>
 <h2 id="推荐算法相关基础知识"><a href="#推荐算法相关基础知识" class="headerlink" title="推荐算法相关基础知识"></a>推荐算法相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、NDCG 指标的含义?</font>  
 
 <p>NDCG (Normalized Discounted Cumulative Gain), 归一化贴现累计收益, 常用于衡量排序质量, 简单来说就是返回的模型排序结果相关性得分 (DCG) 相对于最佳排序结果相关性得分 (IDCG) 的比值, 这个值越大越好.</p>
