@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-27T03:22:42.034Z">
+<meta property="og:updated_time" content="2019-01-27T03:23:02.480Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -287,7 +287,7 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 L(\hat{p}; \beta) &= \prod_{y_i = 1} P(Y = y_i | X_i)\ \cdot\ \prod_{y_i = 0} P(Y = y_i | X_i) \\
 &= \prod_{i = 1} P(Y = y_i = 1 | X_i)^{y_i}\ \cdot\ P(Y = y_i = 0| X_i)^{1-y_i} \\
 &= \prod_{i = 1} P(Y = y_i = 1 | X_i)^{y_i}\ \cdot\ (1 - P(Y = y_i = 1| X_i))^{1-y_i} \\
-\begin{split}
+\end{split}
 log(L(\hat{p}; \beta)) = \sum_{i=1}(ylog\hat{y} + (1-y)log(1-\hat{y}))</script><h2 id="深度学习基础知识"><a href="#深度学习基础知识" class="headerlink" title="深度学习基础知识"></a>深度学习基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、反向传播原理简介:</font>
 
 <p>反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.</p>
