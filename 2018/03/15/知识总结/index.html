@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-27T10:10:52.920Z">
+<meta property="og:updated_time" content="2019-01-27T11:45:54.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -281,7 +281,7 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练.</p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">二十、交叉熵的含义:</font>
 
-<p>交叉熵反应的是训练模型学习到的预测标签分布和真实标签分布的相似性. 使用交叉熵作为损失函数可以有效避免梯度下降时用均方误差带来的学习速率低的问题 (学习速率被误差所控制), 实际上我们常用的二分类交叉熵损失是建立在数据标签符合伯努利分布、数据符合独立同分布的假设下的交叉熵特例, 是对 logstic 函数的最大似然估计取 log:</p>
+<p>交叉熵反应的是训练模型学习到的预测标签分布和真实标签分布的相似性. 使用交叉熵作为损失函数可以有效避免梯度下降时用均方误差带来的学习速率低的问题 (均方误差偏导值在输出概率值接近 0 或 1 的时候非常小, 而使用交叉熵损失函数时学习速率被误差所控制), 实际上我们常用的二分类交叉熵损失是建立在数据标签符合伯努利分布、数据符合独立同分布的假设下的交叉熵特例, 是对 logstic 函数的最大似然估计取 log:</p>
 <script type="math/tex; mode=display">
 \begin{split}
 L(\hat{p}; \beta) &= \prod_{y_i = 1} P(Y = y_i | X_i) \cdot \prod_{y_i = 0} P(Y = y_i | X_i) \\
@@ -795,21 +795,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
