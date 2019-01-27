@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-27T06:03:10.378Z">
+<meta property="og:updated_time" content="2019-01-27T10:08:34.521Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -397,10 +397,15 @@ kernel\_size \times input\_channel \times output\_channel</script><p><strong>LST
 <p>&ensp;&ensp;设 20 分钟内没有车通过的概率为 $p$, 则</p>
 <script type="math/tex; mode=display">
 1 - (p)^3 = 1-0.9</script><p>&ensp;&ensp;答案为 $1-p$</p>
-<p>6、有一个木桶, 里面有 M 个白球, 小明每次从桶中随机取出一个球如果是白色涂成红色再放回否则直接放回, 问小明将桶中球全部涂红的期望时间是多少? </p>
-<p>&ensp;&ensp;有 0 个红球下第一次取出白球的概率为 1, 期望为 1, 有一个红球下第二次取出白球的概率为 $\frac{M-1}{M}$, 期望为 $\frac{M}{M-1}$, 有两个红球下第三次取出白球的概率为 $\frac{M-2}{M}$, 期望为 $\frac{M}{M-2}$, … 最终为:</p>
+<p>6、有一个木桶, 里面有 M 个白球, 小明每次从桶中随机取出一个球涂成红色再放回, 问小明将桶中球全部涂红的期望时间是多少? </p>
+<p>&ensp;&ensp;设 $P[i]$ 表示 M 个球中已有 $i$ 个球是红色后, 全部球变为红色的期望时间. 则 $P[i] = \dfrac{i}{M} \cdot P[i] + (1 - \dfrac{i}{M}) \cdot P[i+1] + 1$, 包含取球操作, 化简得: $P[i] = P[i+1] + \dfrac{M}{M-i}$, 其中 $P[M] = 0$, 那么</p>
+<p>&ensp;&ensp;已有 M-1 个红球时, $P[M-1] = P[M] + \dfrac{M}{1}$;</p>
+<p>&ensp;&ensp;已有 M-2 个红球时, $P[M-2] = P[M-1] + \dfrac{M}{2}$; </p>
+<p>&ensp;&ensp;…</p>
+<p>&ensp;&ensp;已有 0 个红球时, $P[0] = P[1] + \dfrac{M}{M}$; </p>
+<p>&ensp;&ensp;最终为:</p>
 <script type="math/tex; mode=display">
-1 + \dfrac{M}{M-1} + \dfrac{M}{M-2} + ... + M</script><h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
+P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
 <li><a href="https://blog.csdn.net/zhangxiao93/article/details/55101605" target="_blank" rel="noopener">旋转数组求最小值</a></li>
@@ -790,21 +795,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
