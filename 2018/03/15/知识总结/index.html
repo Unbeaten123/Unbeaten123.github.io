@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-27T03:34:18.876Z">
+<meta property="og:updated_time" content="2019-01-27T05:54:56.196Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -333,7 +333,27 @@ log(L(\hat{p}; \beta)) &= \sum_{i=1}(ylog\hat{y} + (1-y)log(1-\hat{y}))
 <script type="math/tex; mode=display">
 kernel\_size \times input\_channel \times output\_channel</script><p><strong>LSTM</strong> 有四个单元: $f_t, i_t, \tilde{C_t}, o_t$, 每部分都会拼接上一时刻的隐状态向量 $h_{t-1}$ 以及输入向量 $x_t$ 然后输出一个隐状态向量维度的权值, 因此 LSTM 的一个 cell 内参数个数 (RNN 则去掉 4 即可):</p>
 <script type="math/tex; mode=display">
-4 \times \left( (hidden\_size + input\_size) \times hidden\_size + hidden\_size(bias) \right)</script><h2 id="推荐算法相关基础知识"><a href="#推荐算法相关基础知识" class="headerlink" title="推荐算法相关基础知识"></a>推荐算法相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、NDCG 指标的含义?</font>  
+4 \times \left( (hidden\_size + input\_size) \times hidden\_size + hidden\_size(bias) \right)</script><font face="Microsoft YaHei" size="4" color="#dddd00">九、Softmax 求导:</font>
+
+<p>Softmax 是归一化指数函数常用于神经网络最后一层输出属于不同类别的概率, 对于输入向量 $z$ 的某一个维度 $i$ 其输出计算公式为: $a_i = \dfrac{e^{z_i}}{\sum_k e^{z_k}}$</p>
+<p>损失函数为交叉熵时: $Loss = -\sum_i y_i lna_i$, 当真实标签的第 $i$ 维为 1 时: $Loss = -lna_i$</p>
+<p>则 $Loss$ 对输入 $z_j$ 的导数为 $\dfrac{\partial Loss}{\partial z_j} = \dfrac{\partial Loss}{\partial a_i} \cdot \dfrac{\partial a_i}{\partial z_j}$ , 所有的输出 $a_i$ 都要反向传播更新参数, $\dfrac{\partial Loss}{\partial a_i} = - \dfrac{1}{a_i}$ 关键是求出 $\dfrac{\partial a_i}{\partial z_j}$ 具体分为两种情况:</p>
+<p>1) $j = i$ :</p>
+<script type="math/tex; mode=display">
+   \begin{split}
+   \dfrac{\partial a_i}{\partial z_j} &= \dfrac{\partial}{\partial z_j}(\dfrac{e^{z_i}} {\sum_k e^{z_k}}) \\
+   &= \dfrac{e^{z_i} \cdot \sum_k e^{z_k} - e^{z_i} \cdot e^{z_i}}{(\sum_k e^{z_k})^2} \\
+   &= \dfrac{e^{z_i}}{\sum_k e^{z_k}} \cdot (1 - \dfrac{e^{z_i}}{\sum_k e^{z_k}}) \\
+   &= a_i(1-a_i)
+   \end{split}</script><p>2) $j \neq i$ :</p>
+<script type="math/tex; mode=display">
+   \begin{split}
+   \dfrac{\partial a_i}{\partial z_j} &= \dfrac{\partial}{\partial z_j}(\dfrac{e^{z_i}} {\sum_k e^{z_k}}) \\
+   &= \dfrac{0 \cdot \sum_k e^{z_k} - e^{z_j} \cdot e^{z_i}}{(\sum_k e^{z_k})^2} \\
+   &= -e^{z_j}\dfrac{1}{(\sum_k e^{z_k})^2}e^{z_i} \\
+   &= -a_i a_j
+   \end{split}</script><p>最终 $\dfrac{\partial Loss}{\partial z_i} = a_i - y_i$ </p>
+<h2 id="推荐算法相关基础知识"><a href="#推荐算法相关基础知识" class="headerlink" title="推荐算法相关基础知识"></a>推荐算法相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、NDCG 指标的含义?</font>  
 
 <p>NDCG (Normalized Discounted Cumulative Gain), 归一化贴现累计收益, 常用于衡量排序质量, 简单来说就是返回的模型排序结果相关性得分 (DCG) 相对于最佳排序结果相关性得分 (IDCG) 的比值, 这个值越大越好.</p>
 <h2 id="CV-相关基础知识"><a href="#CV-相关基础知识" class="headerlink" title="CV 相关基础知识"></a>CV 相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font>  
