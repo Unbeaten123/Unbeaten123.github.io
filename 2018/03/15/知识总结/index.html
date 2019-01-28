@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-28T03:37:55.195Z">
+<meta property="og:updated_time" content="2019-01-28T13:05:06.360Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -254,7 +254,11 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>Adam 优化器对梯度的一阶矩估计 (First Moment Estimation, 即梯度的均值) 和二阶矩估计 (SecondMoment Estimation, 即梯度的未中心化的方差) 进行综合考虑, 计算出更新步长.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">十一、数据偏斜的处理:</font>
 
-<p>在有数据有偏的情况下, 评价标准也需要更换比如ROC, 如果需要特别关注样本较少的类别, 那么precision-recall曲线则是一个很好的选择; 将数据聚类对大类别数据进行欠采样, 对小类别数据进行相似生成或过采样, 调整分类器的阈值: 少类别样本/(少类别样本+多类别样本), 欠采样或是过采样都会导致数据分布被改变因此使用集成学习的方法来调整分类阈值是一个很好的选择</p>
+<ol>
+<li>改变评价指标如使用 F1、 ROC;</li>
+<li>欠采样、过采样;</li>
+<li>对少样本的惩罚加重, 如使用 Focal Loss 或者在模型本身选择不同样本的权重. </li>
+</ol>
 <font face="Microsoft YaHei" size="4" color="#dddd00">十二、GBDT+LR的原理:</font>
 
 <p>利用GBDT来做embedding特征, 预先选定GBDT的树和叶子的数量就可以设置好用于LR分类的特征维度(<script type="math/tex">N_{trees} * N_{leaves}</script>), 通过one-hot编码即可作为LR的输入特征来使用</p>
@@ -798,21 +802,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
