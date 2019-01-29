@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-28T13:07:37.078Z">
+<meta property="og:updated_time" content="2019-01-29T14:26:28.921Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -232,7 +232,13 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>3、 输出 $F_T$ </p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">四、XGboost和GBDT的区别:</font> 
 
-<p>Xgboost防止过拟合的方法: 一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); 二是采用了RF中的列采样策略; 三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间.<br><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
+<p>Xgboost防止过拟合的方法: </p>
+<p>一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); </p>
+<p>二是采用了RF中的列采样策略; </p>
+<p>三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间; </p>
+<p>四是 earlystop; </p>
+<p>五是限制树的深度参数.</p>
+<p><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">五、XGboost和RF的区别:</font> 
 
 <p><a href="https://www.cnblogs.com/notwice/p/8546436.html" target="_blank" rel="noopener">reference here</a></p>
