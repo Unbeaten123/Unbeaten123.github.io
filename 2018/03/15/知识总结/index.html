@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-29T14:26:28.921Z">
+<meta property="og:updated_time" content="2019-01-30T09:50:05.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -403,7 +403,7 @@ kernel\_size \times input\_channel \times output\_channel</script><p><strong>LST
 <script type="math/tex; mode=display">\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}</script><p><strong>2、有 4 个人分 52 张扑克牌, 一个人拿到指定两张牌的概率?</strong></p>
 <script type="math/tex; mode=display">\dfrac{C_4^1 \times C_{50}^{11}}{C_{52}^{13}}</script><p><strong>3、一副扑克牌分成 3 份, 一个人同时拿到大小王的概率?</strong></p>
 <script type="math/tex; mode=display">\dfrac {C_3^1 \times C_{52}^{16} \times C_{36}^{18} \times C_{18}^{18}} {C_{54}^{18} \times C_{36}^{18} \times C_{18}^{18}}</script><p><strong>4、质地不均匀的硬币, 产生 1/2 的概率? 1/3 和 1/4 呢?</strong></p>
-<p>&ensp;&ensp;设抛一次向上的概率为 $p$, 则连续抛两次得到 “正反” 和 “反正” 的概率相等: $p(1-p) = (1-p)p$, 只要连抛两次的结果相同就继续连抛两次</p>
+<p>&ensp;&ensp;设抛一次向上的概率为 $p$, 则连续抛两次得到 “正反” 和 “反正” 的概率相等: $p(1-p) = (1-p)p$, 只要连抛两次的结果相同就继续连抛两次; 1/3 和 1/4 可以从编码角度来实现, 出现 “正反” 记为 0, “反正”记为 1, 则用 0、1 编码 3 个 bits 可以等概率的表示出 8 种事件, 只取 6 种情况的前两种就是 1/3, 8 种情况的前 2 种就是 1/4.</p>
 <p><strong>5、一个路口, 一个小时有车通过的概率是 0.9, 那么 20 分钟内通过车的概率是多少?</strong></p>
 <p>&ensp;&ensp;设 20 分钟内没有车通过的概率为 $p$, 则</p>
 <script type="math/tex; mode=display">
@@ -416,7 +416,8 @@ kernel\_size \times input\_channel \times output\_channel</script><p><strong>LST
 <p>&ensp;&ensp;已有 0 个红球时, $P[0] = P[1] + \dfrac{M}{M}$; </p>
 <p>&ensp;&ensp;最终为:</p>
 <script type="math/tex; mode=display">
-P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p><strong>7、圆上任取 3 点, 构成锐角三角形的概率是多大?</strong></p>
+P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p>&ensp;&ensp;还可以从几何分布角度来解释, 这个操作属于几何分布, 期望值的等于概率的倒数, 因此结果也为上述序列.</p>
+<p><strong>7、圆上任取 3 点, 构成锐角三角形的概率是多大?</strong></p>
 <p>&ensp;&ensp;锐角三角形, 等价圆心在三角形里, 也等价三个点无法被一段半圆弧所包括. 也就是等价任取两个点, 第三个点在其他两个点组成的小圆弧关于圆心对称的圆弧里. 由于圆上每个点选取的概率是一样的, 这个小圆弧最长是接近半圆长, 此时随机选取第三个点使其成为锐角三角形的概率为 1/2; 小圆弧最短接近 0, 此时选取第三个点使其成为锐角三角形概率为 0. </p>
 <p>&ensp;&ensp;问题到最后就转换成任取两点构成的小圆弧长度 (第三个点落在小圆弧对称的范围内) 的期望, 而小圆弧的长度在 0 到 1/2 圆长上符合均匀分布, 所以锐角三角形的概率就是 (1/2+0)/2 = 1/4. (钝角为 3/4, 直角为 0)</p>
 <h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
@@ -809,21 +810,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
