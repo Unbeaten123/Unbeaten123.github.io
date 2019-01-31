@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-01-30T09:50:05.523Z">
+<meta property="og:updated_time" content="2019-01-31T12:37:18.803Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -427,6 +427,7 @@ P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p>&ensp;&en
 <li><a href="https://www.jianshu.com/p/1851ee8fb546" target="_blank" rel="noopener">无序数组分成两部分使得方差和最小</a></li>
 <li><a href="https://www.cnblogs.com/junyuhuang/p/4390780.html" target="_blank" rel="noopener">荷兰国旗问题</a></li>
 <li><a href="https://blog.csdn.net/z84616995z/article/details/18903483" target="_blank" rel="noopener">一个数组分成k份, 每份中元素个数相同, 返回k-1个分界点以及给一个数值返回其属于哪一类, 不断优化时间复杂度, 低于o(nlogn)</a></li>
+<li><a href="https://www.cnblogs.com/GodA/p/5237061.html" target="_blank" rel="noopener">和最大的子矩阵</a></li>
 </ol>
 <h2 id="益智题"><a href="#益智题" class="headerlink" title="益智题"></a>益智题</h2><ol>
 <li><a href="https://www.nowcoder.com/questionTerminal/cded93aeac5249f7a9754400dd249c1d" target="_blank" rel="noopener">站在地球上的某一点, 向南走一公里, 然后向东走一公里, 最后向北走一公里, 回到了原点.地球上有多少个满足这样条件的点?(无数个)</a></li>
@@ -810,5 +811,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
