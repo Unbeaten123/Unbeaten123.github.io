@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-03-04T14:39:42.176Z">
+<meta property="og:updated_time" content="2019-03-04T14:47:24.970Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -283,7 +283,8 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>L1正则化是参数的绝对值之和(Lasso回归), L2正则化是参数的平方和后再开根值(岭回归). 它们都可以防止过拟合, 区别在于L1正则化倾向于稀疏(部分特征的权值会为0)而L2正则化则是使每个权值都很小接近于0但不会为0, L1的稀疏特性使得L1正则可以用于特征选择. </p>
 <p>L1 可以进行特征筛选的背后解释:</p>
 <ol>
-<li>图角度解释: L1 范数是绝对值之和, 在解图像上要求是正方形(二维空间, ($|x+y| = c$)) / 正多面体(高维空间)比较小同时尽可能达到 loss 的最优解等值线, 那么自然是等值线和正方形相切时最满足条件, 而由于正方形的特性这个切点和可能就是坐标轴上的点, 自然就有一些权重变为 0, 如 ($x = 0, y = c$).</li>
+<li><p>图角度解释: L1 范数是绝对值之和, 在解图像上要求是正方形(二维空间, ($|x+y| = c$)) / 正多面体(高维空间)比较小同时尽可能达到 loss 的最优解等值线, 那么自然是等值线和正方形相切时最满足条件, 而由于正方形的特性这个切点和可能就是坐标轴上的点, 自然就有一些权重变为 0, 如 ($x = 0, y = c$).</p>
+</li>
 <li><p>导数的角度解释: </p>
 <p>假设损失函数为 $L(w)$, 加入 L1、L2 正则后变为:</p>
 <script type="math/tex; mode=display">J_{L1}(w) = L(w) + \lambda |w|</script><script type="math/tex; mode=display">J_{L2}(w) = L(w) + \lambda w^2</script><p>设 $L(w)$ 在 $w = 0$ 处导数值为 $d_0$, 则引入 L1、L2 正则后的损失函数在 $w = 0$ 处的导数分别为:</p>
