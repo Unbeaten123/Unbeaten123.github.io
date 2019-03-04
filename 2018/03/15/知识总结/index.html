@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-03-04T14:47:24.970Z">
+<meta property="og:updated_time" content="2019-03-04T16:14:57.643Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -238,6 +238,7 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间; </p>
 <p>四是 earlystop; </p>
 <p>五是限制树的深度参数.</p>
+<p>补充一个容易遗漏的知识点, Xgboost 在计算节点分裂增益时并不是使用传统启发式的 GINI 指数等, 二是直接根据模型的损失函数, 推导出了一个分裂后节点关于损失函数一阶导和二阶导相关的打分函数, 这个函数决定了节点对 loss 的贡献, 那么分类的时候就以分裂后 loss 降低最大为依据.</p>
 <p><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">五、XGboost和RF的区别:</font> 
 
