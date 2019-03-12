@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-03-12T14:38:11.206Z">
+<meta property="og:updated_time" content="2019-03-12T15:18:02.407Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -437,7 +437,13 @@ P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p>&ensp;&en
 <p>所求为 摸一个球猜是黑色情况下真是黑色的概率 $P(A|B)$.</p>
 <p>由贝叶斯公式可得: </p>
 <script type="math/tex; mode=display">P(A|B) = \dfrac{P(AB)}{P(B)}</script><p>易知 $P(AB) = 0.8\times1/3$, $P(B)$ 可以这么分析, 摸一个球猜是黑色包括摸黑球猜成黑色和摸红球猜成黑色, 则 $P(B) = 0.8\times1/3 + 0.2\times2/3$ 则:</p>
-<script type="math/tex; mode=display">P(A|B) = \dfrac{0.8\times1/3}{0.8\times1/3 + 0.2\times2/3} = 2/3</script><h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
+<script type="math/tex; mode=display">P(A|B) = \dfrac{0.8\times1/3}{0.8\times1/3 + 0.2\times2/3} = 2/3</script><p><strong>9、连续抛 n 次硬币都正面的概率</strong></p>
+<p>&ensp;&ensp;设连续出现 $k$ 次正面的期望为 $e[k]$, 则连续出现 $k+1$ 次正面的期望为 $e[k+1]$. 在连续出现 $k$ 次正面后, 分如下两种情况:</p>
+<p>1) 下一次抛出正面, 概率为 $1/2$, 此时 $e[k+1] = e[k] + 1$;</p>
+<p>2) 下一次抛出反面, 概率为 $1/2$, 此时平均仍需抛 $e[k+1]$ 次, 总数为 $e[k] + 1 + e[k+1]$</p>
+<p>综上: $e[k+1] = (e[k] + 1)\times1/2 +(e[k]+1+e[k+1])\times1/2$</p>
+<p>进而: $e[k] = (a[1] + 2)\times2^{n-1} - 2$, 其中 $a[1] = 2$, 最终 $e[k] = 2^{n+1} - 2$</p>
+<h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
 <li><a href="https://blog.csdn.net/zhangxiao93/article/details/55101605" target="_blank" rel="noopener">旋转数组求最小值</a></li>
