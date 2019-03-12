@@ -6,20 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>机器学习算法面经总结 | Zhizhou Yu&#39;s Blog</title>
+  <title>Archives: 2019/3 | Zhizhou Yu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta property="og:type" content="article">
-<meta property="og:title" content="机器学习算法面经总结">
-<meta property="og:url" content="http://yoursite.com/2018/03/15/知识总结/index.html">
+  <meta name="description" content="Standing on the shoulders of giants">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Zhizhou Yu&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/archives/2019/03/index.html">
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
-<meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-03-12T14:25:55.738Z">
+<meta property="og:description" content="Standing on the shoulders of giants">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习算法面经总结">
-<meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
-<meta name="twitter:image" content="http://yoursite.com/img/repeat_conv.png">
+<meta name="twitter:title" content="Zhizhou Yu&#39;s Blog">
+<meta name="twitter:description" content="Standing on the shoulders of giants">
   
     <link rel="alternative" href="/atom.xml" title="Zhizhou Yu&#39;s Blog" type="application/atom+xml">
   
@@ -157,436 +154,43 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-知识总结" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
+            
+  
+  
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      机器学习算法面经总结
-    </h1>
-  
-
-        
-        <a href="/2018/03/15/知识总结/" class="archive-article-date">
-  	<time datetime="2018-03-15T11:46:34.048Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/03/10/Deep Learning on Graphs-A Survey/" class="archive-article-date">
+  	<time datetime="2019-03-10T11:03:33.076Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-10</time>
 </a>
-        
-      </header>
-    
-    <!-- 目录内容 -->
-    
-      <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
-            <span class="btn-bg"></span>
-            <span class="btn-text">文章导航</span>
-            </p>
-    <div id="toc-article" class="toc-article">
-        <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
-      <strong class="toc-title">文章目录</strong>
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#机器学习基础知识"><span class="toc-number">1.</span> <span class="toc-text">机器学习基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习基础知识"><span class="toc-number">2.</span> <span class="toc-text">深度学习基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐算法相关基础知识"><span class="toc-number">3.</span> <span class="toc-text">推荐算法相关基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CV-相关基础知识"><span class="toc-number">4.</span> <span class="toc-text">CV 相关基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NLP-相关基础知识"><span class="toc-number">5.</span> <span class="toc-text">NLP 相关基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概率题"><span class="toc-number">6.</span> <span class="toc-text">概率题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法题"><span class="toc-number">7.</span> <span class="toc-text">算法题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#益智题"><span class="toc-number">8.</span> <span class="toc-text">益智题</span></a></li></ol>
-          </div>
-    <script type="text/javascript">
-    function showToc(){
-      var toc_article = document.getElementById("toc-article");
-      var show_toc_btn = document.getElementById("show-toc-btn");
-      toc_article.setAttribute("style","display:block");
-      show_toc_btn.setAttribute("style","display:none");
-      };
-    function showBtn(){
-      var toc_article = document.getElementById("toc-article");
-      var show_toc_btn = document.getElementById("show-toc-btn");
-      toc_article.setAttribute("style","display:none");
-      show_toc_btn.setAttribute("style","display:block");
-      };
-    </script>
-    
-    <!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题</p>
-<a id="more"></a>
-<h2 id="机器学习基础知识"><a href="#机器学习基础知识" class="headerlink" title="机器学习基础知识"></a>机器学习基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、为什么 SVM 算法在求解过程中, 需要将原始问题转化为对偶问题?</font>
-
-<p>1、通过引入拉格朗日乘子法将原问题中的不等式约束转换成等式约束;<br>2、方便核函数的引入;<br>3、降低了计算复杂度, 由求解特征向量 $\vec w$ 变成求解比例系数 $a$, 在原始问题下求解复杂度和特征维度有关, 现在降低为样本的数量;<br>4、求解更高效, 因为只需要求比例系数 $a$, 而比例系数 $a$ 只有支持向量才为非 0, 其他样本为 0. </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">二、SVM 和 LR 的异同:</font>
-
-<p>1、LR 和 SVM 的学习的目标不同, LR 假设数据属于伯努利分布下最大化所有样本的条件概率似然函数, 而 SVM 则是 “最大化最小间隔” (最大化超平面到不同类别样本的最小距离), 表现在损失函数不同, LR 使用的是交叉熵损失函数, SVM 使用的是 hinge loss;</p>
-<p>2、LR 对数据的异常值和不平衡问题较为敏感, SVM 由于主要由支持向量决定, 所以对异常值不敏感, 但是 SVM 使用基于距离的度量, 所以需要对样本做归一化;</p>
-<p>3、在解决非线性分类问题时, SVM 使用核函数划分超平面, 而 LR 一般不这么做, 原因在于 SVM 只有少部分支持向量参与核函数计算, 而 LR 要考虑所有的样本;</p>
-<p>4、SVM 的损失函数内自带正则项, 而 LR 没有.</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">三、GBDT的过程:</font>
-
-<p>GBDT 是加法模型, 定义为:</p>
-<script type="math/tex; mode=display">
-F(x; w) = \sum_{t = 0}^{T} {\alpha_t h_t (x; w_t)} = \sum_{t = 0}^{T} {f_t(x; w_t)}</script><p>其中, $x$ 是输入样本, $h$ 是分类回归树, $w$ 是分类回归树参数, $\alpha$ 是每棵树权重.<br>每一轮通过最小化损失函数求解最优模型:</p>
-<script type="math/tex; mode=display">
-F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>输入: $(x_i, y_i), T, L$ 分别为训练数据、迭代轮数和损失函数 (平方损失函数)  </p>
-<p>1、初始化 $f_0$  </p>
-<p>2、$\text{for t = 1 to T do}$  </p>
-<p>&ensp;&ensp; 2.1、计算响应 (至 <script type="math/tex">\text{t-1}</script> 轮得到的模型的负梯度):  </p>
-<script type="math/tex; mode=display">\tilde{y_i} = -\left [ \dfrac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right ]_{F(x) = F_{t-1}(x)}, i = 1, 2,..., N</script><p>&ensp;&ensp; 2.2、学习第 $\text{t}$ 颗树 (拟合残差, 当损失函数为平方损失函数时就是拟合负梯度):  </p>
-<script type="math/tex; mode=display">w^* = \mathop{arg min}\limits_{w} \sum_{i=1}^{N} (\tilde{y_i} - h_t(x_i; w))^2</script><p>&ensp;&ensp; 2.3、line search 找步长 (找到第 $\text{t}$ 轮模型的最佳权重):  </p>
-<script type="math/tex; mode=display">\rho^* = \mathop{arg min}\limits_{\rho} \sum_{i=1}^{N} L(y_i, F_{t-1}(x_i) + \rho h_t(x_i; w^*))</script><p>&ensp;&ensp; 2.4、令 <script type="math/tex">f_t = \rho ^* h_t(x; w^*)</script> </p>
-<p>&ensp;&ensp; 2.5、更新模型: $F_t = F_{t-1} + f_t$  </p>
-<p>3、 输出 $F_T$ </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">四、XGboost和GBDT的区别:</font> 
-
-<p>Xgboost防止过拟合的方法: </p>
-<p>一是目标函数中加入了正则项, 包括对叶节点数目的惩罚以及叶节点值的惩罚(取值不能太极端); </p>
-<p>二是采用了RF中的列采样策略; </p>
-<p>三是Shrinkage, 对应的就是eta参数, 一次迭代后将叶子节点的权值乘上这个系数, 目的是为了削弱单颗树对结果的影响, 让后面的树可以有更大的发挥空间; </p>
-<p>四是 earlystop; </p>
-<p>五是限制树的深度参数.</p>
-<p>补充一个容易遗漏的知识点, Xgboost 在计算节点分裂增益时并不是使用传统启发式的 GINI 指数等, 二是直接根据模型的损失函数, 推导出了一个分裂后节点关于损失函数一阶导和二阶导相关的打分函数, 这个函数决定了节点对 loss 的贡献, 那么分类的时候就以分裂后 loss 降低最大为依据.</p>
-<p><a href="https://blog.csdn.net/chengfulukou/article/details/76906710" target="_blank" rel="noopener">reference here</a></p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">五、XGboost和RF的区别:</font> 
-
-<p><a href="https://www.cnblogs.com/notwice/p/8546436.html" target="_blank" rel="noopener">reference here</a></p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">六、XGBoost 和 RF 的特征重要性是如何得到的？</font>
-
-<p>Xgboost 中某个特征的重要性, 等于它被选中为树节点分裂特征的次数的和.<br>RF 可以通过两种方式, 一是按基尼指数降低程度决定特征重要性; 二是改变测试数据的某列特征判断改变后的误差变化  </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">七、ROC、AUC等概念的理解:</font> 
-
-<p><a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a><br>一句话说明AUC的本质和计算规则：给定一个正例, 一个负例, 预测为正的概率值比预测为负的概率值还要大的可能性.</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">八、K-means、KNN、层次聚类和密度聚类(DBSCAN):</font>
-
-<p>这个链接直接对比了Kmeans和KNN<br><a href="https://www.cnblogs.com/190260995xixi/p/5945652.html" target="_blank" rel="noopener">K-means &amp; KNN</a><br>层次聚类的复杂度很高, 但是一次聚类完成就可以得到一个聚类树结果, 选择不同的聚类个数下的聚类结果直接根据树来得到即可且层次聚类是贪心的思想得到的是局部最优需要随机化, kmans的主要优势是效率<br><a href="https://www.cnblogs.com/nku-wangfeng/p/7642745.html" target="_blank" rel="noopener">K-means &amp; 层次聚类</a><br>DBSCAN是基于密度的聚类, 对于密度稀疏的数据表现较差, 但是可以运用到凸和非凸数据集上(甜甜圈数据集), 其计算复杂度较高但是结果往往要比kmeans好, DBSCAN对异常点也不敏感, 聚类结果可复现, 但同时需要调参达到最佳性能<br><a href="https://www.cnblogs.com/pinard/p/6208966.html" target="_blank" rel="noopener">DBSCAN原理</a><br><a href="https://www.cnblogs.com/hdu-2010/p/4621258.html" target="_blank" rel="noopener">K-means &amp; DBSCAN</a></p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">九、EM 算法的收敛性和 K-Means 的收敛性:</font>
-
-<p><a href="https://zhuanlan.zhihu.com/p/36331115" target="_blank" rel="noopener">reference here</a><br>因为 K-means 的更新过程就是 EM 过程, 所以 EM 收敛就表示 K-means 收敛.  </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十、梯度优化的几种方法:</font>
-
-<p>按照大类来分包括: 一阶优化和二阶优化, 二阶优化由于用到了二阶导数计算代价较大往往不会广泛使用(代表算法有牛顿法), 只看一阶优化算法主要就是梯度下降包括SGD、BGD、mini-batch GD(MBGD有时也称为SGD)、Momentum、AdaGrad、Adam等等. </p>
-<p>Adam 优化器对梯度的一阶矩估计 (First Moment Estimation, 即梯度的均值) 和二阶矩估计 (SecondMoment Estimation, 即梯度的未中心化的方差) 进行综合考虑, 计算出更新步长.<br><a href="https://blog.csdn.net/u014595019/article/details/52989301" target="_blank" rel="noopener">refrence here</a><br><a href="https://www.cnblogs.com/shixiangwan/p/7532830.html" target="_blank" rel="noopener">refrence here</a></p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十一、数据偏斜的处理:</font>
-
-<ol>
-<li>改变评价指标如使用 F1、 ROC;</li>
-<li>欠采样、过采样;</li>
-<li>对少样本的惩罚加重, 如使用 Focal Loss 或者在模型本身选择不同样本的权重;</li>
-<li>调整阈值.</li>
-</ol>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十二、GBDT+LR的原理:</font>
-
-<p>利用GBDT来做embedding特征, 预先选定GBDT的树和叶子的数量就可以设置好用于LR分类的特征维度(<script type="math/tex">N_{trees} * N_{leaves}</script>), 通过one-hot编码即可作为LR的输入特征来使用</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十三、GBDT+LR中, 如果GBDT有有1万颗树, 每个树有100个叶子节点, 那么输入到LR的特征会是一个高维稀疏的向量, 那么应该如何处理, 使用PCA降维的话会造成损失, 如果不想有损失的话应该怎么办:</font>
-
-<p><strong>To be Certified</strong></p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十四、GBDT在回归和多分类当中有什么不同, 在预测的时候的流程是怎样的:</font>
-
-<p>在回归和多分类任务中的主要区别在于损失函数不同造成的算法初始化不同以及叶节点取值和表示含义的不同, 回归任务常用均方损失函数、绝对值损失函数和Huber损失函数(前面两者的折中), 而多分类则采用多类逻辑损失函数(二分类是对数损失函数), 对于回归类问题, 定义好损失函数之后, GBDT算法的预测值表示与真实值的偏差, 而多分类中的预测值则表示预测值为真实值的概率. 此外对于多分类, GBDT采用一对多策略, 训练过程中的主要区别是多分类中多了一层内部for循环(k个类别都各自拟合完一棵树之后再拟合下一棵树, 一共拟合M轮, 最终有M*K颗树), 最后使用softmax来计算最终的类别概率<a href="https://blog.csdn.net/qq_22238533/article/details/79199605" target="_blank" rel="noopener">详细的介绍</a></p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十五、逻辑回归如何防止过拟合:</font>
-
-<p>减少特征的数量; 正则化, 加入模型复杂度的惩罚项</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十六、L1、L2正则化的区别是什么:</font>
-
-<p>L1正则化是参数的绝对值之和(Lasso回归), L2正则化是参数的平方和后再开根值(岭回归). 它们都可以防止过拟合, 区别在于L1正则化倾向于稀疏(部分特征的权值会为0)而L2正则化则是使每个权值都很小接近于0但不会为0, L1的稀疏特性使得L1正则可以用于特征选择. </p>
-<p>L1 可以进行特征筛选的背后解释:</p>
-<ol>
-<li><p>图角度解释: L1 范数是绝对值之和, 在解图像上要求是正方形(二维空间, ($|x+y| = c$)) / 正多面体(高维空间)比较小同时尽可能达到 loss 的最优解等值线, 那么自然是等值线和正方形相切时最满足条件, 而由于正方形的特性这个切点和可能就是坐标轴上的点, 自然就有一些权重变为 0, 如 ($x = 0, y = c$).</p>
-</li>
-<li><p>导数的角度解释: </p>
-<p>假设损失函数为 $L(w)$, 加入 L1、L2 正则后变为:</p>
-<script type="math/tex; mode=display">J_{L1}(w) = L(w) + \lambda |w|</script><script type="math/tex; mode=display">J_{L2}(w) = L(w) + \lambda w^2</script><p>设 $L(w)$ 在 $w = 0$ 处导数值为 $d_0$, 则引入 L1、L2 正则后的损失函数在 $w = 0$ 处的导数分别为:</p>
-<script type="math/tex; mode=display">\frac{\partial J_{L1}(w)}{\partial w}\bigg|_{w = 0^-} = d_0 - \lambda,\ \ \ \frac{\partial J_{L1}(w)}{\partial w}\bigg|_{w = 0^+} = d_0 + \lambda</script><script type="math/tex; mode=display">\frac{\partial J_{L2}(w)}{\partial w}\bigg|_{w = 0} = d_0 + 2\lambda\cdot w = d_0</script><p>可以看出, L2 正则 Loss 在 $w = 0$ 处的导数仍为 $d_0$, 而 L1 正则则产生了突变, 如果 $d_0 + \lambda$ 和 $d_0 - \lambda$ 异号, 那么 Loss 在 $w = 0$ 处就是个极小值, 容易收敛到该极小值点 $w = 0$ 上.</p>
-</li>
-<li>先验分布的角度解释: L1 符合数据符合拉普拉斯分布, L2 假设数据符合高斯分布, 拉普拉斯的分布曲线决定了大部分取值的概率都很小或为0.</li>
-</ol>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十七、L1正则不可导该如何解决:</font>
-
-<p><a href="https://blog.csdn.net/luoleicn/article/details/52676378" target="_blank" rel="noopener">Proximal Algorithms或者ADMM来解决</a></p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十八、坐标轴下降法的原理是什么:</font>
-
-<p>坐标下降法属于一种非梯度优化的方法, 它在每步迭代中沿一个坐标的方向进行线性搜索(线性搜索是不需要求导数的), 通过循环使用不同的坐标来达到目标函数的局部极小值, 简单来说就是固定一个变量把其他变量当做常量看待</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">十九、boosting和bagging在不同情况下的选用:</font>
-
-<p>boosting和bagging的区别在于boosting能够改善bias而bagging能改善variance, 所以对于高bias低variance的模型选用boosting, 对于低bias高variance的模型采用bagging, 如果有时间限制考虑到boosting只能串行训练可以使用bagging并行的对各个模型训练.</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">二十、交叉熵的含义:</font>
-
-<p>交叉熵反应的是训练模型学习到的预测标签分布和真实标签分布的相似性. 使用交叉熵作为损失函数可以有效避免梯度下降时用均方误差带来的学习速率低的问题 (均方误差偏导值在输出概率值接近 0 或 1 的时候非常小, 而使用交叉熵损失函数时学习速率被误差所控制), 实际上我们常用的二分类交叉熵损失是建立在数据标签符合伯努利分布、数据符合独立同分布的假设下的交叉熵特例, 是对 logstic 函数的最大似然估计取 log:</p>
-<script type="math/tex; mode=display">
-\begin{split}
-L(\hat{p}; \beta) &= \prod_{y_i = 1} P(Y = y_i | X_i) \cdot \prod_{y_i = 0} P(Y = y_i | X_i) \\
-&= \prod_{i = 1} P(Y = y_i = 1 | X_i)^{y_i} \cdot P(Y = y_i = 0| X_i)^{1-y_i} \\
-&= \prod_{i = 1} P(Y = y_i = 1 | X_i)^{y_i} \cdot (1 - P(Y = y_i = 1| X_i))^{1-y_i} \\
-log(L(\hat{p}; \beta)) &= \sum_{i=1}(ylog\hat{y} + (1-y)log(1-\hat{y})) 
-\end{split}</script><h2 id="深度学习基础知识"><a href="#深度学习基础知识" class="headerlink" title="深度学习基础知识"></a>深度学习基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、反向传播原理简介:</font>
-
-<p>反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">二、Sigmoid和ReLU激活函数的优劣:</font>
-
-<p>使用激活函数的目的是引入非线性变换, 普遍认为ReLU比sigmoid更好, 因为sigmoid函数有三个主要缺点: 一是sigmoid函数在输入很大或很小的时候梯度接近与0, 产生梯度消失现象;二是sigmoid函数的在求导时涉及到除法运算, 计算量很大; 三是sigmoid函数的输出不是0均值的, 即如果输入 $x$ 总是为正的话, 对于式 $f = wx+b$, 关于 $w$ 的梯度总是非负即正(损失函数对 $w$ 的导数总是和损失函数对 $f$ 的导数的符号一致). ReLU函数则计算速度快且由于梯度始终不饱和收敛速度更快没有梯度消失现象, 但是ReLU函数也是非0均值的输出, 且易出现神经元”Dead”现象即由于负梯度到该神经元被置0参数不再被更新并且该神经元可能永远无法再被激活.</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">三、梯度消失问题和损失函数有关吗? 如何解决梯度消失/爆炸?</font>
-
-<p>基本上无关, 梯度消失问题主要和网络层数和激活函数的导数有关, 层数太大又不使用 batch normalization 的以及如果选用 sigmoid 激活函数则很有可能造成梯度消失现象. </p>
-<p><strong>梯度消失解决方案:</strong> 1. 使用 Batch Normalization; 2. 选择ReLU 激活函数; 3. 使用残差结构; 4. Fine-tuning<br><strong>梯度爆炸解决方案:</strong> 1. 梯度裁剪、正则; 2. 选择较小的值初始化; 3. Fine-tuning </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">四、使用TensorFlow训练神经网络模型的基本流程:</font>
-
-<p><a href="https://blog.csdn.net/paopaovae/article/details/81143367" target="_blank" rel="noopener">训练神经网络可分为以下三个步骤</a><br>        1 定义神经网络的结构和前向传播的输出结果<br>        2 定义损失函数以及选择后向传播的算法<br>        3 生成会话 并且在训练数据上反复执行反向传播优化算法.<br>无论神经网络结构如何变化, 这三个步骤基本不变.</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">五、dropout 如何防止过拟合:</font>
-
-<p>1、取平均的作用: 每次 dropout 都会随机的失活一定比例的神经元, 这样就好像是在训练不同的网络.<br>2、减少神经元之间复杂的共适应关系: 随机失活会让一些神经元不一定同时出现在一个 dropout 后的网络中, 因此抵消了他们的相互依懒性, 迫使神经网络学习更加鲁棒的模型.</p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">六、BN 的原理, 为什么BN可以加快优化算法的速度?</font>
-
-<p><strong>深度网络训练的问题:</strong> 参数的变化导致每一层的输入分布会发生改变, 进而上层的网络需要不停地去适应这些分布变化, 使得我们的模型训练变得困难, 网络的训练过程容易陷入梯度饱和区, 减缓网络收敛速度.  </p>
-<p><strong>Batch Normalization:</strong> 对一个 batch 内训练数据的每个特征进行独立的 normalization. 使得第 $l$ 层的输入每个特征的分布均值为0, 方差为1.<br>公式描述:</p>
-<p>变量解释: $W$: 权值矩阵, $A$: 非线性激活结果, $Z$: 线性计算结果, $g()$: 非线性激活函数, $m$: batch size</p>
-<p>对于第 $l$ 层, 有 $Z^l = W^l A^{l-1} + b^l$, 第 $i$ 个 batch 内样本所有特征的均值和方程的向量表示为 $\mu = \frac{1}{m}\sum_{i=1}^{m}Z^{l(i)},   \sigma^2 = \frac{1}{m}\sum_{i=1}^{m}(Z^{l(i)} - \mu)^2$</p>
-<p>为了弥补归一化操作后的数据表示能力的损失加入 $\gamma$ 和 $\beta$ 两个可学习的参数来恢复数据表示能力得到 $l$ 层归一化计算结果: </p>
-<script type="math/tex; mode=display">\tilde{Z^l} = \gamma \cdot \dfrac{Z^l - \mu}{\sqrt{\sigma^2 + \epsilon}} + \beta</script><p>最终得到输出: $A^l = g^l(\tilde{Z^l})$</p>
-<p><strong>BN 的优势:</strong> </p>
-<ol>
-<li>BN 使得网络中每层输入数据的分布相对稳定, 加速模型学习速度; </li>
-<li>BN 使得模型对网络中的参数不那么敏感, 简化调参过程, 使得网络学习更加稳定; </li>
-<li>BN 允许网络使用饱和性激活函数 (例如 sigmoid, tanh 等), 缓解梯度消失问题; </li>
-<li>BN 具有一定的正则化效果 (用 batch 内的数据来估计训练数据). </li>
-</ol>
-<font face="Microsoft YaHei" size="4" color="#dddd00">七、深度学习防止过拟合的方法:</font>
-
-<p>1、<strong>Dropout</strong>: 具体解释上面已经介绍;</p>
-<p>2、<strong>Batch Normalization</strong>: 具体解释上面已经介绍;</p>
-<p>3、<strong>数据增强</strong>: 提供更多的数据自然会减少过拟合;</p>
-<p>4、<strong>参数共享</strong>: 可以减少参数个数并降低过拟合;</p>
-<p>5、<strong>early stop</strong>: 在验证集上超过一定轮数的性能降低就终止训练;</p>
-<p>6、<strong>引入 $L_1$, $L_2$ 正则</strong>: 对神经网络的参数引入正则可以减少过拟合.  </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">八、CNN、LSTM 的参数个数计算:</font>
-
-<p><strong>CNN</strong> 参数个数: </p>
-<script type="math/tex; mode=display">
-kernel\_size \times input\_channel \times output\_channel</script><p><strong>LSTM</strong> 有四个单元: $f_t, i_t, \tilde{C_t}, o_t$, 每部分都会拼接上一时刻的隐状态向量 $h_{t-1}$ 以及输入向量 $x_t$ 然后输出一个隐状态向量维度的权值, 因此 LSTM 的一个 cell 内参数个数 (RNN 则去掉 4 即可):</p>
-<script type="math/tex; mode=display">
-4 \times \left( (hidden\_size + input\_size) \times hidden\_size + hidden\_size(bias) \right)</script><font face="Microsoft YaHei" size="4" color="#dddd00">九、Softmax 求导:</font>
-
-<p>Softmax 是归一化指数函数常用于神经网络最后一层输出属于不同类别的概率, 对于输入向量 $z$ 的某一个维度 $i$ 其输出计算公式为: $a_i = \dfrac{e^{z_i}}{\sum_k e^{z_k}}$</p>
-<p>损失函数为交叉熵时: $Loss = -\sum_i y_i lna_i$, 当真实标签的第 $i$ 维为 1 时: $Loss = -lna_i$</p>
-<p>则 $Loss$ 对输入 $z_j$ 的导数为 $\dfrac{\partial Loss}{\partial z_j} = \dfrac{\partial Loss}{\partial a_i} \cdot \dfrac{\partial a_i}{\partial z_j}$ , 所有的输出 $a_i$ 都要反向传播更新参数, $\dfrac{\partial Loss}{\partial a_i} = - \dfrac{1}{a_i}$ 关键是求出 $\dfrac{\partial a_i}{\partial z_j}$ 具体分为两种情况:</p>
-<p>1) $j = i$ :</p>
-<script type="math/tex; mode=display">
-   \begin{split}
-   \dfrac{\partial a_i}{\partial z_j} &= \dfrac{\partial}{\partial z_j}(\dfrac{e^{z_i}} {\sum_k e^{z_k}}) \\
-   &= \dfrac{e^{z_i} \cdot \sum_k e^{z_k} - e^{z_i} \cdot e^{z_i}}{(\sum_k e^{z_k})^2} \\
-   &= \dfrac{e^{z_i}}{\sum_k e^{z_k}} \cdot (1 - \dfrac{e^{z_i}}{\sum_k e^{z_k}}) \\
-   &= a_i(1-a_i)
-   \end{split}</script><p>2) $j \neq i$ :</p>
-<script type="math/tex; mode=display">
-   \begin{split}
-   \dfrac{\partial a_i}{\partial z_j} &= \dfrac{\partial}{\partial z_j}(\dfrac{e^{z_i}} {\sum_k e^{z_k}}) \\
-   &= \dfrac{0 \cdot \sum_k e^{z_k} - e^{z_j} \cdot e^{z_i}}{(\sum_k e^{z_k})^2} \\
-   &= -e^{z_j}\dfrac{1}{(\sum_k e^{z_k})^2}e^{z_i} \\
-   &= -a_i a_j
-   \end{split}</script><p>合并两种情况最终 $\dfrac{\partial Loss}{\partial z_i} = a_i - y_i$ </p>
-<h2 id="推荐算法相关基础知识"><a href="#推荐算法相关基础知识" class="headerlink" title="推荐算法相关基础知识"></a>推荐算法相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、NDCG 指标的含义?</font>  
-
-<p>NDCG (Normalized Discounted Cumulative Gain), 归一化贴现累计收益, 常用于衡量排序质量, 简单来说就是返回的模型排序结果相关性得分 (DCG) 相对于最佳排序结果相关性得分 (IDCG) 的比值, 这个值越大越好.</p>
-<h2 id="CV-相关基础知识"><a href="#CV-相关基础知识" class="headerlink" title="CV 相关基础知识"></a>CV 相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、测试图像 size 和 CNN 网络输入不一致通过 crop 后造成的卷积重复计算如何解决?</font>  
-
-<p>直接把测试图像输入到网络, 经过同样的网络得到的输出会是一个小的 feature map 其每个元素对应的就是经过 crop 后的输出, 如下图网络的输入是 14*14, 如果此时的测试图像是 16*16, 直接把 16*16 的图像输入到网络中, 最终得到的输出是 2*2*4, 每个元素对应于把输入 crop 成 14*14 的输出.</p>
-<p><div align="center">
-<img src="/img/repeat_conv.png" width="700px">
-</div> <br>   </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">二、one-stage 算法和 two-stage 算法相比为什么精度相对较差速度相对较快?</font>  
-
-<p>one-stage 模型由于类别不平衡问题 (对大量的 Background bbox 进行分类效果自然较差) 使得精度较低, 而 two-stage 模型有着 RPN 层或是启发式的 selective 算法可以进行初步的 bbox 筛选 (ROI Align), 再经过后续的 bbox 回归使得精度自然有着提升, 但是速度也受到拖累.  </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">三、图像特征提取方式?</font> 
-
-<p>传统图像特征包括 <strong>Hog, SIFT, LBP 和 Haar</strong>  </p>
-<ol>
-<li>HOG (Histogram of Oriented Gradient, 方向梯度直方图) 描述的则是图像在局部范围内对应的形状边缘梯度信息</li>
-<li>SIFT (Scale-Invariant Feature Taransform, 尺度不变特征变换) 描述的是图像尺度不变特征变换, 在每个特征点周围的领域内, 在选定的尺度上测量图像的局部梯度, 计算块内梯度直方图, 生成具有独特性的向量;</li>
-<li>LBP (Local Binary Pattern, 局部二值模式) 描述的是图像在局部范围内对应的纹理信息, 原始的 LBP 算子定义在像素 3*3 的邻域内, 以邻域中心像素为阈值, 相邻的 8 个像素的灰度值与邻域中心的像素值进行比较, 若周围像素大于中心像素值, 则该像素点的位置被标记为 1, 否则为0;</li>
-<li>Haar 描述的是图像在局部范围内像素值明暗变换信息, 反映了图像的灰度变化情况.</li>
-</ol>
-<h2 id="NLP-相关基础知识"><a href="#NLP-相关基础知识" class="headerlink" title="NLP 相关基础知识"></a>NLP 相关基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、LSTM和GRU的区别:</font>
-
-<p><a href="https://zhuanlan.zhihu.com/p/30465140" target="_blank" rel="noopener">LSTM</a><br><a href="https://zhuanlan.zhihu.com/p/28297161" target="_blank" rel="noopener">LSTM&amp;GRU</a><br><a href="https://zhuanlan.zhihu.com/p/40119926" target="_blank" rel="noopener">双向LSTM</a></p>
-<ol>
-<li>GRU和LSTM的性能在很多任务上不分伯仲.</li>
-<li>GRU参数更少因此更容易收敛, 但是数据集很大的情况下, LSTM表达性能更好.</li>
-<li>从结构上来说, GRU只有两个门(update和reset), LSTM有三个门(forget, input, output), GRU直接将hidden state传给下一个单元, 而LSTM则用memory cell把hidden state包装起来.</li>
-</ol>
-<font face="Microsoft YaHei" size="4" color="#dddd00">二、LSTM防止梯度弥散和爆炸的原因:</font>
-
-<p>传统的RNN是用覆盖的的方式计算状态: <script type="math/tex">S_t = f(S_{t-1}, x_t)</script>, 这有点类似于复合函数, 那么根据链式求导的法则, 复合函数求导：设 <script type="math/tex">f</script> 和 <script type="math/tex">g</script> 为 <script type="math/tex">x</script> 的可导函数, 则 <script type="math/tex">(f \circ g)'(x) = f'(g(x))g'(x)</script>, 他们是一种乘积的方式, 那么如果导数都是小数或者都是大于1的数的话, 就会使得总的梯度发生vanishing或explosion的情况, 当然梯度爆炸(gradient explosion)不是个严重的问题, 一般靠裁剪后的优化算法即可解决, 比如gradient clipping(如果梯度的范数大于某个给定值, 将梯度同比收缩), 但是梯度消失做不到, 这个时候就要用lstm了. 在lstm中, 我们发现, 状态 <script type="math/tex">S</script> 是通过累加的方式来计算的, <script type="math/tex">S_t = \sum\limits_{i=1}^t \Delta S_i</script>. 那这样的话, 就不是一直复合函数的形式了, 它的的导数也不是乘积的形式, 这样就不会发生梯度消失的情况了. </p>
-<font face="Microsoft YaHei" size="4" color="#dddd00">三、Seq2seq模型:</font>
-
-<p>经典的seq2seq模型就是翻译模型, 例如google翻译团队的transformer + attention. seq2seq模型最大的特点是突破了传统RNN模型输入输出等长的限制. 而seq2seq模型实际上属于encoder-decoder结构, encoder将输入序列压缩成指定维度的隐向量, decoder根据这个隐向量生成输出序列, 生成输出序列可以仅把隐向量当做decoder的输入, 也可以把隐向量加入到生成序列的每个时刻的计算中.  </p>
-<h2 id="概率题"><a href="#概率题" class="headerlink" title="概率题"></a>概率题</h2><p><strong>1、独立分布随机变量 $X_1、X_2$ 服从均匀分布 $U(0, 1)$, 求 $max(X_1, X_2)$ 的期望？</strong><br>&ensp;&ensp;设: $max(X_1, X_2)$ 在 (0, 1) 上分布函数 $F(Z)$, 则 $F(Z) = p(X_1 \leq Z)\cdotp(X_2 \leq Z) = Z^2$, 其概率密度函数为 $f(Z) = F’(Z) = 2\cdot Z$, 则期望为 </p>
-<script type="math/tex; mode=display">\displaystyle \int_{0}^{1} Z\cdot f(Z)\mathcal{d}Z = \dfrac{2}{3}</script><p><strong>2、有 4 个人分 52 张扑克牌, 一个人拿到指定两张牌的概率?</strong></p>
-<script type="math/tex; mode=display">\dfrac{C_4^1 \times C_{50}^{11}}{C_{52}^{13}}</script><p><strong>3、一副扑克牌分成 3 份, 一个人同时拿到大小王的概率?</strong></p>
-<script type="math/tex; mode=display">\dfrac {C_3^1 \times C_{52}^{16} \times C_{36}^{18} \times C_{18}^{18}} {C_{54}^{18} \times C_{36}^{18} \times C_{18}^{18}}</script><p><strong>4、质地不均匀的硬币, 产生 1/2 的概率? 1/3 和 1/4 呢?</strong></p>
-<p>&ensp;&ensp;设抛一次向上的概率为 $p$, 则连续抛两次得到 “正反” 和 “反正” 的概率相等: $p(1-p) = (1-p)p$, 只要连抛两次的结果相同就继续连抛两次; 1/3 和 1/4 可以从编码角度来实现, 出现 “正反” 记为 0, “反正”记为 1, 则用 0、1 编码 3 个 bits 可以等概率的表示出 8 种事件, 只取 6 种情况的前两种就是 1/3, 8 种情况的前 2 种就是 1/4.</p>
-<p><strong>5、一个路口, 一个小时有车通过的概率是 0.9, 那么 20 分钟内通过车的概率是多少?</strong></p>
-<p>&ensp;&ensp;设 20 分钟内没有车通过的概率为 $p$, 则</p>
-<script type="math/tex; mode=display">
-1 - (p)^3 = 1-0.9</script><p>&ensp;&ensp;答案为 $1-p$</p>
-<p><strong>6、有一个木桶, 里面有 M 个白球, 小明每次从桶中随机取出一个球涂成红色再放回, 问小明将桶中球全部涂红的期望时间是多少?</strong></p>
-<p>&ensp;&ensp;设 $P[i]$ 表示 M 个球中已有 $i$ 个球是红色后, 全部球变为红色的期望时间. 则 $P[i] = \dfrac{i}{M} \cdot P[i] + (1 - \dfrac{i}{M}) \cdot P[i+1] + 1$, 包含取球操作, 化简得: $P[i] = P[i+1] + \dfrac{M}{M-i}$, 其中 $P[M] = 0$, 那么</p>
-<p>&ensp;&ensp;已有 M-1 个红球时, $P[M-1] = P[M] + \dfrac{M}{1}$;</p>
-<p>&ensp;&ensp;已有 M-2 个红球时, $P[M-2] = P[M-1] + \dfrac{M}{2}$; </p>
-<p>&ensp;&ensp;…</p>
-<p>&ensp;&ensp;已有 0 个红球时, $P[0] = P[1] + \dfrac{M}{M}$; </p>
-<p>&ensp;&ensp;最终为:</p>
-<script type="math/tex; mode=display">
-P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p>&ensp;&ensp;还可以从几何分布角度来解释, 这个操作属于几何分布, 期望值的等于概率的倒数, 因此结果也为上述序列.</p>
-<p><strong>7、圆上任取 3 点, 构成锐角三角形的概率是多大?</strong></p>
-<p>&ensp;&ensp;锐角三角形, 等价圆心在三角形里, 也等价三个点无法被一段半圆弧所包括. 也就是等价任取两个点, 第三个点在其他两个点组成的小圆弧关于圆心对称的圆弧里. 由于圆上每个点选取的概率是一样的, 这个小圆弧最长是接近半圆长, 此时随机选取第三个点使其成为锐角三角形的概率为 1/2; 小圆弧最短接近 0, 此时选取第三个点使其成为锐角三角形概率为 0. </p>
-<p>&ensp;&ensp;问题到最后就转换成任取两点构成的小圆弧长度 (第三个点落在小圆弧对称的范围内) 的期望, 而小圆弧的长度在 0 到 1/2 圆长上符合均匀分布, 所以锐角三角形的概率就是 (1/2+0)/2 = 1/4. (钝角为 3/4, 直角为 0)</p>
-<p><strong>8、一个袋子中三个球，2红1黑，小明取球并猜中的概率是80%，小明摸球并猜是黑色，求真实是黑色的概率</strong></p>
-<p>&ensp;&ensp;定义事件 $A$: 摸一个球真是黑色; $B$: 模一个球猜是黑色; $AB$: 摸一个球猜是黑色且真是黑色的概率.</p>
-<p>所求为 摸一个球猜是黑色情况下真是黑色的概率 $P(A|B)$.</p>
-<p>由贝叶斯公式可得: </p>
-<script type="math/tex; mode=display">P(A|B) = \dfrac{P(AB)}{P(B)}</script><p>易知 $P(AB) = 0.8\times1/3$, $P(B)$ 可以这么分析, 摸一个球猜是黑色包括摸黑球猜成黑色和摸红球猜成黑色, 则 $P(B) = 0.8\times1/3 + 0.2\times2/3$ 则:</p>
-<script type="math/tex; mode=display">P(A|B) = \dfrac{0.8\times1/3}{0.8\times1/3 + 0.2\times2/3} = 2/3</script><h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
-<li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
-<li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
-<li><a href="https://blog.csdn.net/zhangxiao93/article/details/55101605" target="_blank" rel="noopener">旋转数组求最小值</a></li>
-<li><a href="https://www.jianshu.com/p/1851ee8fb546" target="_blank" rel="noopener">无序数组分成两部分使得方差和最小</a></li>
-<li><a href="https://www.cnblogs.com/junyuhuang/p/4390780.html" target="_blank" rel="noopener">荷兰国旗问题</a></li>
-<li><a href="https://blog.csdn.net/z84616995z/article/details/18903483" target="_blank" rel="noopener">一个数组分成k份, 每份中元素个数相同, 返回k-1个分界点以及给一个数值返回其属于哪一类, 不断优化时间复杂度, 低于o(nlogn)</a></li>
-<li><a href="https://www.cnblogs.com/GodA/p/5237061.html" target="_blank" rel="noopener">和最大的子矩阵</a></li>
-</ol>
-<h2 id="益智题"><a href="#益智题" class="headerlink" title="益智题"></a>益智题</h2><ol>
-<li><a href="https://www.nowcoder.com/questionTerminal/cded93aeac5249f7a9754400dd249c1d" target="_blank" rel="noopener">站在地球上的某一点, 向南走一公里, 然后向东走一公里, 最后向北走一公里, 回到了原点.地球上有多少个满足这样条件的点?(无数个)</a></li>
-</ol>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>干啥呢! 别客气了<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
         </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
+    	 
+        <div class="article-info info-on-right">
+          
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/03/15/知识总结/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2018/05/25/Data Science Bowl比赛/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Data Science Bowl
-        
-      </div>
-    </a>
   
   
-    <a href="/2018/01/03/Spooky比赛/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Spooky Author Classification</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -618,8 +222,8 @@ P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p>&ensp;&en
 	var yiliaConfig = {
 		mathjax: [object Object],
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
