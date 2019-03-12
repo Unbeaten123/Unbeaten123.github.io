@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-03-12T14:35:20.339Z">
+<meta property="og:updated_time" content="2019-03-12T14:38:11.206Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -431,7 +431,7 @@ kernel\_size \times input\_channel \times output\_channel</script><p><strong>LST
 P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p>&ensp;&ensp;还可以从几何分布角度来解释, 这个操作属于几何分布, 期望值的等于概率的倒数, 因此结果也为上述序列.</p>
 <p><strong>7、圆上任取 3 点, 构成锐角三角形的概率是多大?</strong></p>
 <p>&ensp;&ensp;锐角三角形, 等价圆心在三角形里, 也等价三个点无法被一段半圆弧所包括. 也就是等价任取两个点, 第三个点在其他两个点组成的小圆弧关于圆心对称的圆弧里. 由于圆上每个点选取的概率是一样的, 这个小圆弧最长是接近半圆长, 此时随机选取第三个点使其成为锐角三角形的概率为 1/2; 小圆弧最短接近 0, 此时选取第三个点使其成为锐角三角形概率为 0. </p>
-<p>&ensp;&ensp;问题到最后就转换成任取两点构成的小圆弧长度 (第三个点落在小圆弧对称的范围内) 的期望, 而小圆弧的长度在 0 到 1/2 圆长上符合均匀分布, 所以锐角三角形的概率就是 (1/2+0)/2 = 1/4. (钝角为 3/4, 直角为 0) 哈哈哈</p>
+<p>&ensp;&ensp;问题到最后就转换成任取两点构成的小圆弧长度 (第三个点落在小圆弧对称的范围内) 的期望, 而小圆弧的长度在 0 到 1/2 圆长上符合均匀分布, 所以锐角三角形的概率就是 (1/2+0)/2 = 1/4. (钝角为 3/4, 直角为 0)</p>
 <p><strong>8、一个袋子中三个球，2红1黑，小明取球并猜中的概率是80%，小明摸球并猜是黑色，求真实是黑色的概率</strong></p>
 <p>&ensp;&ensp;定义事件 $A$: 摸一个球真是黑色; $B$: 模一个球猜是黑色; $AB$: 摸一个球猜是黑色且真是黑色的概率.</p>
 <p>所求为 摸一个球猜是黑色情况下真是黑色的概率 $P(A|B)$.</p>
