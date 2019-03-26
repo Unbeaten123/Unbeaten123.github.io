@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-03-12T16:04:05.383Z">
+<meta property="og:updated_time" content="2019-03-25T14:01:16.982Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -311,7 +311,10 @@ L(\hat{p}; \beta) &= \prod_{y_i = 1} P(Y = y_i | X_i) \cdot \prod_{y_i = 0} P(Y 
 &= \prod_{i = 1} P(Y = y_i = 1 | X_i)^{y_i} \cdot P(Y = y_i = 0| X_i)^{1-y_i} \\
 &= \prod_{i = 1} P(Y = y_i = 1 | X_i)^{y_i} \cdot (1 - P(Y = y_i = 1| X_i))^{1-y_i} \\
 log(L(\hat{p}; \beta)) &= \sum_{i=1}(ylog\hat{y} + (1-y)log(1-\hat{y})) 
-\end{split}</script><h2 id="深度学习基础知识"><a href="#深度学习基础知识" class="headerlink" title="深度学习基础知识"></a>深度学习基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、反向传播原理简介:</font>
+\end{split}</script><font face="Microsoft YaHei" size="4" color="#dddd00">二十一、连续特征使用线性分类器做one-hot的好处:</font>
+
+<p>加速; 正则化; 特征线性化以解决非线性(比如年龄分布不均匀)</p>
+<h2 id="深度学习基础知识"><a href="#深度学习基础知识" class="headerlink" title="深度学习基础知识"></a>深度学习基础知识</h2><font face="Microsoft YaHei" size="4" color="#dddd00">一、反向传播原理简介:</font>
 
 <p>反向传播实际上就是对复合函数的链式求导, 神经网络本质上可以理解为函数嵌套, 根据输入这个函数有自己的输出可能会和真实输出不等, 不等就会产生误差, 反向传播就是使用梯度下降作为优化方法更新这个函数的参数使得产生的误差最小化. 反向传播通过由后向前的的方式避免了对求导路径的重复访问因此可以十分高效的计算偏导. 即所谓的正向传播预测反向传播误差.</p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">二、Sigmoid和ReLU激活函数的优劣:</font>
@@ -437,12 +440,14 @@ P[0] = 0 + \dfrac{M}{1} + \dfrac{M}{2} + ... + \dfrac{M}{M}</script><p>&ensp;&en
 <p>所求为 摸一个球猜是黑色情况下真是黑色的概率 $P(A|B)$.</p>
 <p>由贝叶斯公式可得: </p>
 <script type="math/tex; mode=display">P(A|B) = \dfrac{P(AB)}{P(B)}</script><p>易知 $P(AB) = 0.8\times1/3$, $P(B)$ 可以这么分析, 摸一个球猜是黑色包括摸黑球猜成黑色和摸红球猜成黑色, 则 $P(B) = 0.8\times1/3 + 0.2\times2/3$ 则:</p>
-<script type="math/tex; mode=display">P(A|B) = \dfrac{0.8\times1/3}{0.8\times1/3 + 0.2\times2/3} = 2/3</script><p><strong>9、连续抛 n 次硬币都正面的概率</strong></p>
+<script type="math/tex; mode=display">P(A|B) = \dfrac{0.8\times1/3}{0.8\times1/3 + 0.2\times2/3} = 2/3</script><p><strong>9、连续抛 n 次硬币都正面的期望</strong></p>
 <p>&ensp;&ensp;设连续出现 $k$ 次正面的期望为 $e[k]$, 则连续出现 $k+1$ 次正面的期望为 $e[k+1]$. 在连续出现 $k$ 次正面后, 分如下两种情况:</p>
 <p>1) 下一次抛出正面, 概率为 $1/2$, 此时 $e[k+1] = e[k] + 1$;</p>
 <p>2) 下一次抛出反面, 概率为 $1/2$, 此时平均仍需抛 $e[k+1]$ 次, 总数为 $e[k] + 1 + e[k+1]$</p>
 <p>综上: $e[k+1] = (e[k] + 1)\times1/2 +(e[k]+1+e[k+1])\times1/2$</p>
 <p>进而: $e[k] = (a[1] + 2)\times2^{n-1} - 2$, 其中 $a[1] = 2$, 最终 $e[k] = 2^{n+1} - 2$</p>
+<p><strong>10、抛硬币直到获得一枚正面的期望</strong></p>
+<p>&ensp;&ensp;设期望为 $T$, 则 $T = 0.5\times1 + 0.5\times(1 + T)$, 解得 $T = 2$</p>
 <h2 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h2><ol>
 <li><a href="https://blog.csdn.net/wangbaochu/article/details/52949443" target="_blank" rel="noopener">数组中第k大的数</a></li>
 <li><a href="https://blog.csdn.net/HEJI1103/article/details/79435588" target="_blank" rel="noopener">通过有偏概率0/1生成器, 生成无偏概率0/1生成器</a></li>
