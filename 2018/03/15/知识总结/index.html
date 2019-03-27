@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Zhizhou Yu&#39;s Blog">
 <meta property="og:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
 <meta property="og:image" content="http://yoursite.com/img/repeat_conv.png">
-<meta property="og:updated_time" content="2019-03-25T14:01:16.982Z">
+<meta property="og:updated_time" content="2019-03-27T14:43:37.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法面经总结">
 <meta name="twitter:description" content="记录机器学习/深度学习/算法岗的面试经验, 包含基础知识和算法题">
@@ -248,7 +248,8 @@ F^* = \mathop{arg min}\limits_{F} \sum_{i = 0}^{N} L(y_i, F(x_i; w))</script><p>
 <p>Xgboost 中某个特征的重要性, 等于它被选中为树节点分裂特征的次数的和.<br>RF 可以通过两种方式, 一是按基尼指数降低程度决定特征重要性; 二是改变测试数据的某列特征判断改变后的误差变化  </p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">七、ROC、AUC等概念的理解:</font> 
 
-<p><a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a><br>一句话说明AUC的本质和计算规则：给定一个正例, 一个负例, 预测为正的概率值比预测为负的概率值还要大的可能性.</p>
+<p><a href="https://blog.csdn.net/shenxiaoming77/article/details/72627882" target="_blank" rel="noopener">reference here</a><br>一句话说明AUC的本质和计算规则：给定一个正例, 一个负例, 预测为正的概率值比预测为负的概率值还要大的可能性. </p>
+<p>AUC 的横轴是 真阳率 TPR (TP / (TP + FN)), 纵轴是 伪阳率FPR (FP / (FP + TN)), AUC就是从所有 1 样本中随机选取一个样本, 从所有 0 样本中随机选取一个样本, 然后根据你的分类器对两个随机样本进行预测, 把 1 样本预测为 1 的概率为 p1, 把 0 样本预测为 1 的概率为 p0, p1 &gt; p0 的概率就等于 AUC, 所以 AUC 反应的是分类器对样本的排序能力.</p>
 <font face="Microsoft YaHei" size="4" color="#dddd00">八、K-means、KNN、层次聚类和密度聚类(DBSCAN):</font>
 
 <p>这个链接直接对比了Kmeans和KNN<br><a href="https://www.cnblogs.com/190260995xixi/p/5945652.html" target="_blank" rel="noopener">K-means &amp; KNN</a><br>层次聚类的复杂度很高, 但是一次聚类完成就可以得到一个聚类树结果, 选择不同的聚类个数下的聚类结果直接根据树来得到即可且层次聚类是贪心的思想得到的是局部最优需要随机化, kmans的主要优势是效率<br><a href="https://www.cnblogs.com/nku-wangfeng/p/7642745.html" target="_blank" rel="noopener">K-means &amp; 层次聚类</a><br>DBSCAN是基于密度的聚类, 对于密度稀疏的数据表现较差, 但是可以运用到凸和非凸数据集上(甜甜圈数据集), 其计算复杂度较高但是结果往往要比kmeans好, DBSCAN对异常点也不敏感, 聚类结果可复现, 但同时需要调参达到最佳性能<br><a href="https://www.cnblogs.com/pinard/p/6208966.html" target="_blank" rel="noopener">DBSCAN原理</a><br><a href="https://www.cnblogs.com/hdu-2010/p/4621258.html" target="_blank" rel="noopener">K-means &amp; DBSCAN</a></p>
